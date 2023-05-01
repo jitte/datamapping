@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -7,6 +7,7 @@ import ReactFlow, {
   useEdgesState,
   addEdge,
 } from 'reactflow';
+import Icon from './Icon';
 
 import 'reactflow/dist/style.css';
 import './App.css'
@@ -21,14 +22,42 @@ export default function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
   return (
     <div className="container">
-      <nav>
+      <nav style={{ width: '20vw', height: '100vh'}}>
         Entities
+        <div className="entity" id="pii_subject">
+          <Icon name='pii_subject' />
+          PII Subject
+          <span className="menuitem">
+            <Icon name="bars_3" />
+          </span>
+        </div>
+        <div className="entity" id="pii_controller">
+          <Icon name='pii_controller' />
+          PII Controller
+          <span className="menuitem">
+            <Icon name="bars_3" />
+          </span>
+        </div>
+        <div className="entity" id="pii_processor">
+          <Icon name='pii_processor' />
+          PII Processor
+          <span className="menuitem">
+            <Icon name="bars_3" />
+          </span>
+          </div>
+        <div className="entity" id="third_party">
+          <Icon name='third_party' />
+          Third Party
+          <span className="menuitem">
+            <Icon name="bars_3" />
+          </span>
+        </div>
       </nav>
-      <main style={{ width: '100vw', height: '100vh' }}>
+      <main style={{ width: '80vw', height: '100vh' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
