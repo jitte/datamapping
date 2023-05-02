@@ -1,65 +1,70 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import ReactFlow, {
-  MiniMap,
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
+  MiniMap, Controls, Background,
+  addEdge, applyEdgeChanges, applyNodeChanges,
 } from 'reactflow';
 import Icon from './Icon';
 
 import 'reactflow/dist/style.css';
 import './App.css'
 
+import PiiSubjectNode from './PiiSubjectNode';
+// TODO: useMemoの使い方を習得する
+//const nodeTypes = useMemo(() => { piiSubject: PiiSubjectNode }, []);
+const nodeTypes = { piiSubject: PiiSubjectNode };
+
 const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-  { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
+  { id: 'node-1', type: 'piiSubject', position: { x: 0, y: 0}, data: { value: 123 }},
 ];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 export default function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState([]);
 
-  const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  const onNodesChange = useCallback(
+    (changes: any) => setNodes(
+      (nds) => applyNodeChanges(changes, nds)
+    ),
+    [setNodes]
+  );
+  const onEdgesChange = useCallback(
+    (changes: any) => setEdges(
+      (eds) => applyEdgeChanges(changes, eds)
+    ),
+    [setEdges]
+  );
+  const onConnect = useCallback(
+    (connection: any) => setEdges(
+      (eds) => addEdge(connection, eds)
+    ),
+    [setEdges]
+  );
+
+  function EntityItem({text}: any): JSX.Element {
+    const name = text.toLowerCase().replace(/ /g, '_');
+    return (
+    <div className="flex border border-solid border-black rounded border-l-4 p-1 m-1 items-center" id={name}>
+      <Icon name={name} />
+      <div className="text-sm">{text}</div>
+      <div className="flex-grow" />
+      <Icon name="drag_handle" />
+    </div>
+    );
+  }
 
   return (
-    <div className="container">
+    <div className="flex">
       <nav style={{ width: '20vw', height: '100vh'}}>
-        Entities
-        <div className="entity" id="pii_subject">
-          <Icon name='pii_subject' />
-          PII Subject
-          <span className="menuitem">
-            <Icon name="bars_3" />
-          </span>
-        </div>
-        <div className="entity" id="pii_controller">
-          <Icon name='pii_controller' />
-          PII Controller
-          <span className="menuitem">
-            <Icon name="bars_3" />
-          </span>
-        </div>
-        <div className="entity" id="pii_processor">
-          <Icon name='pii_processor' />
-          PII Processor
-          <span className="menuitem">
-            <Icon name="bars_3" />
-          </span>
-          </div>
-        <div className="entity" id="third_party">
-          <Icon name='third_party' />
-          Third Party
-          <span className="menuitem">
-            <Icon name="bars_3" />
-          </span>
-        </div>
+        <div className="text-center">Entities</div>
+        <EntityItem text="PII Subject" />
+        <EntityItem text="PII Controller" />
+        <EntityItem text="PII Processor" />
+        <EntityItem text="Third Party" />
       </nav>
       <main style={{ width: '80vw', height: '100vh' }}>
         <ReactFlow
           nodes={nodes}
+          nodeTypes={nodeTypes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}

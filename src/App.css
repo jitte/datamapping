@@ -1,34 +1,17 @@
-.container {
-  display: flex; 
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 nav {
   color: black;
   background-color: #eee;
 }
 
-.entity {
-  margin: 4px;
-  padding: 4px;
-  border: 1px solid black;
-  border-left: 5px solid grey;
-  border-radius: 5px;
-  color: black;
-  font-size: 0.8em;
-}
-.menuitem {
-  float: right;
-}
-
-.entity svg {
+.icon svg {
   vertical-align: middle;
   width: 24px;
   height: 24px;
   color: #777;
-}
-
-main {
-  flex-grow: 1;
 }
 
 /*
