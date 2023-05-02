@@ -8,8 +8,8 @@ nav {
 }
 
 .entity {
-  margin: 1px;
-  padding: 1px;
+  margin: 4px;
+  padding: 4px;
   border: 1px solid black;
   border-left: 5px solid grey;
   border-radius: 5px;
@@ -24,6 +24,7 @@ nav {
   vertical-align: middle;
   width: 24px;
   height: 24px;
+  color: #777;
 }
 
 main {
