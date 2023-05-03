@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-nav {
-  color: black;
-  background-color: #eee;
-}
-
-.icon svg {
-  vertical-align: middle;
-  width: 24px;
-  height: 24px;
-  color: #777;
-}
-
 /*
 #root {
   max-width: 1280px;
