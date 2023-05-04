@@ -23,10 +23,10 @@ const nodeTypes = {
 };
 
 const initialNodes = [
-  { id: 'node-1', type: 'piiSubject'   , position: { x:   0, y:   0}, data: { value: 123 }},
-  { id: 'node-2', type: 'piiController', position: { x: 100, y: 100}, data: { value: 123 }},
-  { id: 'node-3', type: 'piiProcessor' , position: { x: 200, y: 200}, data: { value: 123 }},
-  { id: 'node-4', type: 'thirdParty'   , position: { x: 300, y: 300}, data: { value: 123 }},
+  { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y:  50}, data: { value: 123 }},
+  { id: 'node-2', type: 'piiController', position: { x: 150, y: 150}, data: { value: 123 }},
+  { id: 'node-3', type: 'piiProcessor' , position: { x: 250, y: 250}, data: { value: 123 }},
+  { id: 'node-4', type: 'thirdParty'   , position: { x: 350, y: 350}, data: { value: 123 }},
 ];
 
 export default function App() {
