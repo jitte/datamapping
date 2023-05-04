@@ -9,7 +9,7 @@ export default function TitleComponent(
       <div className="flex flexitems-center justify-between bg-gray-50 rounded-t-lg p-2">
         <Icon name={iconName} />
         <div className="text-lg">{name}</div>
-        <Icon name="delete_button" style={{ width: '18px', height: '18px' }} />
+        <Icon name="delete_button" style={{ width: '18px', height: '18px'}} />
       </div>
       <div className="text-gray-500 px-5 pb-3 text-xs">
         {description}

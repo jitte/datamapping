@@ -5,7 +5,7 @@ export default function InputComponent(
 ): JSX.Element {
   return (
     <div className="w-full flex flex-wrap justify-between items-center bg-gray-50 mt-1 px-5 py-2">
-      <div className="text-xs">
+      <div className="text-xs text-black">
         {caption}
       </div>
       <div className="mt-2 w-full">
