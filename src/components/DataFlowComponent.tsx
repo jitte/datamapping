@@ -1,13 +1,7 @@
-import {
-  useState,
-  useRef,
-  useEffect,
-} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
-;
-
-export function DataFlowComponent(
+export default function DataFlowComponent(
   {name, data}: {name: string, data: any}
 ): JSX.Element {
   const sourceId = 'source_' + name.toLowerCase().replace(/ /g, '_');
@@ -30,8 +24,8 @@ export function DataFlowComponent(
   return (
     <div
       ref={ref}
-      className="w-full flex flex-wrap justify-between items-center bg-gray-50 dark:bg-gray-800 dark:text-white mt-1 px-5 py-2">
-      <div className="text-sm w-full text-center">
+      className="flex bg-gray-50 mt-1 px-5 py-2">
+      <div className="w-full text-center">
         {name}
       </div>
       <Handle

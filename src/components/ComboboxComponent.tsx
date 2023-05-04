@@ -2,8 +2,7 @@ import { useState, ChangeEventHandler } from 'react';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/20/solid';
 
-
-export function ComboboxComponent(
+export default function ComboboxComponent(
   { name, caption, itemList, onChange }: { name: string; caption: string; itemList: string[]; onChange: ChangeEventHandler; }
 ): JSX.Element {
   //  選択されたアイテム
@@ -19,7 +18,7 @@ export function ComboboxComponent(
 
   return (
     <div className="w-full flex flex-wrap justify-between items-center bg-gray-50 mt-1 px-5 py-2">
-      <div className="text-sm w-full ">
+      <div className="text-xs w-full">
         {caption}
       </div>
       <div className="mt-2 w-full text-gray-500 nodrag">
