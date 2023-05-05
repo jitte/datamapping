@@ -6,7 +6,7 @@ export default function ComboboxComponent(
   { name, caption, itemList, value = "", onChange } : { name: string, caption: string, itemList: string[], value: string, onChange: ChangeEventHandler }
 ): JSX.Element {
   //  選択されたアイテム
-  const [selectedItem, setSelectedItem] = useState(value === "" ? "Choose an option" : value);
+  const [selectedItem, setSelectedItem] = useState("");
   // 入力欄の検索テキスト
   const [query, setQuery] = useState('');
   // 検索テキストにマッチするアイテム（小文字でフィルタ）
@@ -27,6 +27,7 @@ export default function ComboboxComponent(
             <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow">
               <Combobox.Input
                 className="nodrag w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 rounded-lg"
+                placeholder="Choose an option"
                 displayValue={() => selectedItem}
                 onChange={(event) => setQuery(event.target.value)}
               />
