@@ -19,6 +19,6 @@ const icon_name :any = {
 export default function Icon({name, style={ color: '#777'}}: any): JSX.Element {
     const IconName = icon_name[name];
     return (
-      <IconName width='24px' height='24px' style={style} />
+      <IconName className="h-6 w-6" style={style} />
     );
 };
