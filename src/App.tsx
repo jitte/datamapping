@@ -43,16 +43,20 @@ export default function App() {
     ),
     [setEdges]
   );
+  // App()の外側をReactFlowProviderで囲むことで、useReactFlow()が使える
+  // reactFlowInstanceをdeleteNode()で使う
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
 
   function deleteNode(deleteId : string) : void {
     console.log(`deleteNode(${deleteId})`);
     console.log(reactFlowInstance);
+    // 指定されたidのノードを削除
     reactFlowInstance.setNodes(
       reactFlowInstance.getNodes().filter(
         (nds : any) => nds.id !== deleteId
       )
     );
+    // 指定されたidにつながっているエッジを削除
     reactFlowInstance.setEdges(
       reactFlowInstance.getEdges().filter(
         (nds : any) => nds.source !== deleteId && nds.target !== deleteId
