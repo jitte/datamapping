@@ -10,22 +10,11 @@ import ReactFlow, {
   MiniMap, Controls, Background,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import './App.css'
 
 import SideBarComponent from './components/SideBarComponent';
-import {
-  PiiSubjectNode,
-  PiiControllerNode,
-  PiiProcessorNode,
-  ThirdPartyNode,
-} from './CustomNodes';
+import { nodeTypes } from './CustomNodes';
 import { GlobalContext } from './Contexts';
-import './App.css'
-const nodeTypes = {
-  piiSubject:    PiiSubjectNode,
-  piiController: PiiControllerNode,
-  piiProcessor:  PiiProcessorNode,
-  thirdParty:    ThirdPartyNode,
-};
 
 const initialNodes = [
   { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y:  50}, data: { value: 123 }},

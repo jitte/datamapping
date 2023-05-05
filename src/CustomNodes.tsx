@@ -3,6 +3,14 @@ import TitleComponent from "./components/TitleComponent";
 import InputComponent from "./components/InputComponent";
 import ComboboxComponent from "./components/ComboboxComponent";
 import DataFlowComponent from './components/DataFlowComponent';
+import './App.css'
+
+export const nodeTypes = {
+  piiSubject:    PiiSubjectNode,
+  piiController: PiiControllerNode,
+  piiProcessor:  PiiProcessorNode,
+  thirdParty:    ThirdPartyNode,
+};
 
 const countryList = [
   "Japan", "USA", "EU", "China", "Singapore", "India", "Other"
