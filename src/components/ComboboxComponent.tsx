@@ -3,7 +3,7 @@ import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 export default function ComboboxComponent(
-  { name, caption, itemList, value = "", onChange } : { name: string, caption: string, itemList: string[], value: string, onChange: ChangeEventHandler }
+  { name, caption, itemList, onChange } : { name: string, caption: string, itemList: string[], onChange: ChangeEventHandler }
 ): JSX.Element {
   //  選択されたアイテム
   const [selectedItem, setSelectedItem] = useState("");
