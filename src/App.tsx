@@ -1,25 +1,30 @@
-import { useCallback, useState } from 'react';
+import {
+  useState,
+  useCallback,
+} from 'react';
 import ReactFlow, {
+  useNodesState,
+  useEdgesState,
+  useReactFlow,
+  addEdge, BackgroundVariant,
   MiniMap, Controls, Background,
-  addEdge, applyEdgeChanges, applyNodeChanges, BackgroundVariant,
 } from 'reactflow';
-import Icon from './Icon';
-
 import 'reactflow/dist/style.css';
-import './App.css'
 
+import SideBarComponent from './components/SideBarComponent';
 import {
   PiiSubjectNode,
   PiiControllerNode,
   PiiProcessorNode,
   ThirdPartyNode,
- } from './Nodes';
-
+} from './CustomNodes';
+import { GlobalContext } from './Contexts';
+import './App.css'
 const nodeTypes = {
   piiSubject:    PiiSubjectNode,
   piiController: PiiControllerNode,
   piiProcessor:  PiiProcessorNode,
-  thirdParty:     ThirdPartyNode,
+  thirdParty:    ThirdPartyNode,
 };
 
 const initialNodes = [
@@ -30,63 +35,54 @@ const initialNodes = [
 ];
 
 export default function App() {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState([]);
-
-  const onNodesChange = useCallback(
-    (changes: any) => setNodes(
-      (nds) => applyNodeChanges(changes, nds)
-    ),
-    [setNodes]
-  );
-  const onEdgesChange = useCallback(
-    (changes: any) => setEdges(
-      (eds) => applyEdgeChanges(changes, eds)
-    ),
-    [setEdges]
-  );
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const onConnect = useCallback(
     (connection: any) => setEdges(
       (eds) => addEdge(connection, eds)
     ),
     [setEdges]
   );
+  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
 
-  function EntityItem({text}: any): JSX.Element {
-    const name = text.toLowerCase().replace(/ /g, '_');
-    return (
-      <div className="flex border border-solid border-black rounded-lg border-l-4 p-1 m-1 items-center gap-2" id={name}>
-        <Icon name={name} />
-        <div className="text-sm">{text}</div>
-        <div className="flex-grow" />
-        <Icon name="drag_handle" />
-      </div>
+  function deleteNode(deleteId : string) : void {
+    console.log(`deleteNode(${deleteId})`);
+    console.log(reactFlowInstance);
+    reactFlowInstance.setNodes(
+      reactFlowInstance.getNodes().filter(
+        (nds : any) => nds.id !== deleteId
+      )
     );
-  }
-
+    reactFlowInstance.setEdges(
+      reactFlowInstance.getEdges().filter(
+        (nds : any) => nds.source !== deleteId && nds.target !== deleteId
+      )
+    );
+  };
+  
   return (
-    <div className="flex flex-row h-screen w-screen">
-      <nav className="w-52 h-full flex flex-col border-r" >
-        <span className="text-center">Entities</span>
-        <EntityItem text="PII Subject" />
-        <EntityItem text="PII Controller" />
-        <EntityItem text="PII Processor" />
-        <EntityItem text="Third Party" />
-      </nav>
-      <main className="flex-1 h-full">
-        <ReactFlow
-          nodes={nodes}
-          nodeTypes={nodeTypes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-        >
-          <Controls />
-          <MiniMap />
-          <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-        </ReactFlow>
-      </main>
-    </div>
+    <GlobalContext.Provider value={{
+      reactFlowInstance, 
+      setReactFlowInstance,
+      deleteNode
+    }} >
+      <div className="flex flex-row h-screen w-screen">
+        <SideBarComponent />
+        <main className="flex-1 h-full">
+          <ReactFlow
+            nodes={nodes}
+            nodeTypes={nodeTypes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+          >
+            <Controls />
+            <MiniMap />
+            <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+          </ReactFlow>
+        </main>
+      </div>
+    </GlobalContext.Provider>
   );
 }
