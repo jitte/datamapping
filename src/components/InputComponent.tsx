@@ -12,7 +12,7 @@ export default function InputComponent(
         <input
           name={name}
           type="text"
-          className="nodrag block w-full form-input rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="nodrag w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 rounded-lg"
           placeholder="Type a text"
           onChange={onChange} />
       </div>
