@@ -18,13 +18,21 @@ import { nodeTypes } from './CustomNodes';
 import { GlobalContext } from './Contexts';
 
 const initialNodes: Node[] = [
-  { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y:  50}, data: { value: 123 }},
-  { id: 'node-2', type: 'piiController', position: { x: 150, y: 150}, data: { value: 123 }},
-  //{ id: 'node-3', type: 'piiProcessor' , position: { x: 250, y: 250}, data: { value: 123 }},
-  //{ id: 'node-4', type: 'thirdParty'   , position: { x: 350, y: 350}, data: { value: 123 }},
+  { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: { value: 123 }},
+  { id: 'node-2', type: 'piiController', position: { x: 450, y:  50}, data: { value: 123 }},
+  { id: 'node-3', type: 'piiProcessor' , position: { x: 850, y:  50}, data: { value: 123 }},
+  { id: 'node-4', type: 'thirdParty'   , position: { x: 450, y: 450}, data: { value: 123 }},
 ];
 const initialEdges: Edge[] = [
-  { id: 'edge-1-2', source: 'node-1', target: 'node-2'}
+  { id: 'edge-1-2',
+    source: 'node-1', sourceHandle: 'source_pii_flow',
+    target: 'node-2', targetHandle: 'target_pii_flow'},
+  { id: 'edge-2-3',
+    source: 'node-2', sourceHandle: 'source_pii_flow',
+    target: 'node-3', targetHandle: 'target_pii_flow'},
+  { id: 'edge-1-4',
+    source: 'node-1', sourceHandle: 'source_non_pii_flow',
+    target: 'node-4', targetHandle: 'target_non_pii_flow'},
 ];
 
 export default function App() {
@@ -88,6 +96,7 @@ export default function App() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            fitView
           >
             <Controls />
             <MiniMap />

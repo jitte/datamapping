@@ -32,8 +32,8 @@ export function PiiSubjectNode(
       />
       <div className="w-full pb-2">
         <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
-        <DataFlowComponent name="PII flow" data={data} />
-        <DataFlowComponent name="Non PII flow" data={data} />
+        <DataFlowComponent name="PII flow" id={id} />
+        <DataFlowComponent name="Non PII flow" id={id} />
       </div>
     </div>
   );
@@ -56,8 +56,8 @@ export function PiiControllerNode(
       <div className="pb-2">
         <InputComponent name="entity_name" caption="Entity Name" onChange={onChange} />
         <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
-        <DataFlowComponent name="PII flow" data={data} />
-        <DataFlowComponent name="Non PII flow" data={data} />
+        <DataFlowComponent name="PII flow" id={id} />
+        <DataFlowComponent name="Non PII flow" id={id} />
       </div>
     </div>
   );
@@ -80,8 +80,8 @@ export function PiiProcessorNode(
       <div className="w-full pb-2">
         <InputComponent name="entity_name" caption="Entity Name" onChange={onChange} />
         <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
-        <DataFlowComponent name="PII flow" data={data} />
-        <DataFlowComponent name="Non PII flow" data={data} />
+        <DataFlowComponent name="PII flow" id={id} />
+        <DataFlowComponent name="Non PII flow" id={id} />
       </div>
     </div>
   );
@@ -104,8 +104,8 @@ export function ThirdPartyNode(
       <div className="w-full pb-2">
         <InputComponent name="entity_name" caption="Entity Name" onChange={onChange} />
         <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
-        <DataFlowComponent name="PII flow" data={data} />
-        <DataFlowComponent name="Non PII flow" data={data} />
+        <DataFlowComponent name="PII flow" id={id} />
+        <DataFlowComponent name="Non PII flow" id={id} />
       </div>
     </div>
   );
