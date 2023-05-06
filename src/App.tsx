@@ -3,10 +3,10 @@ import {
   useCallback,
 } from 'react';
 import ReactFlow, {
-  useNodesState,
-  useEdgesState,
   useReactFlow,
-  addEdge, BackgroundVariant,
+  applyNodeChanges, applyEdgeChanges, addEdge,
+  NodeChange, EdgeChange, Connection,
+  BackgroundVariant,
   MiniMap, Controls, Background,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -19,18 +19,34 @@ import { GlobalContext } from './Contexts';
 const initialNodes = [
   { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y:  50}, data: { value: 123 }},
   { id: 'node-2', type: 'piiController', position: { x: 150, y: 150}, data: { value: 123 }},
-  { id: 'node-3', type: 'piiProcessor' , position: { x: 250, y: 250}, data: { value: 123 }},
-  { id: 'node-4', type: 'thirdParty'   , position: { x: 350, y: 350}, data: { value: 123 }},
+  //{ id: 'node-3', type: 'piiProcessor' , position: { x: 250, y: 250}, data: { value: 123 }},
+  //{ id: 'node-4', type: 'thirdParty'   , position: { x: 350, y: 350}, data: { value: 123 }},
+];
+const initialEdges = [
+  { id: 'edge-1-2', source: 'node-1', target: 'node-2'}
 ];
 
 export default function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
+
+  const onNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      console.log({at: 'onNodesChange', changes: changes});
+      setNodes((nds) => applyNodeChanges(changes, nds));
+    }, [setNodes]
+  );
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange[]) => {
+      console.log({at: 'onEdgesChange', changes: changes});
+      setEdges((eds) => applyEdgeChanges(changes, eds));
+    }, [setEdges]
+  );
   const onConnect = useCallback(
-    (connection: any) => setEdges(
-      (eds) => addEdge(connection, eds)
-    ),
-    [setEdges]
+    (connection: Connection) => {
+      console.log({at: 'onConnect', connection: connection});
+      setEdges((eds) => addEdge(connection, eds))
+    }, [setEdges]
   );
   // App()の外側をReactFlowProviderで囲むことで、useReactFlow()が使える
   // reactFlowInstanceをdeleteNode()で使う
