@@ -1,6 +1,7 @@
 import {
   useState,
   useCallback,
+  useRef,
 } from 'react';
 import ReactFlow, {
   useReactFlow,
@@ -35,7 +36,12 @@ const initialEdges: Edge[] = [
     target: 'node-4', targetHandle: 'target_non_pii_flow'},
 ];
 
+let nodeNumber = 0;
+const newNodeId = () => `node_${nodeNumber++}`;
+
 export default function App() {
+  const ref: React.MutableRefObject<any> = useRef(null);
+
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
 
@@ -79,7 +85,41 @@ export default function App() {
       )
     );
   };
-  
+
+  const onDragOver = useCallback((event: any) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback(
+    (event: any) => {
+      event.preventDefault();
+
+      const reactFlowBounds = ref.current.getBoundingClientRect();
+      const type = event.dataTransfer.getData('application/reactflow');
+
+      // check if the dropped element is valid
+      if (typeof type === 'undefined' || !type) {
+        return;
+      }
+
+      const position = reactFlowInstance.project({
+        x: event.clientX - reactFlowBounds.left,
+        y: event.clientY - reactFlowBounds.top,
+      });
+      const newNode = {
+        id: newNodeId(),
+        type,
+        position,
+        data: { value: 123 },
+      };
+      console.log({at: 'onDrop', newNode: newNode});
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance]
+  );
+ 
   return (
     <GlobalContext.Provider value={{
       reactFlowInstance, 
@@ -88,7 +128,7 @@ export default function App() {
     }} >
       <div className="flex flex-row h-screen w-screen">
         <SideBarComponent />
-        <main className="flex-1 h-full">
+        <main className="flex-1 h-full" ref={ref}>
           <ReactFlow
             nodes={nodes}
             nodeTypes={nodeTypes}
@@ -96,6 +136,8 @@ export default function App() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
             fitView
           >
             <Controls />
