@@ -1,4 +1,3 @@
-import { useCallback, } from 'react';
 import TitleComponent from "./components/TitleComponent";
 import InputComponent from "./components/InputComponent";
 import ComboboxComponent from "./components/ComboboxComponent";
@@ -23,13 +22,12 @@ const countryList = [
   "Japan", "USA", "EU", "China", "Singapore", "India", "Other"
 ];
 
-export function PiiSubjectNode(
-  { id, data } : {id: string, data: any}
-) : JSX.Element {
-  const onChange = useCallback((evt: any) => {
-    console.log(evt.target.value);
-  }, []);
+type NodeParamType = {
+  id: string,
+  data: any,
+}
 
+export function PiiSubjectNode( { id, data }: NodeParamType) : JSX.Element {
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
@@ -38,7 +36,7 @@ export function PiiSubjectNode(
         nodeId={id}
       />
       <div className="w-full pb-2">
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
+        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
@@ -46,13 +44,7 @@ export function PiiSubjectNode(
   );
 };
 
-export function PiiControllerNode(
-  { id, data } : {id: string, data: any}
-) : JSX.Element {
-  const onChange = useCallback((evt: any) => {
-    console.log(evt.target.value);
-  }, []);
-
+export function PiiControllerNode( { id, data } : NodeParamType) : JSX.Element {
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
@@ -61,8 +53,8 @@ export function PiiControllerNode(
         nodeId={id}
       />
       <div className="pb-2">
-        <InputComponent name="entity_name" caption="Entity Name" onChange={onChange} />
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
+        <InputComponent name="entity_name" caption="Entity Name" data={data} />
+        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
@@ -70,13 +62,7 @@ export function PiiControllerNode(
   );
 };
 
-export function PiiProcessorNode(
-  { id, data } : {id: string, data: any}
-) : JSX.Element {
-  const onChange = useCallback((evt: any) => {
-    console.log(evt.target.value);
-  }, []);
-
+export function PiiProcessorNode( { id, data }: NodeParamType): JSX.Element {
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
@@ -85,8 +71,8 @@ export function PiiProcessorNode(
         nodeId={id}
       />
       <div className="w-full pb-2">
-        <InputComponent name="entity_name" caption="Entity Name" onChange={onChange} />
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
+        <InputComponent name="entity_name" caption="Entity Name" data={data} />
+        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
@@ -94,13 +80,7 @@ export function PiiProcessorNode(
   );
 };
 
-export function ThirdPartyNode(
-  { id, data } : {id: string, data: any}
-) : JSX.Element {
-  const onChange = useCallback((evt: any) => {
-    console.log(evt.target.value);
-  }, []);
-
+export function ThirdPartyNode( { id, data }: NodeParamType): JSX.Element {
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
@@ -109,8 +89,8 @@ export function ThirdPartyNode(
         nodeId={id}
       />
       <div className="w-full pb-2">
-        <InputComponent name="entity_name" caption="Entity Name" onChange={onChange} />
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} onChange={onChange} />
+        <InputComponent name="entity_name" caption="Entity Name" data={data} />
+        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>

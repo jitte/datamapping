@@ -1,10 +1,15 @@
-import { useState, ChangeEventHandler, Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
-export default function ComboboxComponent(
-  { name, caption, itemList, onChange } : { name: string, caption: string, itemList: string[], onChange: ChangeEventHandler }
-): JSX.Element {
+type ComboboxType = {
+  name: string,
+  caption: string,
+  itemList: string[],
+  data: any,
+};
+
+export default function ComboboxComponent( { name, caption, itemList, data }: ComboboxType): JSX.Element {
   //  選択されたアイテム
   const [selectedItem, setSelectedItem] = useState("");
   // 入力欄の検索テキスト
@@ -15,6 +20,12 @@ export default function ComboboxComponent(
     : itemList.filter((item) => {
       return item.toLowerCase().includes(query.toLowerCase());
     });
+  // 変更された値を処理するイベントハンドラ
+  function handleCombobox(value: any) {
+    setSelectedItem(value);
+    data[name] = value;
+    console.log({at: 'handleCombobox', value , data});
+  }
 
   return (
     <div className="w-full flex flex-col bg-gray-50 mt-1 px-5 py-2">
@@ -22,7 +33,7 @@ export default function ComboboxComponent(
         {caption}
       </div>
       <div className="mt-2">
-        <Combobox name={name} value={selectedItem} onChange={setSelectedItem}>
+        <Combobox name={name} value={selectedItem} onChange={handleCombobox}>
           <div className="relative">
             <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow">
               <Combobox.Input
