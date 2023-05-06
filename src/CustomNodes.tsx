@@ -5,12 +5,19 @@ import ComboboxComponent from "./components/ComboboxComponent";
 import DataFlowComponent from './components/DataFlowComponent';
 import './App.css'
 
-export const nodeTypes = {
+export const nodeTypes: {[key: string]: any}= {
   piiSubject:    PiiSubjectNode,
   piiController: PiiControllerNode,
   piiProcessor:  PiiProcessorNode,
   thirdParty:    ThirdPartyNode,
 };
+
+export const nodeTitles: {[key: string]: string} = {
+  piiSubject:    "PII Subject",
+  piiController: "PII Controller",
+  piiProcessor:  "PII Processor",
+  thirdParty:    "Third Party",
+}
 
 const countryList = [
   "Japan", "USA", "EU", "China", "Singapore", "India", "Other"
@@ -26,7 +33,7 @@ export function PiiSubjectNode(
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
-        name="PII Subject"
+        nodeType="piiSubject"
         description="Identified or identifiable natural person"
         nodeId={id}
       />
@@ -49,7 +56,7 @@ export function PiiControllerNode(
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
-        name="PII Controller"
+        nodeType="piiController"
         description="Determines the purposes for which and the means by which personal data is processed"
         nodeId={id}
       />
@@ -73,7 +80,7 @@ export function PiiProcessorNode(
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
-        name="PII Processor"
+        nodeType="piiProcessor"
         description="Processes personal data only on behalf of the controller"
         nodeId={id}
       />
@@ -97,7 +104,7 @@ export function ThirdPartyNode(
   return (
     <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
       <TitleComponent
-        name="Third Party"
+        nodeType="thirdParty"
         description="Entity other than PII controller or PII processor"
         nodeId={id}
       />
