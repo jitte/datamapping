@@ -1,19 +1,55 @@
-import { createContext } from "react";
+import { useState, createContext, ReactNode } from "react";
 import { ReactFlowInstance } from "reactflow";
 
-// コンテキストとして共有する変数の型を宣言
 type GlobalContextType = {
 	reactFlowInstance: ReactFlowInstance|null;
 	setReactFlowInstance: any;
   deleteNode: (id: string) => void;
-}
+};
 
-// コンテキストの初期値（ダミー）
-const initialValue : GlobalContextType = {
+export const GlobalContext = createContext<GlobalContextType>({
 	reactFlowInstance: null,
 	setReactFlowInstance: () => {},
   deleteNode: () => {}
+});
+
+type PopUpContextType = {
+	openPopUp: (popUpElement: JSX.Element) => void;
+	closePopUp: () => void;
 };
 
-// コンテキストを参照させる
-export const GlobalContext = createContext<GlobalContextType>(initialValue);
+export const PopUpContext = createContext<PopUpContextType>({
+  openPopUp: () => {},
+  closePopUp: () => {},
+});
+
+const PopUpContextProvider = ({ children }: { children: ReactNode }) => {
+  const [popUpElements, setPopUpElements] = useState<JSX.Element[]>([]);
+
+  const openPopUp = (element: JSX.Element) => {
+    setPopUpElements(prevPopUps => [element, ...prevPopUps]);
+  };
+
+  const closePopUp = () => {
+    setPopUpElements(prevPopUps => prevPopUps.slice(1));
+  };
+
+  return (
+    <PopUpContext.Provider value={{ openPopUp, closePopUp }}>
+      {children}
+      {popUpElements[0]}
+    </PopUpContext.Provider>
+  );
+};
+
+export function GlobalContextProvider(
+	{ value, children }: { value: GlobalContextType, children: ReactNode }
+): JSX.Element {
+	return (
+    <GlobalContext.Provider value={value}>
+			<PopUpContextProvider>
+				{children}
+			</PopUpContextProvider>
+		</GlobalContext.Provider>
+	);
+}

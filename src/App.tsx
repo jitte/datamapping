@@ -16,7 +16,7 @@ import './App.css'
 
 import SideBarComponent from './components/SideBarComponent';
 import { nodeTypes } from './CustomNodes';
-import { GlobalContext } from './Contexts';
+import { GlobalContextProvider } from './Contexts';
 
 const initialNodes: Node[] = [
   { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: { value: 123 }},
@@ -70,8 +70,7 @@ export default function App() {
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
 
   function deleteNode(deleteId : string) : void {
-    console.log(`deleteNode(${deleteId})`);
-    console.log(reactFlowInstance);
+    console.log({at: 'deleteNode', deleteId: deleteId, reactFlowInstance: reactFlowInstance});
     // 指定されたidのノードを削除
     reactFlowInstance.setNodes(
       reactFlowInstance.getNodes().filter(
@@ -121,7 +120,7 @@ export default function App() {
   );
  
   return (
-    <GlobalContext.Provider value={{
+    <GlobalContextProvider value={{
       reactFlowInstance, 
       setReactFlowInstance,
       deleteNode
@@ -146,6 +145,6 @@ export default function App() {
           </ReactFlow>
         </main>
       </div>
-    </GlobalContext.Provider>
+    </GlobalContextProvider>
   );
 }
