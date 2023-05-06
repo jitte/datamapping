@@ -86,13 +86,13 @@ export default function App() {
     );
   };
 
-  const onDragOver = useCallback((event: any) => {
+  const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
   const onDrop = useCallback(
-    (event: any) => {
+    (event: React.DragEvent) => {
       event.preventDefault();
 
       const reactFlowBounds = ref.current.getBoundingClientRect();
@@ -113,7 +113,7 @@ export default function App() {
         position,
         data: { value: 123 },
       };
-      console.log({at: 'onDrop', newNode: newNode});
+      console.log({at: 'onDrop', event: event, newNode: newNode});
 
       setNodes((nds) => nds.concat(newNode));
     },
