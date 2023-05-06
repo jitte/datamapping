@@ -4,10 +4,11 @@ import {
 } from 'react';
 import ReactFlow, {
   useReactFlow,
-  applyNodeChanges, applyEdgeChanges, addEdge,
-  NodeChange, EdgeChange, Connection,
-  BackgroundVariant,
-  MiniMap, Controls, Background,
+  Node, NodeChange, applyNodeChanges,
+  Edge, EdgeChange, applyEdgeChanges, addEdge,
+  Connection,
+  MiniMap, Controls,
+  Background, BackgroundVariant,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css'
@@ -16,13 +17,13 @@ import SideBarComponent from './components/SideBarComponent';
 import { nodeTypes } from './CustomNodes';
 import { GlobalContext } from './Contexts';
 
-const initialNodes = [
+const initialNodes: Node[] = [
   { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y:  50}, data: { value: 123 }},
   { id: 'node-2', type: 'piiController', position: { x: 150, y: 150}, data: { value: 123 }},
   //{ id: 'node-3', type: 'piiProcessor' , position: { x: 250, y: 250}, data: { value: 123 }},
   //{ id: 'node-4', type: 'thirdParty'   , position: { x: 350, y: 350}, data: { value: 123 }},
 ];
-const initialEdges = [
+const initialEdges: Edge[] = [
   { id: 'edge-1-2', source: 'node-1', target: 'node-2'}
 ];
 
@@ -31,9 +32,11 @@ export default function App() {
   const [edges, setEdges] = useState(initialEdges);
 
   const onNodesChange = useCallback(
-    (changes: NodeChange[]) => {
+    (changes: NodeChange[]): void => {
       console.log({at: 'onNodesChange', changes: changes});
-      setNodes((nds) => applyNodeChanges(changes, nds));
+      setNodes(function (nds) {
+        return applyNodeChanges(changes, nds);
+      });
     }, [setNodes]
   );
   const onEdgesChange = useCallback(
