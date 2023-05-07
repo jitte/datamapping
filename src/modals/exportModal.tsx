@@ -4,12 +4,29 @@ import {
   XMarkIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
-import { PopUpContext } from "../Contexts";
+import { GlobalContext, PopUpContext } from "../Contexts";
+
+function normalCaseToSnakeCase(str: string) {
+  return str
+    .split(" ")
+    .map((word, index) => {
+      if (index === 0) {
+        return word[0].toUpperCase() + word.slice(1).toLowerCase();
+      }
+      return word.toLowerCase();
+    })
+    .join("_");
+};
 
 export default function ExportModal() {
   const [open, setOpen] = useState(true);
-  const { closePopUp } = useContext(PopUpContext);
+  const [flowName, setFlowName] = useState("");
+
   const ref: React.MutableRefObject<any> = useRef();
+
+  const { closePopUp } = useContext(PopUpContext);
+  const { nodes, edges }  = useContext(GlobalContext);
+
   function setModalOpen(x: boolean) {
     setOpen(x);
     if (x === false) {
@@ -18,6 +35,23 @@ export default function ExportModal() {
       }, 300);
     }
   }
+
+  function downloadFlow() {
+    if (flowName === '') return;
+    // create a data URI with the current flow data
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify({nodes, edges})
+    )}`;
+
+    // create a link element and set its properties
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = `${normalCaseToSnakeCase(flowName)}.json`;
+
+    // simulate a click on the link element to trigger the download
+    link.click();
+  };
+
   return (
     <Transition.Root show={open} appear={true} as={Fragment}>
       <Dialog
@@ -88,10 +122,10 @@ export default function ExportModal() {
                         Name
                       </label>
                       <input
-                        onChange={() => {}}
+                        onChange={(event) => setFlowName(event.target.value)}
                         type="text"
                         name="name"
-                        value=""
+                        value={flowName}
                         placeholder="File name"
                         id="name"
                         className="focus:border focus:border-blue block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:focus:border-blue-500 dark:focus:ring-blue-500 text-gray-900 dark:text-gray-100"
@@ -120,7 +154,7 @@ export default function ExportModal() {
                     </div>
                     <div className="w-full flex justify-end">
                       <button
-                        onClick={() => setModalOpen(false)}
+                        onClick={downloadFlow}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                       >
                         Download Flow
