@@ -1,15 +1,23 @@
 import { useState, createContext, ReactNode } from "react";
-import { ReactFlowInstance } from "reactflow";
+import { Node, Edge, ReactFlowInstance } from "reactflow";
 
 type GlobalContextType = {
 	reactFlowInstance: ReactFlowInstance|null;
 	setReactFlowInstance: any;
+  nodes: Node[],
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
+  edges: Edge[],
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>,
   deleteNode: (id: string) => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType>({
 	reactFlowInstance: null,
 	setReactFlowInstance: () => {},
+  nodes: [],
+  setNodes: () => {},
+  edges: [],
+  setEdges: () => {},
   deleteNode: () => {}
 });
 

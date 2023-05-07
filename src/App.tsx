@@ -19,10 +19,10 @@ import { nodeTypes } from './CustomNodes';
 import { GlobalContextProvider } from './Contexts';
 
 const initialNodes: Node[] = [
-  { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: { value: 123 }},
-  { id: 'node-2', type: 'piiController', position: { x: 450, y:  50}, data: { value: 123 }},
-  { id: 'node-3', type: 'piiProcessor' , position: { x: 850, y:  50}, data: { value: 123 }},
-  { id: 'node-4', type: 'thirdParty'   , position: { x: 450, y: 450}, data: { value: 123 }},
+  { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: {}},
+  { id: 'node-2', type: 'piiController', position: { x: 450, y:  50}, data: {}},
+  { id: 'node-3', type: 'piiProcessor' , position: { x: 850, y:  50}, data: {}},
+  { id: 'node-4', type: 'thirdParty'   , position: { x: 450, y: 450}, data: {}},
 ];
 const initialEdges: Edge[] = [
   { id: 'edge-1-2',
@@ -40,11 +40,32 @@ let nodeNumber = 0;
 const newNodeId = () => `node_${nodeNumber++}`;
 
 export default function App() {
-  const ref: React.MutableRefObject<any> = useRef(null);
-
+  // creating state
+  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
 
+  // creating ref
+  const ref: React.MutableRefObject<any> = useRef(null);
+
+  // utility function
+  function deleteNode(deleteId : string) : void {
+    console.log({at: 'deleteNode', deleteId: deleteId, reactFlowInstance: reactFlowInstance});
+    // 指定されたidのノードを削除
+    reactFlowInstance.setNodes(
+      reactFlowInstance.getNodes().filter(
+        (nds : any) => nds.id !== deleteId
+      )
+    );
+    // 指定されたidにつながっているエッジを削除
+    reactFlowInstance.setEdges(
+      reactFlowInstance.getEdges().filter(
+        (nds : any) => nds.source !== deleteId && nds.target !== deleteId
+      )
+    );
+  };
+
+  // callbacks
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
       console.log({at: 'onNodesChange', changes: changes});
@@ -65,31 +86,12 @@ export default function App() {
       setEdges((eds) => addEdge(connection, eds))
     }, [setEdges]
   );
-  // App()の外側をReactFlowProviderで囲むことで、useReactFlow()が使える
-  // reactFlowInstanceをdeleteNode()で使う
-  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
-
-  function deleteNode(deleteId : string) : void {
-    console.log({at: 'deleteNode', deleteId: deleteId, reactFlowInstance: reactFlowInstance});
-    // 指定されたidのノードを削除
-    reactFlowInstance.setNodes(
-      reactFlowInstance.getNodes().filter(
-        (nds : any) => nds.id !== deleteId
-      )
-    );
-    // 指定されたidにつながっているエッジを削除
-    reactFlowInstance.setEdges(
-      reactFlowInstance.getEdges().filter(
-        (nds : any) => nds.source !== deleteId && nds.target !== deleteId
-      )
-    );
-  };
-
-  const onDragOver = useCallback((event: React.DragEvent) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
-
+  const onDragOver = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    }, []
+  );
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
@@ -110,19 +112,22 @@ export default function App() {
         id: newNodeId(),
         type,
         position,
-        data: { value: 123 },
+        data: {},
       };
       console.log({at: 'onDrop', event: event, newNode: newNode});
 
       setNodes((nds) => nds.concat(newNode));
-    },
-    [reactFlowInstance]
+    }, [reactFlowInstance]
   );
  
   return (
     <GlobalContextProvider value={{
       reactFlowInstance, 
       setReactFlowInstance,
+      nodes,
+      setNodes,
+      edges,
+      setEdges,
       deleteNode
     }} >
       <div className="flex flex-row h-screen w-screen">
