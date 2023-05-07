@@ -68,7 +68,7 @@ export default function App() {
   // callbacks
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
-      console.log({at: 'onNodesChange', changes: changes});
+      console.log({at: 'onNodesChange', changes});
       setNodes(function (nds) {
         return applyNodeChanges(changes, nds);
       });
@@ -76,13 +76,13 @@ export default function App() {
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      console.log({at: 'onEdgesChange', changes: changes});
+      console.log({at: 'onEdgesChange', changes});
       setEdges((eds) => applyEdgeChanges(changes, eds));
     }, [setEdges]
   );
   const onConnect = useCallback(
     (connection: Connection) => {
-      console.log({at: 'onConnect', connection: connection});
+      console.log({at: 'onConnect', connection});
       setEdges((eds) => addEdge(connection, eds))
     }, [setEdges]
   );
@@ -114,7 +114,7 @@ export default function App() {
         position,
         data: {},
       };
-      console.log({at: 'onDrop', event: event, newNode: newNode});
+      console.log({at: 'onDrop', event, newNode});
 
       setNodes((nds) => nds.concat(newNode));
     }, [reactFlowInstance]
