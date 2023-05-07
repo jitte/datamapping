@@ -7,7 +7,7 @@ type InputType = {
 };
 
 export default function InputComponent( { name, caption, data }: InputType): JSX.Element {
-  const [text, setText] = useState(data[name]);
+  const [text, setText] = useState(data[name] ?? '');
   // 変更された値を処理するイベントハンドラ
   function handleInput(event: any) {
     setText(event.target.value);

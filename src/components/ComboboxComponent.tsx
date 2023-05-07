@@ -11,7 +11,7 @@ type ComboboxType = {
 
 export default function ComboboxComponent( { name, caption, itemList, data }: ComboboxType): JSX.Element {
   //  選択されたアイテム
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState(data[name] ?? '');
   // 入力欄の検索テキスト
   const [query, setQuery] = useState('');
   // 検索テキストにマッチするアイテム（小文字でフィルタ）
