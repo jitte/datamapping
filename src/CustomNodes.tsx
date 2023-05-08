@@ -2,7 +2,6 @@ import TitleComponent from "./components/TitleComponent";
 import InputComponent from "./components/InputComponent";
 import ComboboxComponent from "./components/ComboboxComponent";
 import DataFlowComponent from './components/DataFlowComponent';
-import './App.css'
 
 export const nodeTypes: {[key: string]: any}= {
   piiSubject:    PiiSubjectNode,
@@ -22,16 +21,25 @@ const countryList = [
   "Japan", "USA", "EU", "China", "Singapore", "India", "Other"
 ];
 
+function classNames(...classes: Array<string>) {
+  return classes.filter(Boolean).join(" ");
+}
+
 type NodeParamType = {
   id: string,
   data: any,
+  type: string,
+  selected: boolean,
 }
 
-export function PiiSubjectNode( { id, data }: NodeParamType) : JSX.Element {
+export function PiiSubjectNode({ id, data, type, selected }: NodeParamType): JSX.Element {
   return (
-    <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
+    <div className={classNames(
+      "flex flex-col w-80 bg-white border border-black rounded-lg",
+      selected ? "border border-blue-500" : "border dark:border-gray-700"
+    )}>
       <TitleComponent
-        nodeType="piiSubject"
+        nodeType={type}
         description="Identified or identifiable natural person"
         nodeId={id}
       />
@@ -44,11 +52,14 @@ export function PiiSubjectNode( { id, data }: NodeParamType) : JSX.Element {
   );
 };
 
-export function PiiControllerNode( { id, data } : NodeParamType) : JSX.Element {
+export function PiiControllerNode({ id, data, type, selected }: NodeParamType): JSX.Element {
   return (
-    <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
+    <div className={classNames(
+      "flex flex-col w-80 bg-white border border-black rounded-lg",
+      selected ? "border border-blue-500" : "border dark:border-gray-700"
+    )}>
       <TitleComponent
-        nodeType="piiController"
+        nodeType={type}
         description="Determines the purposes for which and the means by which personal data is processed"
         nodeId={id}
       />
@@ -62,11 +73,14 @@ export function PiiControllerNode( { id, data } : NodeParamType) : JSX.Element {
   );
 };
 
-export function PiiProcessorNode( { id, data }: NodeParamType): JSX.Element {
+export function PiiProcessorNode({ id, data, type, selected }: NodeParamType): JSX.Element {
   return (
-    <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
+    <div className={classNames(
+      "flex flex-col w-80 bg-white border border-black rounded-lg",
+      selected ? "border border-blue-500" : "border dark:border-gray-700"
+    )}>
       <TitleComponent
-        nodeType="piiProcessor"
+        nodeType={type}
         description="Processes personal data only on behalf of the controller"
         nodeId={id}
       />
@@ -80,11 +94,14 @@ export function PiiProcessorNode( { id, data }: NodeParamType): JSX.Element {
   );
 };
 
-export function ThirdPartyNode( { id, data }: NodeParamType): JSX.Element {
+export function ThirdPartyNode({ id, data, type, selected }: NodeParamType): JSX.Element {
   return (
-    <div className="flex flex-col w-80 bg-white border border-black rounded-lg">
+    <div className={classNames(
+      "flex flex-col w-80 bg-white border border-black rounded-lg",
+      selected ? "border border-blue-500" : "border dark:border-gray-700"
+    )}>
       <TitleComponent
-        nodeType="thirdParty"
+        nodeType={type}
         description="Entity other than PII controller or PII processor"
         nodeId={id}
       />
