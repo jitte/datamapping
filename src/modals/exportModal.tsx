@@ -40,7 +40,7 @@ export default function ExportModal() {
     if (flowName === '') return;
     // create a data URI with the current flow data
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-      JSON.stringify({nodes, edges})
+      JSON.stringify({nodes, edges}, null, "\t")
     )}`;
 
     // create a link element and set its properties
