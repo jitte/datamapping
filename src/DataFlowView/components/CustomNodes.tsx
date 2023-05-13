@@ -1,7 +1,7 @@
-import TitleComponent from "./components/TitleComponent";
-import InputComponent from "./components/InputComponent";
-import ComboboxComponent from "./components/ComboboxComponent";
-import DataFlowComponent from './components/DataFlowComponent';
+import TitleComponent from "./TitleComponent";
+import InputComponent from "./InputComponent";
+import ComboboxComponent from "./ComboboxComponent";
+import DataFlowComponent from './DataFlowComponent';
 
 export const nodeTypes: {[key: string]: any}= {
   piiSubject:    PiiSubjectNode,

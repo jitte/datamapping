@@ -2,12 +2,15 @@ import { useContext } from "react";
 import {
   ArrowDownTrayIcon,
   ArrowUpTrayIcon,
+  ListBulletIcon,
 } from "@heroicons/react/24/outline";
 import Icon from '../Icon'
-import { nodeTitles } from '../CustomNodes';
-import { PopUpContext } from '../Contexts';
+import { nodeTitles } from '../DataFlowView/components/CustomNodes';
+import { GlobalContext, PopUpContext } from '../Contexts';
 import ImportModal from '../modals/importModal';
 import ExportModal from '../modals/exportModal';
+
+import { Sidebar } from 'flowbite-react';
 
 function EntityComponent({nodeType}: {nodeType: string}) : JSX.Element {
   const onDragStart = (event: any, type: any) => {
@@ -29,7 +32,7 @@ function EntityComponent({nodeType}: {nodeType: string}) : JSX.Element {
   );
 }
 
-export default function SideBarComponent() {
+function OldSideBarComponent() {
   const { openPopUp } = useContext(PopUpContext);
   return (
     <nav className="w-52 h-full flex flex-col border-r" >
@@ -54,5 +57,36 @@ export default function SideBarComponent() {
         </button>
       </div>
     </nav>
+  );
+}
+export default function SideBarComponent() {
+  const { setCurrentMenu } = useContext(GlobalContext);
+  return (
+    <div className="w-fit">
+      <Sidebar aria-label="Default sidebar example">
+        <Sidebar.Items>
+          <Sidebar.ItemGroup>
+            <Sidebar.Item icon={ListBulletIcon} label="n/a">
+              Dashboard
+            </Sidebar.Item>
+            <Sidebar.Item icon={ListBulletIcon} label="n/a">
+              Assets
+            </Sidebar.Item>
+            <Sidebar.Item icon={ListBulletIcon} label="n/a">
+              Storages
+            </Sidebar.Item>
+            <Sidebar.Item icon={ListBulletIcon} label="n/a">
+              Entities
+            </Sidebar.Item>
+            <Sidebar.Item
+              icon={ListBulletIcon} 
+              onClick={() => setCurrentMenu('Data Flow')}
+            >
+              Data Flow
+            </Sidebar.Item>
+          </Sidebar.ItemGroup>
+        </Sidebar.Items>
+      </Sidebar>
+    </div>
   );
 }

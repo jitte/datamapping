@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { GlobalContext } from '../Contexts';
-import { nodeTitles } from '../CustomNodes';
+import { DataFlowContext } from '../dataFlowContext';
+import { nodeTitles } from './CustomNodes';
 
-import Icon from '../Icon';
+import Icon from '../../Icon';
 
 export default function TitleComponent(
   { nodeType, description, nodeId } : { nodeType: string, description: string, nodeId: string }
 ) : JSX.Element {
 
   // グローバルコンテキストで作成した削除関数を使う
-  const { deleteNode } = useContext(GlobalContext);
+  const { deleteNode } = useContext(DataFlowContext);
   return (
     <>
       <div className="flex flexitems-center justify-between bg-gray-50 rounded-t-lg p-2">
