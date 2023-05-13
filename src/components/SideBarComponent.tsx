@@ -84,6 +84,9 @@ export default function SideBarComponent() {
             >
               Data Flow
             </Sidebar.Item>
+            <Sidebar.Item icon={ListBulletIcon} label="n/a">
+              Risks
+            </Sidebar.Item>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
