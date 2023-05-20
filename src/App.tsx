@@ -7,9 +7,10 @@ import SideBarComponent from './components/SideBarComponent';
 import { GlobalContextProvider } from './Contexts';
 
 import DataFlowView from './DataFlowView';
+import ProjectsView from './ProjectsView';
 
 export default function App() {
-  const [currentMenu, setCurrentMenu] = useState('Data Flow');
+  const [currentMenu, setCurrentMenu] = useState('Projects');
 
   let viewElement;
 
@@ -20,6 +21,11 @@ export default function App() {
           <DataFlowView />
         </ReactFlowProvider>
       );
+      break;
+    case 'Projects':
+      viewElement = (
+        <ProjectsView />
+      )
       break;
     default:
       console.log('n/a');

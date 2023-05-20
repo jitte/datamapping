@@ -79,6 +79,13 @@ export default function SideBarComponent() {
               Entities
             </Sidebar.Item>
             <Sidebar.Item
+              icon={ListBulletIcon}
+              label="n/a"
+              onClick={() => setCurrentMenu('Projects')}
+            >
+              Projects
+            </Sidebar.Item>
+            <Sidebar.Item
               icon={ListBulletIcon} 
               onClick={() => setCurrentMenu('Data Flow')}
             >
