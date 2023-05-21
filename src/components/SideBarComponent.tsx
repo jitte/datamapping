@@ -75,7 +75,7 @@ export default function SideBarComponent() {
     )
   }
   return (
-    <div className="w-fit justify-stretch">
+    <div className="w-fit justify-stretch bg-gray-50">
       <SidebarItem
         onClick={() => setCurrentMenu('Projects')}
         label="n/a">
