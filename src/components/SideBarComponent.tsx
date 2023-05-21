@@ -10,8 +10,6 @@ import { GlobalContext, PopUpContext } from '../Contexts';
 import ImportModal from '../modals/importModal';
 import ExportModal from '../modals/exportModal';
 
-import { Sidebar } from 'flowbite-react';
-
 function EntityComponent({nodeType}: {nodeType: string}) : JSX.Element {
   const onDragStart = (event: any, type: any) => {
     event.dataTransfer.setData('application/reactflow', type);
@@ -59,44 +57,59 @@ function OldSideBarComponent() {
     </nav>
   );
 }
+
 export default function SideBarComponent() {
   const { setCurrentMenu } = useContext(GlobalContext);
+
+  function SidebarItem({ icon=ListBulletIcon, label='', onClick, children}): JSX.Element {
+    const IconElement = icon
+    return (
+      <button onClick={onClick} className="flex flex-row items-center justify-between p-2 gap-2 w-full">
+        <IconElement className="w-5 h-5" style={{color: '#777'}} />
+        {children}
+        <div className="grow" />
+        {label === '' ? '' :
+          <div className="bg-blue-300 text-blue-900 text-sm rounded-lg px-1">{label}</div>
+        }
+      </button>
+    )
+  }
   return (
-    <div className="w-fit">
-      <Sidebar aria-label="Default sidebar example">
-        <Sidebar.Items>
-          <Sidebar.ItemGroup>
-            <Sidebar.Item icon={ListBulletIcon} label="n/a">
-              Dashboard
-            </Sidebar.Item>
-            <Sidebar.Item icon={ListBulletIcon} label="n/a">
-              Assets
-            </Sidebar.Item>
-            <Sidebar.Item icon={ListBulletIcon} label="n/a">
-              Storages
-            </Sidebar.Item>
-            <Sidebar.Item icon={ListBulletIcon} label="n/a">
-              Entities
-            </Sidebar.Item>
-            <Sidebar.Item
-              icon={ListBulletIcon}
-              label="n/a"
-              onClick={() => setCurrentMenu('Projects')}
-            >
-              Projects
-            </Sidebar.Item>
-            <Sidebar.Item
-              icon={ListBulletIcon} 
-              onClick={() => setCurrentMenu('Data Flow')}
-            >
-              Data Flow
-            </Sidebar.Item>
-            <Sidebar.Item icon={ListBulletIcon} label="n/a">
-              Risks
-            </Sidebar.Item>
-          </Sidebar.ItemGroup>
-        </Sidebar.Items>
-      </Sidebar>
+    <div className="w-fit justify-stretch">
+      <SidebarItem
+        onClick={() => setCurrentMenu('Projects')}
+        label="n/a">
+        Dashboard
+      </SidebarItem>
+      <SidebarItem
+        onClick={() => setCurrentMenu('Projects')}
+        label="n/a">
+        Assets
+      </SidebarItem>
+      <SidebarItem
+        onClick={() => setCurrentMenu('Projects')}
+        label="n/a">
+        Storages
+      </SidebarItem>
+      <SidebarItem
+        onClick={() => setCurrentMenu('Projects')}
+        label="n/a">
+        Entities
+      </SidebarItem>
+      <SidebarItem
+        onClick={() => setCurrentMenu('Projects')}
+        label="n/a" >
+        Projects
+      </SidebarItem>
+      <SidebarItem
+        onClick={() => setCurrentMenu('Data Flow')} >
+        Data Flow
+      </SidebarItem>
+      <SidebarItem
+        onClick={() => setCurrentMenu('Data Flow')}
+        label="n/a">
+        Risks
+      </SidebarItem>
     </div>
   );
 }
