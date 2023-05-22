@@ -1,17 +1,4 @@
 import { useState, createContext, ReactNode } from "react"
-import { Node, Edge } from "reactflow"
-
-// Data Types
-type FlowType = {
-  nodes: Node[],
-  edges: Edge[],
-}
-type ProjectType = {
-  id: number,
-  name: string,
-  description: string,
-  flow: FlowType,
-}
 
 // Context Types
 type GlobalContextType = {
