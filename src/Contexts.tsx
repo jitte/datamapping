@@ -17,8 +17,6 @@ type ProjectType = {
 type GlobalContextType = {
   currentMenu: string,
   setCurrentMenu: React.Dispatch<React.SetStateAction<string>>,
-  projects: ProjectType[],
-  setProjects: React.Dispatch<React.SetStateAction<ProjectType>>,
 }
 type PopUpContextType = {
 	openPopUp: (popUpElement: JSX.Element) => void;
@@ -29,8 +27,6 @@ type PopUpContextType = {
 export const GlobalContext = createContext<GlobalContextType>({
   currentMenu: '',
 	setCurrentMenu: () => {},
-  projects: [],
-  setProjects: () => {},
 })
 export const PopUpContext = createContext<PopUpContextType>({
   openPopUp: () => {},
