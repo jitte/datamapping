@@ -1,14 +1,14 @@
-import { useContext } from "react";
+import { useContext } from "react"
 import {
   ArrowDownTrayIcon,
   ArrowUpTrayIcon,
   ListBulletIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/outline"
 import Icon from '../Icon'
-import { nodeTitles } from '../DataFlowView/components/CustomNodes';
-import { GlobalContext, PopUpContext } from '../Contexts';
-import ImportModal from '../modals/importModal';
-import ExportModal from '../modals/exportModal';
+import { nodeTitles } from '../DataFlowView/components/CustomNodes'
+import { GlobalContext, PopUpContext } from '../Contexts'
+import ImportModal from '../modals/importModal'
+import ExportModal from '../modals/exportModal'
 
 function EntityComponent({nodeType}: {nodeType: string}) : JSX.Element {
   const onDragStart = (event: any, type: any) => {
@@ -27,7 +27,7 @@ function EntityComponent({nodeType}: {nodeType: string}) : JSX.Element {
       <div className="flex-grow" />
       <Icon name="dragHandle" />
     </div>
-  );
+  )
 }
 
 function OldSideBarComponent() {
@@ -55,11 +55,11 @@ function OldSideBarComponent() {
         </button>
       </div>
     </nav>
-  );
+  )
 }
 
 export default function SideBarComponent() {
-  const { setCurrentMenu } = useContext(GlobalContext);
+  const { setCurrentMenu } = useContext(GlobalContext)
 
   function SidebarItem({ icon=ListBulletIcon, label='', onClick, children}): JSX.Element {
     const IconElement = icon
@@ -75,7 +75,7 @@ export default function SideBarComponent() {
     )
   }
   return (
-    <div className="w-fit justify-stretch bg-gray-50">
+    <div className="w-fit justify-stretch bg-gray-50 p-2">
       <SidebarItem
         onClick={() => setCurrentMenu('Projects')}
         label="n/a">
@@ -98,7 +98,7 @@ export default function SideBarComponent() {
       </SidebarItem>
       <SidebarItem
         onClick={() => setCurrentMenu('Projects')}
-        label="n/a" >
+        label="n/a">
         Projects
       </SidebarItem>
       <SidebarItem
@@ -111,5 +111,5 @@ export default function SideBarComponent() {
         Risks
       </SidebarItem>
     </div>
-  );
+  )
 }
