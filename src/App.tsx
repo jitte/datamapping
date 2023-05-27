@@ -11,7 +11,6 @@ import ReactFlow, {
   MiniMap, Controls,
   Background, BackgroundVariant,
   ReactFlowProvider,
-  Panel,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
