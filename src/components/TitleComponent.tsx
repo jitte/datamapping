@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { DataFlowContext } from '../dataFlowContext';
+import { DataFlowContext } from '../contexts/dataFlowContext';
 import { nodeTitles } from './CustomNodes';
 
-import Icon from '../../Icon';
+import Icon from '../Icon';
 
 export default function TitleComponent(
   { nodeType, description, nodeId } : { nodeType: string, description: string, nodeId: string }

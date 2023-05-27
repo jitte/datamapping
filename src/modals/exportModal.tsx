@@ -4,7 +4,7 @@ import {
   XMarkIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
-import { GlobalContext, PopUpContext } from "../Contexts";
+import { GlobalContext, PopUpContext } from "../contexts";
 
 function normalCaseToSnakeCase(str: string) {
   return str

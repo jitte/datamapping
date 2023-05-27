@@ -7,7 +7,7 @@ import {
 	IdentificationIcon,
 } from '@heroicons/react/24/outline'
 
-import { PopUpContext } from '../Contexts'
+import { PopUpContext } from '../contexts'
 import { useLocalStore } from '../store'
 
 export default function ProjectsView() {

@@ -5,8 +5,8 @@ import {
   ListBulletIcon,
 } from "@heroicons/react/24/outline"
 import Icon from '../Icon'
-import { nodeTitles } from '../DataFlowView/components/CustomNodes'
-import { GlobalContext, PopUpContext } from '../Contexts'
+import { nodeTitles } from './CustomNodes'
+import { GlobalContext, PopUpContext } from '../contexts'
 import ImportModal from '../modals/importModal'
 import ExportModal from '../modals/exportModal'
 
