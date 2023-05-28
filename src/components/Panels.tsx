@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Panel } from 'reactflow'
 import { Listbox, Menu } from '@headlessui/react'
 import { PlusIcon, CogIcon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { ProjectModal } from '../modals/projectsModal'
+import { PopUpContext } from '../contexts'
+import { useLocalStore } from '../store'
 
 const projects = [
   { id: 1, name: 'Project 1'},
@@ -121,8 +124,14 @@ function GenericMenu({ name, icon, items}: { name: string, icon: React.ElementTy
 }
 
 function ConfigMenu() {
+	const { openPopUp, closePopUp } = useContext(PopUpContext)
+  const localStore = useLocalStore()
+	//const projects  = useLocalStore((state) => state.projects)
+	//const setProjects = useLocalStore((state) => state.setProjects)
+	//const newProjectId = useLocalStore((state) => state.newProjectId)
+
   const items = [
-    { name: 'Projects', onClick: () => {} },
+    { name: 'Projects', onClick: () => ProjectModal(openPopUp, closePopUp, localStore ) },
     { name: 'Entities', onClick: () => {} },
   ]
   return (

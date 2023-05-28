@@ -8,7 +8,77 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { PopUpContext } from '../contexts'
-import { useLocalStore } from '../store'
+import { useLocalStore, LocalStoreType } from '../store'
+
+export function ProjectModal(
+	openPopUp: (popUpElement: JSX.Element) => void,
+	closePopUp: () => void,
+	localStore: LocalStoreType
+) {
+	const projects  = localStore.projects
+	const setProjects = localStore.setProjects
+	const newProjectId = localStore.newProjectId
+
+	//const { openPopUp, closePopUp } = useContext(PopUpContext)
+	console.log({ at: 'ProjectModal', localStore })
+
+	openPopUp(
+		<Dialog open={true} onClose={closePopUp} className="z-50">
+			<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
+				<Dialog.Panel className="bg-white rounded-xl">
+					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
+						Project Dialog
+					</Dialog.Title>
+						<div className="flex flex-col p-2">
+							<div className="m-2">
+								<button
+									className="text-white bg-blue-700 hover:bg-blue-800 flex flex-row p-2 rounded-lg float-right"
+									onClick={() => {}}
+								>
+									<PlusIcon className="mr-2 h-5 w-5" />
+									Project
+								</button>
+							</div>
+							<table className="text-left text-sm drop-shadow-md m-2">
+								<thead>
+									<tr className="bg-gray-50 uppercase">
+										<th className="px-6 py-4">ID</th>
+										<th className="px-6 py-4">Name</th>
+										<th className="px-6 py-4">Subject</th>
+										<th className="px-6 py-4">Controller</th>
+										<th className="px-6 py-4">Processor</th>
+										<th className="py-4">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{projects.map((pj,idx) => (
+										<tr key={idx} className="border-b min-w-0">
+											<td className="px-6 py-4">{pj.id}</td>
+											<td className="px-6 py-4">{pj.name}</td>
+											<td className="px-6 py-4">{}</td>
+											<td className="px-6 py-4">{}</td>
+											<td className="px-6 py-4">{}</td>
+											<td>
+												<button onClick={()=>{}}>
+													<IdentificationIcon className="h-5 w-5 m-0.5" />
+												</button>
+												<button onClick={()=>{}}>
+													<PencilIcon className="h-5 w-5 m-0.5" />
+												</button>
+												<button onClick={()=>{}}>
+													<TrashIcon className="h-5 w-5 m-0.5" />
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+				</Dialog.Panel>
+			</div>
+		</Dialog>
+	)
+}
 
 export default function ProjectsView() {
 	const projects  = useLocalStore((state) => state.projects)
