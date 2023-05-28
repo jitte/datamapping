@@ -21,6 +21,7 @@ import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'
 import ProjectsModal from './modals/projectsModal'
+import { useLocalStore } from './store'
 
 const initialNodes: Node[] = [
   { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: {}},
@@ -155,11 +156,21 @@ function DataFlowView() {
 }
 
 export default function App() {
+	const projects  = useLocalStore((state) => state.projects)
+	const setProjects = useLocalStore((state) => state.setProjects)
+	const newProjectId = useLocalStore((state) => state.newProjectId)
+
+  if (projects.length === 0) {
+    console.log({ at: 'App', projects })
+    setProjects([{ id: newProjectId(), name: 'New Project' } ])
+  }
+  const [currentProject, setCurrentProject] = useState(projects[0])
   const [showProjects, setShowProjects] = useState(false)
   const [showEntities, setShowEntities] = useState(false)
 
   return (
     <GlobalContextProvider value={{
+      currentProject, setCurrentProject,
       showProjects, setShowProjects,
       showEntities, setShowEntities,
     }} >
