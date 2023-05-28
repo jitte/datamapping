@@ -85,11 +85,11 @@ export default function ProjectsModal() {
 	}
 
 	function handleDelete(id:any) {
-		console.log({ at: 'handleDelete', id, projects, currentProject})
+		console.log({ at: 'handleDelete', id, projects, currentProject })
 		let newProjects = projects.filter((pj)=>pj.id !== id)
 		if (id === currentProject.id) {
 			if (newProjects.length === 0) {
-				newProjects = [{ id: 1, name: 'New Project'}]
+				newProjects = [{ id: 1, name: 'New Project' }]
 			}
 			setCurrentProject(newProjects[0])
 		}
