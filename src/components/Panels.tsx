@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Panel } from 'reactflow'
 import { Listbox, Menu } from '@headlessui/react'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, CogIcon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 const projects = [
@@ -64,44 +64,44 @@ function ProjectList() {
   )
 }
 
-function EntityMenu() {
-  function MenuItem({ name }: { name: string }) {
+function GenericMenu({ name, icon, items}: { name: string, icon: React.ElementType, items: any[] }) {
+  const IconElement = icon
+  function MenuItem({ name, onClick }: { name: string, onClick: any }) {
     return (
       <Menu.Item>
         {({ active }) => (
-          <button className={`${
-            active ? 'bg-blue-500 text-white' : 'text-gray-900'
-          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+          <button
+            className={
+              `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
+              text-left w-full rounded-md px-2 py-2 text-sm`
+            }
+            onClick={onClick}
           >
-        {name}
-        </button>
+            {name}
+          </button>
         )}
       </Menu.Item>
     )
   }
   return (
-    <Menu as="div" className="relative inline-block text-left shadow-md">
-      <div className="relative">
-        <Menu.Button className="
-          inline-flex
-          w-full
-          justify-center
-          rounded-md
-          pl-2 pr-4
-          py-2
-          gap-2
-          text-sm
-          font-medium
-          text-white
-          bg-blue-700
-          hover:bg-blue-800
-        ">
-          <PlusIcon className="h-5 w-5" />
-          Entity
-        </Menu.Button>
-      </div>
+    <Menu as="div" className="text-left w-full">
+      <Menu.Button className="
+        inline-flex
+        w-full
+        rounded-md
+        p-2
+        gap-2
+        text-sm
+        font-medium
+        bg-white
+        hover:text-white
+        hover:bg-blue-500
+      ">
+        <IconElement className="h-5 w-5" />
+        {name}
+      </Menu.Button>
       <Menu.Items className="
-        absolute mt-2 w-52
+        absolute mt-2
         divide-y
         divide-gray-100
         rounded-md
@@ -112,12 +112,41 @@ function EntityMenu() {
         ring-opacity-5
         focus:outline-none
       ">
-        <MenuItem name="PII Subject" />
-        <MenuItem name="PII Controller" />
-        <MenuItem name="PII Processor" />
-        <MenuItem name="Third Party" />
+        {items.map((item) => (
+          <MenuItem name={item.name} key={item.name} onClick={item.onClick} />
+        ))}
       </Menu.Items>
     </Menu>
+  )
+}
+
+function ConfigMenu() {
+  const items = [
+    { name: 'Projects', onClick: () => {} },
+    { name: 'Entities', onClick: () => {} },
+  ]
+  return (
+    <GenericMenu
+      name="Config"
+      icon={CogIcon}
+      items={items}
+    />
+  )
+}
+
+function EntityMenu() {
+  const items = [
+    { name: 'PII Subject', onClick: () => {} },
+    { name: 'PII Controller', onClick: () => {} },
+    { name: 'PII Processor', onClick: () => {} },
+    { name: 'Third Party', onClick: () => {} },
+  ]
+  return (
+    <GenericMenu
+      name="Entity"
+      icon={PlusIcon}
+      items={items}
+    />
   )
 }
 
@@ -126,7 +155,9 @@ export function TopLeftPanel() {
     <Panel position='top-left'>
       <div className="flex flex-row items-center gap-2">
         <ProjectList />
-        <EntityMenu />
+        <div className="w-32 rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+          <EntityMenu />
+        </div>
       </div>
     </Panel>
   )
@@ -135,7 +166,9 @@ export function TopLeftPanel() {
 export function TopRightPanel() {
   return (
     <Panel position='top-right'>
-      Import | Export | Config | Help
+      <div className="rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+        <ConfigMenu />
+      </div>
     </Panel>
   )
 }
