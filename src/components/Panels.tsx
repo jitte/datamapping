@@ -1,20 +1,18 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Panel } from 'reactflow'
 import { Listbox, Menu } from '@headlessui/react'
 import { PlusIcon, CogIcon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
-
-const projects = [
-  { id: 1, name: 'Project 1'},
-  { id: 2, name: 'Project 2'},
-  { id: 3, name: 'Project 3'},
-]
+import { useLocalStore } from '../store'
 
 function ProjectList() {
-  const [selectedProject, setSelectedProject] = useState(projects[0])
+	const projects  = useLocalStore((state) => state.projects)
+  //const [selectedProject, setSelectedProject] = useState(projects[0])
+  const { currentProject, setCurrentProject } = useContext(GlobalContext)
+  console.log({ at: 'ProjectList', projects, currentProject })
   return (
-    <Listbox value={selectedProject} onChange={setSelectedProject}>
+    <Listbox value={currentProject} onChange={setCurrentProject}>
       <div className="relative">
         <Listbox.Button className="
           relative w-52 cursor-default rounded-lg bg-white py-2 pl-3 pr-3
@@ -23,7 +21,7 @@ function ProjectList() {
           focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm
         ">
           <div className="flex flex-row gap-2">
-            <div className="grow">{selectedProject.name}</div>
+            <div className="grow">{currentProject.name}</div>
             <ChevronUpDownIcon className="h-5 w-5" />
           </div>
         </Listbox.Button>
