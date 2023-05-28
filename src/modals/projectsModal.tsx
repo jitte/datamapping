@@ -1,4 +1,5 @@
 import { useContext, FormEvent } from 'react'
+import { Node, Edge } from 'reactflow'
 import { Dialog } from '@headlessui/react'
 import {
 	PlusIcon,
@@ -10,17 +11,28 @@ import {
 import { useLocalStore } from '../store'
 import { GlobalContext, PopUpContext } from '../contexts'
 
-export default function ProjectsModal() {
-	console.log({ at: 'ProjectModal' })
+export type ProjectType = {
+  id: number,
+  name: string,
+  description?: string,
+  flow?: {
+    nodes: Node[],
+    edges: Edge[],
+  }
+}
 
+export default function ProjectsModal() {
 	// contexts
 	const { showProjects, setShowProjects } = useContext(GlobalContext)
+	const { currentProject, setCurrentProject } = useContext(GlobalContext)
 	const { openPopUp, closePopUp } = useContext(PopUpContext)
 
 	// stores
 	const projects  = useLocalStore((state) => state.projects)
 	const setProjects = useLocalStore((state) => state.setProjects)
 	const newProjectId = useLocalStore((state) => state.newProjectId)
+
+	console.log({ at: 'ProjectModal', projects, currentProject })
 
 	function handleSubmit(event: FormEvent, id: number) {
 		event.preventDefault()
@@ -73,8 +85,15 @@ export default function ProjectsModal() {
 	}
 
 	function handleDelete(id:any) {
-		console.log({ at: 'handleDelete', id})
-		setProjects(projects.filter((pj)=>pj.id !== id))
+		console.log({ at: 'handleDelete', id, projects, currentProject})
+		let newProjects = projects.filter((pj)=>pj.id !== id)
+		if (id === currentProject.id) {
+			if (newProjects.length === 0) {
+				newProjects = [{ id: 1, name: 'New Project'}]
+			}
+			setCurrentProject(newProjects[0])
+		}
+		setProjects(newProjects)
 	}
 
 	// open ProjectsModal
