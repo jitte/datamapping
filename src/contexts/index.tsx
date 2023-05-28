@@ -1,7 +1,10 @@
-import { useState, createContext, ReactNode } from "react"
+import { useState, createContext, ReactNode } from 'react'
+import { ProjectType } from '../modals/projectsModal';
 
 // Context Types
 type GlobalContextType = {
+  currentProject: ProjectType,
+  setCurrentProject: React.Dispatch<React.SetStateAction<ProjectType>>,
   showProjects: boolean,
   setShowProjects: React.Dispatch<React.SetStateAction<boolean>>,
   showEntities: boolean,
@@ -14,6 +17,8 @@ type PopUpContextType = {
 
 // Contexts
 export const GlobalContext = createContext<GlobalContextType>({
+  currentProject: {id: 0, name: ''},
+  setCurrentProject: () => {},
   showProjects: false,
   setShowProjects: () => {},
   showEntities: false,
