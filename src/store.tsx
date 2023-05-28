@@ -12,7 +12,7 @@ type ProjectType = {
   }
 }
 
-type LocalStoreType = {
+export type LocalStoreType = {
   projects: ProjectType[],
   setProjects: (projects: ProjectType[]) => void,
   newProjectId: () => number,
