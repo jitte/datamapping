@@ -3,7 +3,7 @@ import { Panel } from 'reactflow'
 import { Listbox, Menu } from '@headlessui/react'
 import { PlusIcon, CogIcon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { ProjectModal } from '../modals/projectsModal'
+import ProjectModal from '../modals/projectsModal'
 import { PopUpContext } from '../contexts'
 import { useLocalStore } from '../store'
 
