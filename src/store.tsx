@@ -1,16 +1,6 @@
-import { Node, Edge } from "reactflow"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-
-type ProjectType = {
-  id: number,
-  name: string,
-  description: string,
-  flow?: {
-    nodes: Node[],
-    edges: Edge[],
-  }
-}
+import { ProjectType } from "./modals/projectsModal"
 
 export type LocalStoreType = {
   projects: ProjectType[],
