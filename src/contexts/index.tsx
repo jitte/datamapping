@@ -2,8 +2,10 @@ import { useState, createContext, ReactNode } from "react"
 
 // Context Types
 type GlobalContextType = {
-  currentMenu: string,
-  setCurrentMenu: React.Dispatch<React.SetStateAction<string>>,
+  showProjects: boolean,
+  setShowProjects: React.Dispatch<React.SetStateAction<boolean>>,
+  showEntities: boolean,
+  setShowEntities: React.Dispatch<React.SetStateAction<boolean>>,
 }
 type PopUpContextType = {
 	openPopUp: (popUpElement: JSX.Element) => void;
@@ -12,8 +14,10 @@ type PopUpContextType = {
 
 // Contexts
 export const GlobalContext = createContext<GlobalContextType>({
-  currentMenu: '',
-	setCurrentMenu: () => {},
+  showProjects: false,
+  setShowProjects: () => {},
+  showEntities: false,
+  setShowEntities: () => {},
 })
 export const PopUpContext = createContext<PopUpContextType>({
   openPopUp: () => {},
