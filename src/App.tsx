@@ -20,6 +20,7 @@ import { nodeTypes } from './components/CustomNodes'
 import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'
+import ProjectsModal from './modals/projectsModal'
 
 const initialNodes: Node[] = [
   { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: {}},
@@ -125,12 +126,9 @@ function DataFlowView() {
 
   return (
     <DataFlowContextProvider value={{
-      reactFlowInstance, 
-      setReactFlowInstance,
-      nodes,
-      setNodes,
-      edges,
-      setEdges,
+      reactFlowInstance, setReactFlowInstance,
+      nodes, setNodes,
+      edges, setEdges,
       deleteNode
       }}
     >
@@ -150,18 +148,20 @@ function DataFlowView() {
         <Controls />
         <MiniMap />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        <ProjectsModal />
       </ReactFlow>
     </DataFlowContextProvider>
   );
 }
 
 export default function App() {
-  const [currentMenu, setCurrentMenu] = useState('Projects');
+  const [showProjects, setShowProjects] = useState(false)
+  const [showEntities, setShowEntities] = useState(false)
 
   return (
     <GlobalContextProvider value={{
-      currentMenu,
-      setCurrentMenu,
+      showProjects, setShowProjects,
+      showEntities, setShowEntities,
     }} >
       <div className="flex flex-row h-screen w-screen">
         <ReactFlowProvider>

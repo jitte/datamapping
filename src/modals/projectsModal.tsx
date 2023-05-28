@@ -1,4 +1,4 @@
-import { FormEvent } from 'react'
+import { useContext, FormEvent } from 'react'
 import { Dialog } from '@headlessui/react'
 import {
 	PlusIcon,
@@ -7,18 +7,20 @@ import {
 	DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'
 
-import { LocalStoreType } from '../store'
+import { useLocalStore } from '../store'
+import { GlobalContext, PopUpContext } from '../contexts'
 
-export default function ProjectModal(
-	openPopUp: (popUpElement: JSX.Element) => void,
-	closePopUp: () => void,
-	localStore: LocalStoreType
-) {
-	console.log({ at: 'ProjectModal', localStore })
+export default function ProjectsModal() {
+	console.log({ at: 'ProjectModal' })
 
-	const projects  = localStore.projects
-	const setProjects = localStore.setProjects
-	const newProjectId = localStore.newProjectId
+	// contexts
+	const { showProjects, setShowProjects } = useContext(GlobalContext)
+	const { openPopUp, closePopUp } = useContext(PopUpContext)
+
+	// stores
+	const projects  = useLocalStore((state) => state.projects)
+	const setProjects = useLocalStore((state) => state.setProjects)
+	const newProjectId = useLocalStore((state) => state.newProjectId)
 
 	function handleSubmit(event: FormEvent, id: number) {
 		event.preventDefault()
@@ -76,8 +78,8 @@ export default function ProjectModal(
 	}
 
 	// open ProjectsModal
-	openPopUp(
-		<Dialog open={true} onClose={closePopUp} className="z-50">
+	return (
+		<Dialog open={showProjects} onClose={() => setShowProjects(false)} className="z-50">
 			<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
 				<Dialog.Panel className="bg-white rounded-xl">
 					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
