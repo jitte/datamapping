@@ -154,7 +154,7 @@ export default function ProjectsModal() {
 										<tr key={idx} className="border-b min-w-0">
 											<td className="px-6 py-4">{pj.id}</td>
 											<td className="px-6 py-4">{pj.name}</td>
-											<td className="px-6 py-4">{}</td>
+											<td className="px-6 py-4">{pj.description}</td>
 											<td>
 												<button onClick={()=>handleEdit(pj.id)}>
 													<PencilIcon className="h-5 w-5 m-0.5" />
