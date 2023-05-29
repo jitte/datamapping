@@ -14,11 +14,36 @@ import { GlobalContext, PopUpContext } from '../contexts'
 export type ProjectType = {
   id: number,
   name: string,
-  description?: string,
-  flow?: {
-    nodes: Node[],
-    edges: Edge[],
-  }
+  description: string,
+	nodes: Node[],
+	edges: Edge[],
+}
+
+export function initialProject(id: number) {
+	return (
+		{
+			id: id ,
+			name: 'New Project',
+			description: '',
+			nodes:  [
+				{ id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: {}},
+				{ id: 'node-2', type: 'piiController', position: { x: 450, y:  50}, data: {}},
+				{ id: 'node-3', type: 'piiProcessor' , position: { x: 850, y:  50}, data: {}},
+				{ id: 'node-4', type: 'thirdParty'   , position: { x: 450, y: 450}, data: {}},
+			],
+			edges: [
+				{ id: 'edge-1-2',
+					source: 'node-1', sourceHandle: 'source_pii_flow',
+					target: 'node-2', targetHandle: 'target_pii_flow'},
+				{ id: 'edge-2-3',
+					source: 'node-2', sourceHandle: 'source_pii_flow',
+					target: 'node-3', targetHandle: 'target_pii_flow'},
+				{ id: 'edge-1-4',
+					source: 'node-1', sourceHandle: 'source_non_pii_flow',
+					target: 'node-4', targetHandle: 'target_non_pii_flow'},
+			]
+		}
+	)
 }
 
 export default function ProjectsModal() {
@@ -32,24 +57,25 @@ export default function ProjectsModal() {
 	const setProjects = useLocalStore((state) => state.setProjects)
 	const newProjectId = useLocalStore((state) => state.newProjectId)
 
-	console.log({ at: 'ProjectModal', projects, currentProject })
+	//console.log({ at: 'ProjectModal', projects, currentProject })
 
-	function handleSubmit(event: FormEvent, id: number) {
+	function handleSubmit(event: FormEvent, project: ProjectType) {
 		event.preventDefault()
 		// collect form values
 		const { value: name } = (event.target as any).name
 		const { value: description } = (event.target as any).description
 		// project to be added
-		const newProject = { id, name, description }
+		const newProject = { ...project, name, description }
 		console.log({ at: 'handleSubmit', newProject })
 		// update projects
-		setProjects([newProject, ...projects.filter((pj) => pj.id !== id)])
+		setCurrentProject(newProject)
+		setProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
 		closePopUp()
 	}
 
 	function handleEdit(id: number | null) {
 		console.log({ at: 'handleEdit', id })
-		const project =  projects.find((pj) => pj.id === id) ?? { id: newProjectId(), name: '', description: '' }
+		const project =  projects.find((pj) => pj.id === id) ?? initialProject(newProjectId())
 
 		openPopUp(
 			<Dialog open={true} onClose={closePopUp} className="z-50" >
@@ -58,7 +84,7 @@ export default function ProjectsModal() {
 						<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
 							Project Dialog
 						</Dialog.Title>
-						<form onSubmit={(event) => handleSubmit(event, project.id)}>
+						<form onSubmit={(event) => handleSubmit(event, project)}>
 							<div className="flex flex-col p-4 text-sm">
 								<label htmlFor="name">
 									Project Name
@@ -89,7 +115,7 @@ export default function ProjectsModal() {
 		let newProjects = projects.filter((pj)=>pj.id !== id)
 		if (id === currentProject.id) {
 			if (newProjects.length === 0) {
-				newProjects = [{ id: 1, name: 'New Project' }]
+				newProjects = [initialProject(1)]
 			}
 			setCurrentProject(newProjects[0])
 		}

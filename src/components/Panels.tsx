@@ -7,10 +7,13 @@ import { GlobalContext } from '../contexts'
 import { useLocalStore } from '../store'
 
 function ProjectList() {
-	const projects  = useLocalStore((state) => state.projects)
-  //const [selectedProject, setSelectedProject] = useState(projects[0])
+  // load projects from localStore
+	const projects = useLocalStore((state) => state.projects)
+
+  // current project from global context
   const { currentProject, setCurrentProject } = useContext(GlobalContext)
-  console.log({ at: 'ProjectList', projects, currentProject })
+
+  //console.log({ at: 'ProjectList', projects, currentProject })
   return (
     <Listbox value={currentProject} onChange={setCurrentProject}>
       <div className="relative">

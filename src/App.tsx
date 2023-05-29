@@ -1,12 +1,8 @@
-import {
-  useState,
-  useCallback,
-  useRef,
-} from 'react'
+import { useState, useContext, useCallback, useRef, useEffect } from 'react'
 import ReactFlow, {
   useReactFlow,
-  Node, NodeChange, applyNodeChanges,
-  Edge, EdgeChange, applyEdgeChanges, addEdge,
+  NodeChange, applyNodeChanges,
+  EdgeChange, applyEdgeChanges, addEdge,
   Connection,
   MiniMap, Controls,
   Background, BackgroundVariant,
@@ -17,41 +13,47 @@ import 'reactflow/dist/style.css'
 import './App.css'
 
 import { nodeTypes } from './components/CustomNodes'
-import { GlobalContextProvider } from './contexts'
+import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'
-import ProjectsModal from './modals/projectsModal'
+import ProjectsModal, { initialProject } from './modals/projectsModal'
 import { useLocalStore } from './store'
-
-const initialNodes: Node[] = [
-  { id: 'node-1', type: 'piiSubject'   , position: { x:  50, y: 250}, data: {}},
-  { id: 'node-2', type: 'piiController', position: { x: 450, y:  50}, data: {}},
-  { id: 'node-3', type: 'piiProcessor' , position: { x: 850, y:  50}, data: {}},
-  { id: 'node-4', type: 'thirdParty'   , position: { x: 450, y: 450}, data: {}},
-];
-const initialEdges: Edge[] = [
-  { id: 'edge-1-2',
-    source: 'node-1', sourceHandle: 'source_pii_flow',
-    target: 'node-2', targetHandle: 'target_pii_flow'},
-  { id: 'edge-2-3',
-    source: 'node-2', sourceHandle: 'source_pii_flow',
-    target: 'node-3', targetHandle: 'target_pii_flow'},
-  { id: 'edge-1-4',
-    source: 'node-1', sourceHandle: 'source_non_pii_flow',
-    target: 'node-4', targetHandle: 'target_non_pii_flow'},
-];
 
 let nodeNumber = 0;
 const newNodeId = () => `node_${nodeNumber++}`;
 
 function DataFlowView() {
+	// load projects from localStore
+	const projects  = useLocalStore((state) => state.projects)
+	const setProjects = useLocalStore((state) => state.setProjects)
 
+  // current project from global context
+  const { currentProject } = useContext(GlobalContext)
+
+  // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const [nodes, setNodes] = useState(currentProject.nodes);
+  const [edges, setEdges] = useState(currentProject.edges);
 
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null);
+
+  console.log({ at: 'DataFlowView', projects, currentProject, nodes, edges })
+
+  // update nodes and edges after changing current project
+  useEffect(() => {
+    setNodes(currentProject.nodes)
+    setEdges(currentProject.edges)
+    console.log({ at: 'DataFlowView/useEffect', currentProject })
+  }, [currentProject])
+
+  // save projects after changing nodes and edges
+  useEffect(() => {
+    currentProject.nodes = nodes
+    currentProject.edges = edges
+    setProjects(projects)
+    console.log({ at: 'DataFlowView/useEffect', nodes, edges })
+  }, [nodes, edges])
 
   // utility function
   function deleteNode(deleteId : string) : void {
@@ -134,8 +136,8 @@ function DataFlowView() {
       }}
     >
       <ReactFlow
-        nodes={nodes}
         nodeTypes={nodeTypes}
+        nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
@@ -158,15 +160,14 @@ function DataFlowView() {
 export default function App() {
 	const projects  = useLocalStore((state) => state.projects)
 	const setProjects = useLocalStore((state) => state.setProjects)
-	const newProjectId = useLocalStore((state) => state.newProjectId)
 
   if (projects.length === 0) {
-    console.log({ at: 'App', projects })
-    setProjects([{ id: newProjectId(), name: 'New Project' } ])
+    setProjects([initialProject(1)])
   }
   const [currentProject, setCurrentProject] = useState(projects[0])
   const [showProjects, setShowProjects] = useState(false)
   const [showEntities, setShowEntities] = useState(false)
+  //console.log({ at: 'App', projects, currentProject })
 
   return (
     <GlobalContextProvider value={{
