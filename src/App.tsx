@@ -135,24 +135,26 @@ function DataFlowView() {
       deleteNode
       }}
     >
-      <ReactFlow
-        nodeTypes={nodeTypes}
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        fitView
-      >
-        <TopLeftPanel />
-        <TopRightPanel />
-        <Controls />
-        <MiniMap />
-        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-        <ProjectsModal />
-      </ReactFlow>
+      <div className="w-screen h-screen" ref={ref}>
+        <ReactFlow
+          nodeTypes={nodeTypes}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          fitView
+        >
+          <TopLeftPanel />
+          <TopRightPanel />
+          <Controls />
+          <MiniMap />
+          <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+          <ProjectsModal />
+        </ReactFlow>
+      </div>
     </DataFlowContextProvider>
   );
 }
