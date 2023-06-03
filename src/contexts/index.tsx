@@ -17,7 +17,7 @@ type PopUpContextType = {
 
 // Contexts
 export const GlobalContext = createContext<GlobalContextType>({
-  currentProject: {id: 0, name: ''},
+  currentProject: { id: 0, name: '', description: '', nodes: [], edges: [] },
   setCurrentProject: () => {},
   showProjects: false,
   setShowProjects: () => {},
