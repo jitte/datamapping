@@ -19,13 +19,11 @@ import { TopLeftPanel, TopRightPanel } from './components/Panels'
 import ProjectsModal, { initialProject } from './modals/projectsModal'
 import { useLocalStore } from './store'
 
-let nodeNumber = 0;
-const newNodeId = () => `node_${nodeNumber++}`;
-
 function DataFlowView() {
 	// load projects from localStore
 	const projects  = useLocalStore((state) => state.projects)
 	const setProjects = useLocalStore((state) => state.setProjects)
+  const newNodeId = useLocalStore((state) => state.newNodeId)
 
   // current project from global context
   const { currentProject } = useContext(GlobalContext)
