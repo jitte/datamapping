@@ -1,4 +1,4 @@
-import { useContext, FormEvent } from 'react'
+import { useState, useContext, FormEvent } from 'react'
 import { Node, Edge } from 'reactflow'
 import { Dialog } from '@headlessui/react'
 import {
@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { useLocalStore } from '../store'
-import { GlobalContext, PopUpContext } from '../contexts'
+import { GlobalContext } from '../contexts'
 
 export type ProjectType = {
   id: number,
@@ -54,14 +54,15 @@ export default function ProjectsModal() {
 	// contexts
 	const { showProjects, setShowProjects } = useContext(GlobalContext)
 	const { currentProject, setCurrentProject } = useContext(GlobalContext)
-	const { openPopUp, closePopUp } = useContext(PopUpContext)
 
 	// stores
 	const projects  = useLocalStore((state) => state.projects)
 	const setProjects = useLocalStore((state) => state.setProjects)
 	const newProjectId = useLocalStore((state) => state.newProjectId)
 
-	//console.log({ at: 'ProjectModal', projects, currentProject })
+	// states
+	const [showEditModal, setShowEditModal] = useState(false)
+	const [project, setProject] = useState<ProjectType>(initialProject(0))
 
 	function handleSubmit(event: FormEvent, project: ProjectType) {
 		event.preventDefault()
@@ -74,40 +75,14 @@ export default function ProjectsModal() {
 		// update projects
 		setCurrentProject(newProject)
 		setProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
-		closePopUp()
+		//closePopUp()
+		setShowEditModal(false)
 	}
 
 	function handleEdit(id: number | null) {
 		console.log({ at: 'handleEdit', id })
-		const project =  projects.find((pj) => pj.id === id) ?? initialProject(newProjectId())
-
-		openPopUp(
-			<Dialog open={true} onClose={closePopUp} className="z-50" >
-				<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
-					<Dialog.Panel className="bg-white rounded-xl">
-						<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
-							Project Dialog
-						</Dialog.Title>
-						<form onSubmit={(event) => handleSubmit(event, project)}>
-							<div className="flex flex-col p-4 text-sm">
-								<label htmlFor="name">
-									Project Name
-								</label>
-								<input type="text" name="name" className="form-input rounded" defaultValue={project.name} />
-								<label htmlFor="description">
-									Description
-								</label>
-								<textarea name="description" className="form-textarea rounded" defaultValue={project.description} />
-							</div>
-							<div className="flex flex-row justify-evenly pb-4">
-								<input type="submit" className="bg-blue-700 hover:bg-blue-800 text-white rounded-full px-4" value="Submit"/>
-								<button onClick={closePopUp} className="bg-blue-700 hover:bg-blue-800 text-white rounded-full px-4">Cancel</button>
-							</div>
-						</form>
-					</Dialog.Panel>
-				</div>
-			</Dialog>
-		)
+		setProject(projects.find((pj) => pj.id === id) ?? initialProject(newProjectId()))
+		setShowEditModal(true)
 	}
 
 	function handleDuplicate(id:any) {
@@ -126,13 +101,45 @@ export default function ProjectsModal() {
 		setProjects(newProjects)
 	}
 
-	// open ProjectsModal
+	// Sub modal for editting project, hiddon on startup
+	function EditModal() {
+		const onClose = () => {setShowEditModal(false)}
+		return (
+			<Dialog open={showEditModal} onClose={onClose} className="z-50" >
+				<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
+					<Dialog.Panel className="bg-white rounded-xl">
+						<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
+							Project Edit Dialog
+						</Dialog.Title>
+						<form onSubmit={(event) => handleSubmit(event, project)}>
+							<div className="flex flex-col p-4 text-sm">
+								<label htmlFor="name">
+									Project Name
+								</label>
+								<input type="text" name="name" className="form-input rounded" defaultValue={project.name} />
+								<label htmlFor="description">
+									Description
+								</label>
+								<textarea name="description" className="form-textarea rounded" defaultValue={project.description} />
+							</div>
+							<div className="flex flex-row justify-evenly pb-4">
+								<input type="submit" className="bg-blue-700 hover:bg-blue-800 text-white rounded-full px-4" value="Submit"/>
+								<button onClick={onClose} className="bg-blue-700 hover:bg-blue-800 text-white rounded-full px-4">Cancel</button>
+							</div>
+						</form>
+					</Dialog.Panel>
+				</div>
+			</Dialog>
+		)
+	}
+
+	// Modal for projects, hidden on startup
 	return (
 		<Dialog open={showProjects} onClose={() => setShowProjects(false)} className="z-50">
 			<div className="fixed inset-0 bg-black/30 flex items-center justify-center max-w-full">
 				<Dialog.Panel className="bg-white rounded-xl m-4">
 					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
-						Project Dialog
+						Project List Dialog
 					</Dialog.Title>
 						<div className="flex flex-col p-2">
 							<div className="m-2">
@@ -177,6 +184,7 @@ export default function ProjectsModal() {
 						</div>
 				</Dialog.Panel>
 			</div>
+			<EditModal />
 		</Dialog>
 	)
 }
