@@ -125,8 +125,8 @@ export default function ProjectsModal() {
 	// open ProjectsModal
 	return (
 		<Dialog open={showProjects} onClose={() => setShowProjects(false)} className="z-50">
-			<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
-				<Dialog.Panel className="bg-white rounded-xl">
+			<div className="fixed inset-0 bg-black/30 flex items-center justify-center max-w-full">
+				<Dialog.Panel className="bg-white rounded-xl m-4">
 					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
 						Project Dialog
 					</Dialog.Title>
@@ -151,7 +151,7 @@ export default function ProjectsModal() {
 								</thead>
 								<tbody>
 									{projects.map((pj,idx) => (
-										<tr key={idx} className="border-b min-w-0">
+										<tr key={idx} className="border-b">
 											<td className="px-6 py-4">{pj.id}</td>
 											<td className="px-6 py-4">{pj.name}</td>
 											<td className="px-6 py-4">{pj.description}</td>
