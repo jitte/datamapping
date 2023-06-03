@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Panel } from 'reactflow'
 import { Listbox, Menu } from '@headlessui/react'
-import { PlusIcon, CogIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, CogIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { useLocalStore } from '../store'
@@ -147,10 +147,66 @@ function EntityMenu() {
   ]
   return (
     <GenericMenu
-      name="Entity"
+      name="New"
       icon={PlusIcon}
       items={items}
     />
+  )
+}
+
+function ReuseMenu() {
+  const items = [{ name: '(TBD)', onClick: () => {} }]
+  function MenuItem({ name, onClick }: { name: string, onClick: any }) {
+    return (
+      <Menu.Item>
+        {({ active }) => (
+          <button
+            className={
+              `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
+              text-left w-full rounded-md px-2 py-2 text-sm`
+            }
+            onClick={onClick}
+          >
+            {name}
+          </button>
+        )}
+      </Menu.Item>
+    )
+  }
+  return (
+    <Menu as="div" className="text-left w-full">
+      <Menu.Button className="
+        inline-flex
+        w-full
+        rounded-md
+        p-2
+        gap-2
+        text-sm
+        font-medium
+        bg-white
+        hover:text-white
+        hover:bg-blue-500
+      ">
+        <DocumentDuplicateIcon className="h-5 w-5" />
+        Reuse
+      </Menu.Button>
+      <Menu.Items className="
+        absolute mt-2
+        divide-y
+        divide-gray-100
+        rounded-md
+        bg-white
+        shadow-lg
+        ring-1
+        ring-black
+        ring-opacity-5
+        focus:outline-none
+      ">
+        {items.map((item) => (
+          <MenuItem name={item.name} key={item.name} onClick={item.onClick} />
+        ))}
+      </Menu.Items>
+    </Menu>
   )
 }
 
@@ -161,6 +217,9 @@ export function TopLeftPanel() {
         <ProjectList />
         <div className="w-32 rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
           <EntityMenu />
+        </div>
+        <div className="w-32 rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+          <ReuseMenu />
         </div>
       </div>
     </Panel>
