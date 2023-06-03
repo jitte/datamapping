@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import { Panel } from 'reactflow'
 import { Listbox, Menu } from '@headlessui/react'
-import { PlusIcon, CogIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, CogIcon, DocumentDuplicateIcon, Bars2Icon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { useLocalStore } from '../store'
+import { nodeTitles } from '../components/CustomNodes'
 
 function ProjectList() {
   // load projects from localStore
@@ -66,7 +67,101 @@ function ProjectList() {
   )
 }
 
-function GenericMenu({ name, icon, items}: { name: string, icon: React.ElementType, items: any[] }) {
+function DraggableMenu({ name, icon, items }:
+  { name: string, icon: React.ElementType, items: any[] })
+{
+  const IconElement = icon
+  // Draggable menu item
+  function MenuItem({ name, type }:
+    { name: string,
+      type: string,
+    })
+  {
+    const onDragStart = (event: React.DragEvent, type: string) => {
+      event.dataTransfer.setData('application/reactflow', type);
+      event.dataTransfer.effectAllowed = 'move';
+    }
+    return (
+      <Menu.Item>
+        {({ active }) => (
+          <div
+            className={
+              `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
+              flex flex-row gap-2 text-left w-full rounded-md px-2 py-2 text-sm
+              cursor-grab active:cursor-grabbing`
+            }
+            draggable
+            onDragStart={(event) => onDragStart(event, type)}
+          >
+            {name}
+            <div className="flex-grow" />
+            <Bars2Icon className="w-5 h-5" />
+          </div>
+        )}
+      </Menu.Item>
+    )
+  }
+  return (
+    <Menu as="div" className="text-left w-full">
+      <Menu.Button className="
+        inline-flex
+        w-full
+        rounded-md
+        p-2
+        gap-2
+        text-sm
+        font-medium
+        bg-white
+        hover:text-white
+        hover:bg-blue-500
+      ">
+        <IconElement className="h-5 w-5" />
+        {name}
+      </Menu.Button>
+      <Menu.Items className="
+        absolute mt-2
+        divide-y
+        divide-gray-100
+        rounded-md
+        bg-white
+        shadow-lg
+        ring-1
+        ring-black
+        ring-opacity-5
+        focus:outline-none
+      ">
+        <div className="text-xs text-gray-500 m-1">
+          Drag item to create entity
+        </div>
+        {items.map((item) => (
+          <MenuItem name={item.name} key={item.name} type={item.type} />
+        ))}
+      </Menu.Items>
+    </Menu>
+  )
+}
+
+function EntityMenu() {
+  const entityList = [
+    'piiSubject',
+    'piiController',
+    'piiProcessor',
+    'thirdParty',
+  ]
+  const items = entityList.map((type) => {
+    return { name: nodeTitles[type], type }
+  })
+
+  return (
+    <DraggableMenu
+      name="New"
+      icon={PlusIcon}
+      items={items}
+    />
+  )
+}
+
+function GenericMenu({ name, icon, items }: { name: string, icon: React.ElementType, items: any[] }) {
   const IconElement = icon
   function MenuItem({ name, onClick }: { name: string, onClick: any }) {
     return (
@@ -133,22 +228,6 @@ function ConfigMenu() {
     <GenericMenu
       name="Config"
       icon={CogIcon}
-      items={items}
-    />
-  )
-}
-
-function EntityMenu() {
-  const items = [
-    { name: 'PII Subject', onClick: () => {} },
-    { name: 'PII Controller', onClick: () => {} },
-    { name: 'PII Processor', onClick: () => {} },
-    { name: 'Third Party', onClick: () => {} },
-  ]
-  return (
-    <GenericMenu
-      name="New"
-      icon={PlusIcon}
       items={items}
     />
   )
