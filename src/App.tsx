@@ -122,6 +122,7 @@ function DataFlowView() {
       console.log({at: 'onDrop', event, newNode});
 
       setNodes((nds) => nds.concat(newNode));
+      //setDraggingMenu(false)
     }, [reactFlowInstance]
   );
 
@@ -166,14 +167,11 @@ export default function App() {
   }
   const [currentProject, setCurrentProject] = useState(projects[0])
   const [showProjects, setShowProjects] = useState(false)
-  const [showEntities, setShowEntities] = useState(false)
-  //console.log({ at: 'App', projects, currentProject })
 
   return (
     <GlobalContextProvider value={{
       currentProject, setCurrentProject,
       showProjects, setShowProjects,
-      showEntities, setShowEntities,
     }} >
       <div className="flex flex-row h-screen w-screen">
         <ReactFlowProvider>

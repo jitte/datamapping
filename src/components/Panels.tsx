@@ -222,7 +222,6 @@ function ConfigMenu() {
 
   const items = [
     { name: 'Projects', onClick: () => setShowProjects(true) },
-    { name: 'Entities', onClick: () => {} },
   ]
   return (
     <GenericMenu
