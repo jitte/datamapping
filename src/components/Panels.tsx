@@ -12,13 +12,13 @@ function ProjectList() {
 	const projects = useLocalStore((state) => state.projects)
 
   // current project from global context
-  const { currentProject, setCurrentProject } = useContext(GlobalContext)
+  const { currentProject, setCurrentProject, setEntityMenuOpen } = useContext(GlobalContext)
 
   //console.log({ at: 'ProjectList', projects, currentProject })
   return (
     <Listbox value={currentProject} onChange={setCurrentProject}>
       <div className="relative">
-        <Listbox.Button className="
+        <Listbox.Button onClick={()=>setEntityMenuOpen(false)} className="
           relative w-52 cursor-default rounded-lg bg-white py-2 pl-3 pr-3
           text-left shadow-md focus:outline-none focus-visible:border-indigo-500
           focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75
@@ -300,10 +300,10 @@ export function TopLeftPanel() {
     <Panel position='top-left'>
       <div className="flex flex-row items-center gap-2">
         <ProjectList />
-        <div className="w-32 rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+        <div className="rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
           <EntityMenu />
         </div>
-        <div className="w-32 rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+        <div className="rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
           <ReuseMenu />
         </div>
       </div>
