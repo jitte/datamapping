@@ -70,6 +70,7 @@ function ProjectList() {
 function DraggableMenu({ name, icon, items }:
   { name: string, icon: React.ElementType, items: any[] })
 {
+  const { entityMenuOpen, setEntityMenuOpen } = useContext(GlobalContext)
   const IconElement = icon
   // Draggable menu item
   function MenuItem({ name, type }:
@@ -103,7 +104,10 @@ function DraggableMenu({ name, icon, items }:
   }
   return (
     <Menu as="div" className="text-left w-full">
-      <Menu.Button className="
+      <Menu.Button onClick={
+        () => setEntityMenuOpen(!entityMenuOpen)
+      }
+      className="
         inline-flex
         w-full
         rounded-md
@@ -118,25 +122,28 @@ function DraggableMenu({ name, icon, items }:
         <IconElement className="h-5 w-5" />
         {name}
       </Menu.Button>
-      <Menu.Items className="
-        absolute mt-2
-        divide-y
-        divide-gray-100
-        rounded-md
-        bg-white
-        shadow-lg
-        ring-1
-        ring-black
-        ring-opacity-5
-        focus:outline-none
-      ">
-        <div className="text-xs text-gray-500 m-1">
-          Drag item to create entity
-        </div>
-        {items.map((item) => (
-          <MenuItem name={item.name} key={item.name} type={item.type} />
-        ))}
-      </Menu.Items>
+      { entityMenuOpen ?
+        <Menu.Items static className="
+          absolute mt-2
+          divide-y
+          divide-gray-100
+          rounded-md
+          bg-white
+          shadow-lg
+          ring-1
+          ring-black
+          ring-opacity-5
+          focus:outline-none
+        ">
+          <div className="text-xs text-gray-500 m-1">
+            Drag item to create entity
+          </div>
+          {items.map((item) => (
+            <MenuItem name={item.name} key={item.name} type={item.type} />
+          ))}
+        </Menu.Items>
+      : ''
+      }
     </Menu>
   )
 }

@@ -7,6 +7,8 @@ type GlobalContextType = {
   setCurrentProject: React.Dispatch<React.SetStateAction<ProjectType>>,
   showProjects: boolean,
   setShowProjects: React.Dispatch<React.SetStateAction<boolean>>,
+  entityMenuOpen: boolean,
+  setEntityMenuOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 type PopUpContextType = {
 	openPopUp: (popUpElement: JSX.Element) => void;
@@ -19,6 +21,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   setCurrentProject: () => {},
   showProjects: false,
   setShowProjects: () => {},
+  entityMenuOpen: false,
+  setEntityMenuOpen: () => {},
 })
 export const PopUpContext = createContext<PopUpContextType>({
   openPopUp: () => {},
