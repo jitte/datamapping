@@ -1,6 +1,14 @@
-import { useState, Fragment } from 'react';
-import { Combobox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { useState, Fragment } from 'react'
+import { Combobox, Transition } from '@headlessui/react'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { countries } from 'countries-list'
+
+const countryInfo:
+{ [key: string] : { name: string, emoji: string } } = {
+  EU: { name: 'European Union', emoji: String.fromCodePoint(0x1F1EA, 0x1F1FA) },
+  ...countries
+}
+export const countryList = Object.keys(countryInfo).sort()
 
 type ComboboxType = {
   name: string,
@@ -18,7 +26,8 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
   const filteredList = query === ''
     ? itemList
     : itemList.filter((item) => {
-      return item.toLowerCase().includes(query.toLowerCase());
+      const itemLong = `${item}: ${countryInfo[item]['name']}`.toLowerCase()
+      return itemLong.includes(query.toLowerCase());
     });
   // 変更された値を処理するイベントハンドラ
   function handleCombobox(value: any) {
@@ -26,6 +35,11 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
     data[name] = value;
     console.log({at: 'handleCombobox', value , data});
   }
+  function flagAndCountry(countryCode: string) {
+    const data = countryInfo[countryCode]
+    return data == undefined ? '' : `${data['emoji']} ${data['name']}`
+  }
+  console.log({ at: 'combo', selectedItem })
 
   return (
     <div className="w-full flex flex-col bg-gray-50 mt-1 px-5 py-2">
@@ -39,7 +53,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
               <Combobox.Input
                 className="nodrag w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 rounded-lg"
                 placeholder="Choose an option"
-                displayValue={() => selectedItem}
+                displayValue={() => flagAndCountry(selectedItem)}
                 onChange={(event) => setQuery(event.target.value)}
               />
               <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -76,7 +90,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
                               selected ? 'font-medium' : 'font-normal'
                             }`}
                           >
-                            {item}
+                            {flagAndCountry(item)}
                           </span>
                           {selected ? (
                             <span

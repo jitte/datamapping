@@ -1,6 +1,6 @@
 import TitleComponent from "./TitleComponent";
 import InputComponent from "./InputComponent";
-import ComboboxComponent from "./ComboboxComponent";
+import ComboboxComponent, { countryList } from "./ComboboxComponent";
 import DataFlowComponent from './DataFlowComponent';
 
 export const nodeTypes: {[key: string]: any}= {
@@ -16,10 +16,6 @@ export const nodeTitles: {[key: string]: string} = {
   piiProcessor:  "PII Processor",
   thirdParty:    "Third Party",
 }
-
-const countryList = [
-  "Japan", "USA", "EU", "China", "Singapore", "India", "Other"
-];
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(" ");
