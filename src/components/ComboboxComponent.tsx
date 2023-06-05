@@ -30,16 +30,15 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
       return itemLong.includes(query.toLowerCase());
     });
   // 変更された値を処理するイベントハンドラ
-  function handleCombobox(value: any) {
+  function handleCombobox(value: string) {
     setSelectedItem(value);
     data[name] = value;
-    console.log({at: 'handleCombobox', value , data});
+    console.log({at: 'ComboboxComponent/handleCombobox', value , data});
   }
   function flagAndCountry(countryCode: string) {
     const data = countryInfo[countryCode]
     return data == undefined ? '' : `${data['emoji']} ${data['name']}`
   }
-  console.log({ at: 'combo', selectedItem })
 
   return (
     <div className="w-full flex flex-col bg-gray-50 mt-1 px-5 py-2">
