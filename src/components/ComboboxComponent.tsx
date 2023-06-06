@@ -40,7 +40,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
     const data = countryInfo[countryCode]
     return data == undefined ? '' : 
       <div className="flex flex-row items-center gap-2">
-        <ReactCountryFlag svg countryCode={countryCode} className="border"/>
+        <ReactCountryFlag svg countryCode={countryCode} className="border" style={{ width: '20px', height: '15px' }} />
         {data['name']}
       </div>
   }
@@ -56,7 +56,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
             <div className="relative">
               <div className="flex flex-row items-center w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow">
                 { !open && 
-                  <ReactCountryFlag svg countryCode={selectedItem} className="absolute left-3 border" />
+                  <ReactCountryFlag svg countryCode={selectedItem} className="absolute left-3 border" style={{ width: '20px', height: '15px' }} />
                 }
                 <Combobox.Input
                   className="nodrag w-full border-none py-2 pl-10 pr-10 text-sm leading-5 text-gray-900 rounded-lg"
@@ -85,7 +85,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
                       <Combobox.Option
                         key={item}
                         className={({ active }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                          `relative cursor-default select-none py-2 pl-3 pr-10 ${
                             active ? 'bg-teal-600 text-white' : 'text-gray-900'
                           }`
                         }
@@ -102,7 +102,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
                             </span>
                             {selected ? (
                               <span
-                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                className={`absolute inset-y-0 right-3 flex items-center pl-3 ${
                                   active ? 'text-white' : 'text-teal-600'
                                 }`}
                               >
