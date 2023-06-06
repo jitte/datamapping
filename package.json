@@ -16,6 +16,7 @@
     "countries-list": "^2.6.1",
     "postcss": "^8.4.23",
     "react": "^18.2.0",
+    "react-country-flag": "^3.1.0",
     "react-dom": "^18.2.0",
     "reactflow": "^11.7.0",
     "tailwindcss": "^3.3.2"
