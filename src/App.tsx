@@ -16,8 +16,9 @@ import { nodeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'
-import ProjectsModal, { initialProject } from './modals/projectsModal'
+import ProjectsModal from './modals/projectsModal'
 import { useLocalStore } from './store'
+import { initialProject } from './constants'
 
 function DataFlowView() {
 	// load projects from localStore
@@ -144,6 +145,7 @@ function DataFlowView() {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
+          defaultEdgeOptions={{ animated: true }}
           fitView
         >
           <TopLeftPanel />
