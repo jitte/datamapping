@@ -145,7 +145,10 @@ function DataFlowView() {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
-          defaultEdgeOptions={{ animated: true }}
+          defaultEdgeOptions={{
+            animated: true,
+            style: { strokeWidth: 8 }
+          }}
           fitView
         >
           <TopLeftPanel />
