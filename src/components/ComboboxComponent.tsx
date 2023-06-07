@@ -55,7 +55,7 @@ export default function ComboboxComponent( { name, caption, itemList, data }: Co
           {({ open }) => (
             <div className="relative">
               <div className="flex flex-row items-center w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow">
-                { !open && 
+                { !open && selectedItem !== '' &&
                   <ReactCountryFlag svg countryCode={selectedItem} className="absolute left-3 border" style={{ width: '20px', height: '15px' }} />
                 }
                 <Combobox.Input
