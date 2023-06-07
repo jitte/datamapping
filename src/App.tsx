@@ -12,7 +12,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import './App.css'
 
-import { nodeTypes } from './components/CustomNodes'
+import { nodeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'

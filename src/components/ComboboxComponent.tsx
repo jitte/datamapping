@@ -1,32 +1,24 @@
 import { useState, Fragment } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { countries } from 'countries-list'
 import { ReactCountryFlag } from 'react-country-flag'
-
-const countryInfo:
-{ [key: string] : { name: string, emoji: string } } = {
-  EU: { name: 'European Union', emoji: String.fromCodePoint(0x1F1EA, 0x1F1FA) },
-  ...countries
-}
-export const countryList = Object.keys(countryInfo).sort()
+import { countryInfo, countryList } from '../constants'
 
 type ComboboxType = {
   name: string,
   caption: string,
-  itemList: string[],
   data: any,
-};
+}
 
-export default function ComboboxComponent( { name, caption, itemList, data }: ComboboxType): JSX.Element {
+export default function ComboboxComponent( { name, caption, data }: ComboboxType): JSX.Element {
   //  選択されたアイテム
   const [selectedItem, setSelectedItem] = useState(data[name] ?? '');
   // 入力欄の検索テキスト
   const [query, setQuery] = useState('');
   // 検索テキストにマッチするアイテム（小文字でフィルタ）
   const filteredList = query === ''
-    ? itemList
-    : itemList.filter((item) => {
+    ? countryList
+    : countryList.filter((item) => {
       const itemLong = `${item}: ${countryInfo[item]['name']}`.toLowerCase()
       return itemLong.includes(query.toLowerCase());
     });

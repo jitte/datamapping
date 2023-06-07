@@ -5,7 +5,7 @@ import { PlusIcon, CogIcon, DocumentDuplicateIcon, Bars2Icon } from '@heroicons/
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { useLocalStore } from '../store'
-import { nodeTitles } from '../components/CustomNodes'
+import { nodeTitles } from '../constants'
 
 function ProjectList() {
   // load projects from localStore

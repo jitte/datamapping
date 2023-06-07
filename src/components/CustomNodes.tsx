@@ -1,21 +1,7 @@
 import TitleComponent from "./TitleComponent";
 import InputComponent from "./InputComponent";
-import ComboboxComponent, { countryList } from "./ComboboxComponent";
+import ComboboxComponent from "./ComboboxComponent";
 import DataFlowComponent from './DataFlowComponent';
-
-export const nodeTypes: {[key: string]: any}= {
-  piiSubject:    PiiSubjectNode,
-  piiController: PiiControllerNode,
-  piiProcessor:  PiiProcessorNode,
-  thirdParty:    ThirdPartyNode,
-};
-
-export const nodeTitles: {[key: string]: string} = {
-  piiSubject:    "PII Subject",
-  piiController: "PII Controller",
-  piiProcessor:  "PII Processor",
-  thirdParty:    "Third Party",
-}
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(" ");
@@ -40,7 +26,7 @@ export function PiiSubjectNode({ id, data, type, selected }: NodeParamType): JSX
         nodeId={id}
       />
       <div className="w-full pb-2">
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
+        <ComboboxComponent name="country_name" caption="Country" data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
@@ -61,7 +47,7 @@ export function PiiControllerNode({ id, data, type, selected }: NodeParamType): 
       />
       <div className="pb-2">
         <InputComponent name="entity_name" caption="Entity Name" data={data} />
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
+        <ComboboxComponent name="country_name" caption="Country" data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
@@ -82,7 +68,7 @@ export function PiiProcessorNode({ id, data, type, selected }: NodeParamType): J
       />
       <div className="w-full pb-2">
         <InputComponent name="entity_name" caption="Entity Name" data={data} />
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
+        <ComboboxComponent name="country_name" caption="Country" data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
@@ -103,7 +89,7 @@ export function ThirdPartyNode({ id, data, type, selected }: NodeParamType): JSX
       />
       <div className="w-full pb-2">
         <InputComponent name="entity_name" caption="Entity Name" data={data} />
-        <ComboboxComponent name="country_name" caption="Country" itemList={countryList} data={data} />
+        <ComboboxComponent name="country_name" caption="Country" data={data} />
         <DataFlowComponent name="PII flow" id={id} />
         <DataFlowComponent name="Non PII flow" id={id} />
       </div>
