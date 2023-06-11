@@ -34,46 +34,25 @@ export default function ProjectsModal() {
 	const [showEditModal, setShowEditModal] = useState(false)
 	const [project, setProject] = useState<ProjectType>(initialProject(0))
 
-	function handleSubmit(event: FormEvent, project: ProjectType) {
-		event.preventDefault()
-		// collect form values
-		const { value: name } = (event.target as any).name
-		const { value: description } = (event.target as any).description
-		// project to be added
-		const newProject = { ...project, name, description }
-		console.log({ at: 'handleSubmit', newProject })
-		// update projects
-		setCurrentProject(newProject)
-		setProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
-		//closePopUp()
-		setShowEditModal(false)
-	}
-
-	function handleEdit(id: number | null) {
-		console.log({ at: 'handleEdit', id })
-		setProject(projects.find((pj) => pj.id === id) ?? initialProject(newProjectId()))
-		setShowEditModal(true)
-	}
-
-	function handleDuplicate(id:any) {
-		console.log({ at: 'handleDuplicate', id})
-	}
-
-	function handleDelete(id:any) {
-		console.log({ at: 'handleDelete', id, projects, currentProject })
-		let newProjects = projects.filter((pj)=>pj.id !== id)
-		if (id === currentProject.id) {
-			if (newProjects.length === 0) {
-				newProjects = [initialProject(1)]
-			}
-			setCurrentProject(newProjects[0])
-		}
-		setProjects(newProjects)
-	}
-
 	// Sub modal for editting project, hiddon on startup
 	function EditModal() {
-		const onClose = () => {setShowEditModal(false)}
+		function onSubmit(event: FormEvent, project: ProjectType) {
+			event.preventDefault()
+			// collect form values
+			const { value: name } = (event.target as any).name
+			const { value: description } = (event.target as any).description
+			// project to be added
+			const newProject = { ...project, name, description }
+			console.log('at: onSubmit', { newProject })
+			// update projects
+			setCurrentProject(newProject)
+			setProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
+			//closePopUp()
+			setShowEditModal(false)
+		}
+		function onClose() {
+			setShowEditModal(false)
+		}
 		return (
 			<Dialog open={showEditModal} onClose={onClose} className="z-50" >
 				<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
@@ -81,7 +60,7 @@ export default function ProjectsModal() {
 						<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
 							Project Edit Dialog
 						</Dialog.Title>
-						<form onSubmit={(event) => handleSubmit(event, project)}>
+						<form onSubmit={(event) => onSubmit(event, project)}>
 							<div className="flex flex-col p-4 text-sm">
 								<label htmlFor="name">
 									Project Name
@@ -101,6 +80,28 @@ export default function ProjectsModal() {
 				</div>
 			</Dialog>
 		)
+	}
+
+	function handleEdit(id: number | null) {
+		console.log('at: handleEdit', { id })
+		setProject(projects.find((pj) => pj.id === id) ?? initialProject(newProjectId()))
+		setShowEditModal(true)
+	}
+
+	function handleDuplicate(id: number) {
+		console.log('at: handleDuplicate', { id })
+	}
+
+	function handleDelete(id: number) {
+		console.log('at: handleDelete', { id, projects, currentProject })
+		let newProjects = projects.filter((pj)=>pj.id !== id)
+		if (id === currentProject.id) {
+			if (newProjects.length === 0) {
+				newProjects = [initialProject(1)]
+			}
+			setCurrentProject(newProjects[0])
+		}
+		setProjects(newProjects)
 	}
 
 	// Modal for projects, hidden on startup
