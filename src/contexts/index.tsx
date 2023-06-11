@@ -5,6 +5,8 @@ import { ProjectType } from '../modals/projectsModal';
 type GlobalContextType = {
   currentProject: ProjectType,
   setCurrentProject: React.Dispatch<React.SetStateAction<ProjectType>>,
+  projectUpdated: boolean,
+  setProjectUpdated: React.Dispatch<React.SetStateAction<boolean>>,
   showProjects: boolean,
   setShowProjects: React.Dispatch<React.SetStateAction<boolean>>,
   entityMenuOpen: boolean,
@@ -19,6 +21,8 @@ type PopUpContextType = {
 export const GlobalContext = createContext<GlobalContextType>({
   currentProject: { id: 0, name: '', description: '', nodes: [], edges: [] },
   setCurrentProject: () => {},
+  projectUpdated: false,
+  setProjectUpdated: () => {},
   showProjects: false,
   setShowProjects: () => {},
   entityMenuOpen: false,

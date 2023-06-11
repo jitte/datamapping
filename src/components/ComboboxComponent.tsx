@@ -1,8 +1,9 @@
-import { useState, Fragment } from 'react'
+import { useState, useContext, Fragment } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { ReactCountryFlag } from 'react-country-flag'
 import { countryInfo, countryList } from '../constants'
+import { GlobalContext } from '../contexts';
 
 type ComboboxType = {
   name: string,
@@ -12,21 +13,26 @@ type ComboboxType = {
 
 export default function ComboboxComponent( { name, caption, data }: ComboboxType): JSX.Element {
   //  選択されたアイテム
-  const [selectedItem, setSelectedItem] = useState(data[name] ?? '');
+  const [selectedItem, setSelectedItem] = useState(data[name] ?? '')
+  // global context
+  const { setProjectUpdated } = useContext(GlobalContext)
   // 入力欄の検索テキスト
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('')
   // 検索テキストにマッチするアイテム（小文字でフィルタ）
   const filteredList = query === ''
     ? countryList
     : countryList.filter((item) => {
       const itemLong = `${item}: ${countryInfo[item]['name']}`.toLowerCase()
-      return itemLong.includes(query.toLowerCase());
-    });
+      return itemLong.includes(query.toLowerCase())
+    })
   // 変更された値を処理するイベントハンドラ
   function handleCombobox(value: string) {
-    setSelectedItem(value);
-    data[name] = value;
-    console.log({at: 'ComboboxComponent/handleCombobox', value , data});
+    if (data[name] !== value) {
+      data[name] = value
+      setSelectedItem(value)
+      setProjectUpdated(true)
+      console.log('at: handleCombobox', { value , data })
+    }
   }
   function flagAndCountry(countryCode: string) {
     const data = countryInfo[countryCode]

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { GlobalContext } from '../contexts';
 
 type InputType = {
   name: string,
@@ -8,11 +9,14 @@ type InputType = {
 
 export default function InputComponent( { name, caption, data }: InputType): JSX.Element {
   const [text, setText] = useState(data[name] ?? '');
+  const { setProjectUpdated } = useContext(GlobalContext)
+
   // 変更された値を処理するイベントハンドラ
   function handleInput(event: any) {
-    setText(event.target.value);
-    data[name] = event.target.value;
-    console.log({at: 'handleInput', event, data});
+    setText(event.target.value)
+    data[name] = event.target.value
+    setProjectUpdated(true)
+    console.log('at: handleInput', { event, data })
   }
 
   return (

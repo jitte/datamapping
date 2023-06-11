@@ -27,7 +27,10 @@ function DataFlowView() {
   const newNodeId = useLocalStore((state) => state.newNodeId)
 
   // current project from global context
-  const { currentProject, setEntityMenuOpen } = useContext(GlobalContext)
+  const {
+    currentProject, setEntityMenuOpen,
+    projectUpdated, setProjectUpdated,
+  } = useContext(GlobalContext)
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
@@ -43,16 +46,26 @@ function DataFlowView() {
   useEffect(() => {
     setNodes(currentProject.nodes)
     setEdges(currentProject.edges)
-    console.log('at: useEffect', { currentProject })
+    console.log('at: useEffect(currentProject)', { currentProject, projects })
   }, [currentProject, setNodes, setEdges])
 
   // save projects after changing nodes and edges
   useEffect(() => {
     currentProject.nodes = nodes
     currentProject.edges = edges
-    setProjects(projects)
-    console.log('at: useEffect', { nodes, edges })
+    //setProjects(projects)
+    setProjectUpdated(true)
+    console.log('at: useEffect(nodes/edges)', { currentProject, projects })
   }, [nodes, edges, setProjects])
+
+  // save project if project is updated
+  useEffect(() => {
+    if (projectUpdated) {
+      console.log('at: useEffect(projectUpated)', { currentProject, projects })
+      setProjects(projects)
+      setProjectUpdated(false)
+    }
+  }, [projectUpdated, setProjectUpdated])
 
   // utility function
   function deleteNode(deleteId : string) : void {
@@ -170,12 +183,14 @@ export default function App() {
     setProjects([initialProject(1)])
   }
   const [currentProject, setCurrentProject] = useState(projects[0])
+  const [projectUpdated, setProjectUpdated] = useState(false)
   const [showProjects, setShowProjects] = useState(false)
   const [entityMenuOpen, setEntityMenuOpen] = useState(false)
 
   return (
     <GlobalContextProvider value={{
       currentProject, setCurrentProject,
+      projectUpdated, setProjectUpdated,
       showProjects, setShowProjects,
       entityMenuOpen, setEntityMenuOpen,
     }} >
