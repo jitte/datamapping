@@ -90,6 +90,16 @@ export default function ProjectsModal() {
 
 	function handleDuplicate(id: number) {
 		console.log('at: handleDuplicate', { id })
+		const oldProject = projects.find((pj) => pj.id === id) as ProjectType
+		const newId = newProjectId()
+		const newProject = {
+			id: newId,
+			name: `${oldProject.name} (${newId})`,
+			description: oldProject.description,
+			nodes: [...oldProject.nodes],
+			edges: [...oldProject.edges]
+		}
+		setProjects([newProject, ...projects])
 	}
 
 	function handleDelete(id: number) {
