@@ -1,12 +1,31 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
-import { ProjectType } from "./modals/projectsModal"
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import { ProjectType } from './modals/projectsModal'
+import { Node, Edge } from 'reactflow'
 
 export type LocalStoreType = {
   projects: ProjectType[],
   setProjects: (projects: ProjectType[]) => void,
   newProjectId: () => number,
   newNodeId: () => string,
+}
+
+export function allNodes(projects: ProjectType[]) {
+  let nodes: Node[] = []
+
+  for (const project of projects) {
+    nodes.push(...project.nodes)
+  }
+  return nodes
+}
+
+export function allEdges(projects: ProjectType[]) {
+  let edges: Edge[] = []
+
+  for (const project of projects) {
+    edges.push(...project.edges)
+  }
+  return edges
 }
 
 export const useLocalStore = create(
