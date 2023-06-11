@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
-import { Panel } from 'reactflow'
-import { Listbox, Menu } from '@headlessui/react'
-import { PlusIcon, CogIcon, DocumentDuplicateIcon, Bars2Icon } from '@heroicons/react/24/outline'
+import React, { useState, useContext } from 'react'
+import { Panel, Node } from 'reactflow'
+import { Menu, Listbox, Combobox } from '@headlessui/react'
+import { PlusIcon, CogIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
-import { useLocalStore } from '../store'
+import { useLocalStore, allNodes } from '../store'
 import { nodeTitles } from '../constants'
 
 function ProjectList() {
@@ -236,58 +236,60 @@ function ConfigMenu() {
 }
 
 function ReuseMenu() {
-  const items = [{ name: '(TBD)', onClick: () => {} }]
-  function MenuItem({ name, onClick }: { name: string, onClick: any }) {
-    return (
-      <Menu.Item>
-        {({ active }) => (
-          <button
-            className={
-              `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
-              text-left w-full rounded-md px-2 py-2 text-sm`
-            }
-            onClick={onClick}
-          >
-            {name}
-          </button>
-        )}
-      </Menu.Item>
-    )
-  }
+  const projects = useLocalStore((state) => state.projects)
+  const nodes = allNodes(projects).filter((node)=>(node.data.entity_name ?? '').length > 0)
+  const [selectedNode, setSelectedNode] = useState(nodes[0])
+  const [query, setQuery] = useState('')
+  const filteredNode = query === ''
+    ? nodes
+    : nodes.filter((node) => {
+      return node.data.entity_name.toLowerCase().includes(query.toLowerCase())
+    })
+  console.log('at: ReuseMenu', {projects, nodes, selectedNode, query, filteredNode })
+
   return (
-    <Menu as="div" className="text-left w-full">
-      <Menu.Button className="
-        inline-flex
-        w-full
-        rounded-md
-        p-2
-        gap-2
-        text-sm
-        font-medium
-        bg-white
-        hover:text-white
-        hover:bg-blue-500
-      ">
-        <DocumentDuplicateIcon className="h-5 w-5" />
-        Reuse
-      </Menu.Button>
-      <Menu.Items className="
-        absolute mt-2
-        divide-y
-        divide-gray-100
-        rounded-md
-        bg-white
-        shadow-lg
-        ring-1
-        ring-black
-        ring-opacity-5
-        focus:outline-none
-      ">
-        {items.map((item) => (
-          <MenuItem name={item.name} key={item.name} onClick={item.onClick} />
-        ))}
-      </Menu.Items>
-    </Menu>
+    <Combobox value={selectedNode} onChange={setSelectedNode}>
+      <div className="relative">
+        <div className="flex flex-row items-center">
+          <MagnifyingGlassIcon className="w-5 h-5 absolute left-3" />
+          <Combobox.Input
+            className="border-none rounded-md text-sm px-10"
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search Entity"
+            /*displayValue={(node: Node) => node.data.entity_name}*/
+          />
+          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <ChevronUpDownIcon className="h-5 w-5" aria-hidden="true" />
+          </Combobox.Button>
+        </div>
+        <Combobox.Options className="absolute nowheel mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg">
+          <div className="text-xs text-gray-500 m-1">
+            Click item to reuse entity
+          </div>
+          {filteredNode.length === 0 && query !== '' ? (
+            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+              Nothing found.
+            </div>
+          ) : (
+            filteredNode.map((node: Node) => (
+              <Combobox.Option key={node.id} value={node}>
+                {({ active }) => (
+                  <div
+                    className={
+                      `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
+                      flex flex-row gap-2 text-left w-full rounded-md px-2 py-2 text-sm
+                      cursor-grab active:cursor-grabbing`
+                    }
+                  >
+                    {node.data.entity_name}
+                  </div>
+                )}
+              </Combobox.Option>
+            ))
+          )}
+        </Combobox.Options>
+      </div>
+    </Combobox>
   )
 }
 
