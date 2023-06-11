@@ -37,26 +37,26 @@ function DataFlowView() {
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null);
 
-  console.log({ at: 'DataFlowView', projects, currentProject, nodes, edges })
+  console.log('at: DataFlowView', { projects, currentProject, nodes, edges })
 
   // update nodes and edges after changing current project
   useEffect(() => {
     setNodes(currentProject.nodes)
     setEdges(currentProject.edges)
-    console.log({ at: 'DataFlowView/useEffect', currentProject })
-  }, [currentProject])
+    console.log('at: useEffect', { currentProject })
+  }, [currentProject, setNodes, setEdges])
 
   // save projects after changing nodes and edges
   useEffect(() => {
     currentProject.nodes = nodes
     currentProject.edges = edges
     setProjects(projects)
-    console.log({ at: 'DataFlowView/useEffect', nodes, edges })
-  }, [nodes, edges])
+    console.log('at: useEffect', { nodes, edges })
+  }, [nodes, edges, setProjects])
 
   // utility function
   function deleteNode(deleteId : string) : void {
-    console.log({at: 'deleteNode', deleteId: deleteId, reactFlowInstance: reactFlowInstance});
+    console.log('at: deleteNode', { deleteId, reactFlowInstance })
     // 指定されたidのノードを削除
     reactFlowInstance.setNodes(
       reactFlowInstance.getNodes().filter(
@@ -68,24 +68,23 @@ function DataFlowView() {
       reactFlowInstance.getEdges().filter(
         (nds : any) => nds.source !== deleteId && nds.target !== deleteId
       )
-    );
-  };
-
+    )
+  }
   // callbacks
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
-      console.log({at: 'onNodesChange', changes});
+      console.log('at: onNodesChange', { changes })
       setNodes(function (nds) {
-        return applyNodeChanges(changes, nds);
-      });
+        return applyNodeChanges(changes, nds)
+      })
     }, [setNodes]
-  );
+  )
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      console.log({at: 'onEdgesChange', changes});
-      setEdges((eds) => applyEdgeChanges(changes, eds));
+      console.log('at: onEdgesChange', { changes })
+      setEdges((eds) => applyEdgeChanges(changes, eds))
     }, [setEdges]
-  );
+  )
   const onConnect = useCallback(
     (connection: Connection) => {
       console.log({at: 'onConnect', connection});
@@ -94,10 +93,10 @@ function DataFlowView() {
   );
   const onDragOver = useCallback(
     (event: React.DragEvent) => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = 'move';
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
     }, []
-  );
+  )
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
@@ -113,19 +112,19 @@ function DataFlowView() {
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
-      });
+      })
       const newNode = {
         id: newNodeId(),
         type,
         position,
         data: {},
-      };
-      console.log({at: 'onDrop', event, newNode});
+      }
+      console.log('at: onDrop', { event, newNode })
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode))
       setEntityMenuOpen(false)
     }, [reactFlowInstance]
-  );
+  )
 
   return (
     <DataFlowContextProvider value={{
@@ -160,7 +159,7 @@ function DataFlowView() {
         </ReactFlow>
       </div>
     </DataFlowContextProvider>
-  );
+  )
 }
 
 export default function App() {
