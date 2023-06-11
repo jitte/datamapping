@@ -309,7 +309,7 @@ export function TopLeftPanel() {
 export function TopRightPanel() {
   return (
     <Panel position='top-right'>
-      <div className="flex flox-row">
+      <div className="flex flox-row gap-2">
         <div className="
           relative cursor-default rounded-lg bg-white
           shadow-md focus:outline-none focus-visible:border-indigo-500
