@@ -237,6 +237,7 @@ function ConfigMenu() {
 
 function ReuseMenu() {
   const projects = useLocalStore((state) => state.projects)
+  const { entityMenuOpen, setEntityMenuOpen } = useContext(GlobalContext)
   const nodes = allNodes(projects).filter((node)=>(node.data.entity_name ?? '').length > 0)
   const [selectedNode, setSelectedNode] = useState(nodes[0])
   const [query, setQuery] = useState('')
@@ -254,11 +255,17 @@ function ReuseMenu() {
           <MagnifyingGlassIcon className="w-5 h-5 absolute left-3" />
           <Combobox.Input
             className="border-none rounded-md text-sm px-10"
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              if (entityMenuOpen) setEntityMenuOpen(false)
+            }}
             placeholder="Search Entity"
             /*displayValue={(node: Node) => node.data.entity_name}*/
           />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+          <Combobox.Button
+            className="absolute inset-y-0 right-0 flex items-center pr-2"
+            onClick={() => {if (entityMenuOpen) setEntityMenuOpen(false)}}
+          >
             <ChevronUpDownIcon className="h-5 w-5" aria-hidden="true" />
           </Combobox.Button>
         </div>
