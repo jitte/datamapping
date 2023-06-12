@@ -22,7 +22,7 @@ export type ProjectType = {
 
 export default function ProjectsModal() {
 	// contexts
-	const { showProjects, setShowProjects } = useContext(GlobalContext)
+	const { showProjectModal, setShowProjectModal } = useContext(GlobalContext)
 	const { currentProject, setCurrentProject } = useContext(GlobalContext)
 
 	// stores
@@ -116,7 +116,7 @@ export default function ProjectsModal() {
 
 	// Modal for projects, hidden on startup
 	return (
-		<Dialog open={showProjects} onClose={() => setShowProjects(false)} className="z-50">
+		<Dialog open={showProjectModal} onClose={() => setShowProjectModal(false)} className="z-50">
 			<div className="fixed inset-0 bg-black/30 flex items-center justify-center max-w-full">
 				<Dialog.Panel className="bg-white rounded-xl m-4">
 					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">

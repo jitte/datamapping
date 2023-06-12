@@ -7,8 +7,8 @@ type GlobalContextType = {
   setCurrentProject: React.Dispatch<React.SetStateAction<ProjectType>>,
   projectUpdated: boolean,
   setProjectUpdated: React.Dispatch<React.SetStateAction<boolean>>,
-  showProjects: boolean,
-  setShowProjects: React.Dispatch<React.SetStateAction<boolean>>,
+  showProjectModal: boolean,
+  setShowProjectModal: React.Dispatch<React.SetStateAction<boolean>>,
   entityMenuOpen: boolean,
   setEntityMenuOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
@@ -23,8 +23,8 @@ export const GlobalContext = createContext<GlobalContextType>({
   setCurrentProject: () => {},
   projectUpdated: false,
   setProjectUpdated: () => {},
-  showProjects: false,
-  setShowProjects: () => {},
+  showProjectModal: false,
+  setShowProjectModal: () => {},
   entityMenuOpen: false,
   setEntityMenuOpen: () => {},
 })

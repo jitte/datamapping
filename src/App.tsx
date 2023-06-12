@@ -184,14 +184,14 @@ export default function App() {
   }
   const [currentProject, setCurrentProject] = useState(projects[0])
   const [projectUpdated, setProjectUpdated] = useState(false)
-  const [showProjects, setShowProjects] = useState(false)
+  const [showProjectModal, setShowProjectModal] = useState(false)
   const [entityMenuOpen, setEntityMenuOpen] = useState(false)
 
   return (
     <GlobalContextProvider value={{
       currentProject, setCurrentProject,
       projectUpdated, setProjectUpdated,
-      showProjects, setShowProjects,
+      showProjectModal, setShowProjectModal,
       entityMenuOpen, setEntityMenuOpen,
     }} >
       <div className="flex flex-row h-screen w-screen">

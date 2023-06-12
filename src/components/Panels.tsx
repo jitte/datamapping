@@ -221,10 +221,10 @@ function GenericMenu({ name, icon, items }: { name: string, icon: React.ElementT
 }
 
 function ConfigMenu() {
-  const { setShowProjects } = useContext(GlobalContext)
+  const { setShowProjectModal } = useContext(GlobalContext)
 
   const items = [
-    { name: 'Projects', onClick: () => setShowProjects(true) },
+    { name: 'Projects', onClick: () => setShowProjectModal(true) },
   ]
   return (
     <GenericMenu
