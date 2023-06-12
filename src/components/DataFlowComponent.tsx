@@ -34,13 +34,13 @@ export default function DataFlowComponent(
       </div>
       <Handle
         id={targetId}
-        className="w-3 h-3 -ml-0.5 rounded-full border-2 border-black bg-white"
+        className="w-5 h-5 -ml-1.5 rounded-full border-2 border-gray-500 bg-white"
         type="target"
         position={Position.Left}
         style={{top: position}} />
       <Handle
         id={sourceId}
-        className="w-3 h-3 -mr-0.5 rounded-full border-2 border-black bg-white"
+        className="w-5 h-5 -mr-1.5 rounded-full border-2 border-gray-500 bg-white"
         type="source"
         position={Position.Right}
         style={{top: position}} />
