@@ -14,7 +14,11 @@ export function allNodes(projects: ProjectType[]) {
   let nodes: Node[] = []
 
   for (const project of projects) {
-    nodes.push(...project.nodes)
+    for (const node of project.nodes) {
+      if (nodes.find((addedNode) => addedNode.id === node.id) === undefined) {
+        nodes.push(node)
+      }
+    }
   }
   return nodes
 }
@@ -23,7 +27,11 @@ export function allEdges(projects: ProjectType[]) {
   let edges: Edge[] = []
 
   for (const project of projects) {
-    edges.push(...project.edges)
+    for (const edge of project.edges) {
+      if (edges.find((addedEdge) => addedEdge.id === edge.id) === undefined) {
+        edges.push(edge)
+      }
+    }
   }
   return edges
 }
