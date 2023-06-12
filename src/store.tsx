@@ -15,7 +15,7 @@ export function allNodes(projects: ProjectType[]) {
 
   for (const project of projects) {
     for (const node of project.nodes) {
-      if (nodes.find((addedNode) => addedNode.id === node.id) === undefined) {
+      if (!nodes.find((addedNode) => addedNode.id === node.id)) {
         nodes.push(node)
       }
     }
@@ -28,7 +28,7 @@ export function allEdges(projects: ProjectType[]) {
 
   for (const project of projects) {
     for (const edge of project.edges) {
-      if (edges.find((addedEdge) => addedEdge.id === edge.id) === undefined) {
+      if (!edges.find((addedEdge) => addedEdge.id === edge.id)) {
         edges.push(edge)
       }
     }
