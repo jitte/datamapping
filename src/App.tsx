@@ -17,6 +17,7 @@ import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'
 import ProjectsModal from './modals/projectsModal'
+import ExportModal from './modals/exportModal'
 import { useLocalStore } from './store'
 import { initialProject } from './constants'
 
@@ -169,6 +170,7 @@ function DataFlowView() {
           <MiniMap />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
           <ProjectsModal />
+          <ExportModal />
         </ReactFlow>
       </div>
     </DataFlowContextProvider>
@@ -185,6 +187,7 @@ export default function App() {
   const [currentProject, setCurrentProject] = useState(projects[0])
   const [projectUpdated, setProjectUpdated] = useState(false)
   const [showProjectModal, setShowProjectModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [entityMenuOpen, setEntityMenuOpen] = useState(false)
 
   return (
@@ -192,6 +195,7 @@ export default function App() {
       currentProject, setCurrentProject,
       projectUpdated, setProjectUpdated,
       showProjectModal, setShowProjectModal,
+      showExportModal, setShowExportModal,
       entityMenuOpen, setEntityMenuOpen,
     }} >
       <div className="flex flex-row h-screen w-screen">
