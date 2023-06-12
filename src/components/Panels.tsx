@@ -6,7 +6,7 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { DataFlowContext } from '../contexts/dataFlowContext'
 import { useLocalStore, allNodes } from '../store'
-import { nodeTitles } from '../constants'
+import { nodeInfo } from '../constants'
 
 function ProjectList() {
   // load projects from localStore
@@ -153,7 +153,7 @@ function EntityMenu() {
     'thirdParty',
   ]
   const items = entityList.map((type) => {
-    return { name: nodeTitles[type], type }
+    return { name: nodeInfo[type].title, type }
   })
 
   return (

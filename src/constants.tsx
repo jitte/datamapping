@@ -1,4 +1,10 @@
 import { countries } from 'countries-list'
+import {
+  UsersIcon,
+  CogIcon,
+  CpuChipIcon,
+  DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline';
 
 export const countryInfo:
 { [key: string] : { name: string, emoji: string } } = {
@@ -21,11 +27,38 @@ export const nodeTypes: {[key: string]: any}= {
   thirdParty:    ThirdPartyNode,
 }
 
-export const nodeTitles: {[key: string]: string} = {
-  piiSubject:    "PII Subject",
-  piiController: "PII Controller",
-  piiProcessor:  "PII Processor",
-  thirdParty:    "Third Party",
+type nodeInfoType = {
+  title: string
+  icon: any
+	from: string
+	to: string
+}
+
+export const nodeInfo: { [key: string]: nodeInfoType } = {
+  piiSubject: {
+    title: 'PII Subject',
+    icon: UsersIcon,
+    from: 'from-rose-600',
+    to: 'to-purple-600',
+  },
+  piiController: {
+    title: 'PII Controller',
+    icon: CogIcon,
+    from: 'from-orange-600',
+    to: 'to-yellow-600',
+  },
+  piiProcessor: {
+    title: 'PII Processor',
+    icon: CpuChipIcon,
+    from: 'from-lime-600',
+    to: 'to-teal-600',
+  },
+  thirdParty: {
+    title: 'Third Party',
+    icon: DocumentDuplicateIcon,
+    from: 'from-blue-600',
+    to: 'to-cyan-600',
+  },
 }
 
 export function initialProject(id: number) {
