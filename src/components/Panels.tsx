@@ -4,6 +4,7 @@ import { Menu, Listbox, Combobox } from '@headlessui/react'
 import { PlusIcon, CogIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
+import { DataFlowContext } from '../contexts/dataFlowContext'
 import { useLocalStore, allNodes } from '../store'
 import { nodeTitles } from '../constants'
 
@@ -240,18 +241,44 @@ function ConfigMenu() {
 }
 
 function ReuseMenu() {
-  const projects = useLocalStore((state) => state.projects)
-  const { entityMenuOpen, setEntityMenuOpen } = useContext(GlobalContext)
-  const nodes = allNodes(projects).filter((node)=>(node.data.entity_name ?? '').length > 0)
-  const [selectedNode, setSelectedNode] = useState(nodes[0])
-  const [query, setQuery] = useState('')
-  const filteredNode = query === ''
-    ? nodes
-    : nodes.filter((node) => {
-      return node.data.entity_name.toLowerCase().includes(query.toLowerCase())
-    })
-  console.log('at: ReuseMenu', {projects, nodes, selectedNode, query, filteredNode })
+  // imports from global context
+  const { entityMenuOpen, setEntityMenuOpen, currentProject } =
+    useContext(GlobalContext)
 
+  // imports from dataflow context
+  const { setNodes } = useContext(DataFlowContext)
+
+  // all projects and nodes that has own entity name
+  const projects = useLocalStore((state) => state.projects)
+  const nodes = allNodes(projects).filter(
+    (node) =>
+      (node.data.entity_name ?? '').length > 0 &&
+      !currentProject.nodes.find((nd) => nd.id === node.id)
+  )
+
+  // current option for combobox
+  const [selectedNode, setSelectedNode] = useState(nodes[0])
+
+  // current query
+  const [query, setQuery] = useState('')
+
+  // all nodes that includes current query
+  const filteredNode =
+    query === ''
+      ? nodes
+      : nodes.filter((node) => {
+          return node.data.entity_name
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        })
+  console.log('at: ReuseMenu', { selectedNode, query })
+
+  function handleClick(node: Node) {
+    setNodes((nds) => nds.concat(node))
+  }
+  function entityMenuClose() {
+    if (entityMenuOpen) setEntityMenuOpen(false)
+  }
   return (
     <Combobox value={selectedNode} onChange={setSelectedNode}>
       <div className="relative">
@@ -261,42 +288,45 @@ function ReuseMenu() {
             className="border-none rounded-md text-sm px-10"
             onChange={(event) => {
               setQuery(event.target.value)
-              if (entityMenuOpen) setEntityMenuOpen(false)
+              entityMenuClose()
             }}
             placeholder="Search Entity"
             /*displayValue={(node: Node) => node.data.entity_name}*/
           />
           <Combobox.Button
             className="absolute inset-y-0 right-0 flex items-center pr-2"
-            onClick={() => {if (entityMenuOpen) setEntityMenuOpen(false)}}
+            onClick={entityMenuClose}
           >
             <ChevronUpDownIcon className="h-5 w-5" aria-hidden="true" />
           </Combobox.Button>
         </div>
         <Combobox.Options className="absolute nowheel mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg">
-          <div className="text-xs text-gray-500 m-1">
-            Click item to reuse entity
-          </div>
-          {filteredNode.length === 0 && query !== '' ? (
+          {filteredNode.length === 0 ? (
             <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
               Nothing found.
             </div>
           ) : (
-            filteredNode.map((node: Node) => (
-              <Combobox.Option key={node.id} value={node}>
-                {({ active }) => (
-                  <div
-                    className={
-                      `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
+            <>
+              <div className="text-xs text-gray-500 m-1">
+                Click item to reuse entity
+              </div>
+              {filteredNode.map((node: Node) => (
+                <Combobox.Option key={node.id} value={node}>
+                  {({ active }) => (
+                    <button
+                      onClick={() => handleClick(node)}
+                      className={`${
+                        active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                      }
                       flex flex-row gap-2 text-left w-full rounded-md px-2 py-2 text-sm
-                      cursor-grab active:cursor-grabbing`
-                    }
-                  >
-                    {node.data.entity_name}
-                  </div>
-                )}
-              </Combobox.Option>
-            ))
+                      cursor-grab active:cursor-grabbing`}
+                    >
+                      {node.data.entity_name}
+                    </button>
+                  )}
+                </Combobox.Option>
+              ))}
+            </>
           )}
         </Combobox.Options>
       </div>
