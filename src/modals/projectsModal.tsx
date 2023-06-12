@@ -56,7 +56,7 @@ export default function ProjectsModal() {
 		return (
 			<Dialog open={showEditModal} onClose={onClose} className="z-50" >
 				<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
-					<Dialog.Panel className="bg-white rounded-xl">
+					<Dialog.Panel className="bg-white rounded-xl w-[600px]">
 						<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
 							Project Edit Dialog
 						</Dialog.Title>
@@ -118,7 +118,7 @@ export default function ProjectsModal() {
 	return (
 		<Dialog open={showProjectModal} onClose={() => setShowProjectModal(false)} className="z-50">
 			<div className="fixed inset-0 bg-black/30 flex items-center justify-center max-w-full">
-				<Dialog.Panel className="bg-white rounded-xl m-4">
+				<Dialog.Panel className="bg-white rounded-xl m-4 w-[800px]">
 					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
 						Project List Dialog
 					</Dialog.Title>
