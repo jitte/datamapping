@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState, useContext } from 'react'
 import { Node } from 'reactflow'
 import { ChevronsUpDown } from 'lucide-react'
