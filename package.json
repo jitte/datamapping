@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
+    "@radix-ui/react-menubar": "^1.0.3",
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",

@@ -20,6 +20,7 @@ import ProjectsModal from './modals/projectsModal'
 import ExportModal from './modals/exportModal'
 import { useLocalStore } from './store'
 import { initialProject } from './constants'
+import { MyMenubar } from './components/MenubarComponent'
 
 function DataFlowView() {
 	// load projects from localStore
@@ -198,9 +199,12 @@ export default function App() {
       showExportModal, setShowExportModal,
       entityMenuOpen, setEntityMenuOpen,
     }} >
-      <div className="flex flex-row h-screen w-screen">
+      <div className="flex flex-row w-screen h-screen">
         <ReactFlowProvider>
-          <DataFlowView />
+          <div className="flex flex-col">
+            <MyMenubar />
+            <DataFlowView />
+          </div>
         </ReactFlowProvider>
       </div>
     </GlobalContextProvider>
