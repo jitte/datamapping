@@ -31,7 +31,6 @@ function DataFlowView() {
   // current project from global context
   const {
     currentProject,
-    setEntityMenuOpen,
     projectUpdated,
     setProjectUpdated,
   } = useContext(GlobalContext)
@@ -140,7 +139,6 @@ function DataFlowView() {
       console.log('at: onDrop', { event, newNode })
 
       setNodes((nds) => nds.concat(newNode))
-      setEntityMenuOpen(false)
     },
     [reactFlowInstance]
   )
