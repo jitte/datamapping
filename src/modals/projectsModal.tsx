@@ -27,7 +27,7 @@ export default function ProjectsModal() {
 
 	// stores
 	const projects  = useLocalStore((state) => state.projects)
-	const setProjects = useLocalStore((state) => state.setProjects)
+	const storeProjects = useLocalStore((state) => state.storeProjects)
 	const newProjectId = useLocalStore((state) => state.newProjectId)
 
 	// states
@@ -46,7 +46,7 @@ export default function ProjectsModal() {
 			console.log('at: onSubmit', { newProject })
 			// update projects
 			setCurrentProject(newProject)
-			setProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
+			storeProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
 			//closePopUp()
 			setShowEditModal(false)
 		}
@@ -55,9 +55,9 @@ export default function ProjectsModal() {
 		}
 		return (
 			<Dialog open={showEditModal} onClose={onClose} className="z-50" >
-				<div className="fixed inset-0 bg-black/30 flex items-center justify-center">
+				<div className="fixed inset-0 flex items-center justify-center bg-black/30">
 					<Dialog.Panel className="bg-white rounded-xl w-[600px]">
-						<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
+						<Dialog.Title className="p-4 text-center bg-gray-100 rounded-t-xl drop-shadow">
 							Project Edit Dialog
 						</Dialog.Title>
 						<form onSubmit={(event) => onSubmit(event, project)}>
@@ -65,15 +65,15 @@ export default function ProjectsModal() {
 								<label htmlFor="name">
 									Project Name
 								</label>
-								<input type="text" name="name" className="form-input rounded" defaultValue={project.name} />
+								<input type="text" name="name" className="rounded form-input" defaultValue={project.name} />
 								<label htmlFor="description">
 									Description
 								</label>
-								<textarea name="description" className="form-textarea rounded" defaultValue={project.description} />
+								<textarea name="description" className="rounded form-textarea" defaultValue={project.description} />
 							</div>
-							<div className="flex flex-row justify-evenly pb-4">
-								<input type="submit" className="bg-blue-700 hover:bg-blue-800 text-white rounded-full px-4" value="Submit"/>
-								<button onClick={onClose} className="bg-blue-700 hover:bg-blue-800 text-white rounded-full px-4">Cancel</button>
+							<div className="flex flex-row pb-4 justify-evenly">
+								<input type="submit" className="px-4 text-white bg-blue-700 rounded-full hover:bg-blue-800" value="Submit"/>
+								<button onClick={onClose} className="px-4 text-white bg-blue-700 rounded-full hover:bg-blue-800">Cancel</button>
 							</div>
 						</form>
 					</Dialog.Panel>
@@ -99,7 +99,7 @@ export default function ProjectsModal() {
 			nodes: [...oldProject.nodes],
 			edges: [...oldProject.edges]
 		}
-		setProjects([newProject, ...projects])
+		storeProjects([newProject, ...projects])
 	}
 
 	function handleDelete(id: number) {
@@ -111,30 +111,30 @@ export default function ProjectsModal() {
 			}
 			setCurrentProject(newProjects[0])
 		}
-		setProjects(newProjects)
+		storeProjects(newProjects)
 	}
 
 	// Modal for projects, hidden on startup
 	return (
 		<Dialog open={showProjectModal} onClose={() => setShowProjectModal(false)} className="z-50">
-			<div className="fixed inset-0 bg-black/30 flex items-center justify-center max-w-full">
+			<div className="fixed inset-0 flex items-center justify-center max-w-full bg-black/30">
 				<Dialog.Panel className="bg-white rounded-xl m-4 w-[800px]">
-					<Dialog.Title className="bg-gray-100 rounded-t-xl p-4 drop-shadow text-center">
+					<Dialog.Title className="p-4 text-center bg-gray-100 rounded-t-xl drop-shadow">
 						Project List Dialog
 					</Dialog.Title>
 						<div className="flex flex-col p-2">
 							<div className="m-2">
 								<button
-									className="text-white bg-blue-700 hover:bg-blue-800 flex flex-row p-2 rounded-lg float-right"
+									className="flex flex-row float-right p-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800"
 									onClick={() => handleEdit(null)}
 								>
-									<PlusIcon className="mr-2 h-5 w-5" />
+									<PlusIcon className="w-5 h-5 mr-2" />
 									Project
 								</button>
 							</div>
-							<table className="text-left text-sm drop-shadow-md m-2">
+							<table className="m-2 text-sm text-left drop-shadow-md">
 								<thead>
-									<tr className="bg-gray-50 uppercase">
+									<tr className="uppercase bg-gray-50">
 										<th className="px-6 py-4">ID</th>
 										<th className="px-6 py-4">Name</th>
 										<th className="px-6 py-4">Description</th>

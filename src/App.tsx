@@ -25,7 +25,7 @@ import { MyMenubar } from './components/MenubarComponent'
 function DataFlowView() {
   // load projects from localStore
   const projects = useLocalStore((state) => state.projects)
-  const setProjects = useLocalStore((state) => state.setProjects)
+  const storeProjects = useLocalStore((state) => state.storeProjects)
   const newNodeId = useLocalStore((state) => state.newNodeId)
 
   // current project from global context
@@ -56,16 +56,15 @@ function DataFlowView() {
   useEffect(() => {
     currentProject.nodes = nodes
     currentProject.edges = edges
-    //setProjects(projects)
     setProjectUpdated(true)
     console.log('at: useEffect(nodes/edges)', { currentProject, projects })
-  }, [nodes, edges, setProjects])
+  }, [nodes, edges, storeProjects])
 
   // save project if project is updated
   useEffect(() => {
     if (projectUpdated) {
       console.log('at: useEffect(projectUpated)', { currentProject, projects })
-      setProjects(projects)
+      storeProjects(projects)
       setProjectUpdated(false)
     }
   }, [projectUpdated, setProjectUpdated])
@@ -191,10 +190,10 @@ function DataFlowView() {
 
 export default function App() {
 	const projects  = useLocalStore((state) => state.projects)
-	const setProjects = useLocalStore((state) => state.setProjects)
+	const storeProjects = useLocalStore((state) => state.storeProjects)
 
   if (projects.length === 0) {
-    setProjects([initialProject(1)])
+    storeProjects([initialProject(1)])
   }
   const [currentProject, setCurrentProject] = useState(projects[0])
   const [projectUpdated, setProjectUpdated] = useState(false)

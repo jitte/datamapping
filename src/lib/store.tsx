@@ -5,7 +5,7 @@ import { Node, Edge } from 'reactflow'
 
 export type LocalStoreType = {
   projects: ProjectType[],
-  setProjects: (projects: ProjectType[]) => void,
+  storeProjects: (projects: ProjectType[]) => void,
   newProjectId: () => number,
   newNodeId: () => string,
 }
@@ -40,7 +40,7 @@ export const useLocalStore = create(
   persist<LocalStoreType>(
     (set, get) => ({
       projects: [],
-      setProjects: (projects: ProjectType[]) => {
+      storeProjects: (projects: ProjectType[]) => {
         set({ projects })
       },
       newProjectId: () => {
