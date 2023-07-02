@@ -224,7 +224,6 @@ function ProjectMenu() {
 
 export function MyMenubar() {
   return (
-    <div className="z-10">
     <Menubar className='bg-white/50'>
       <FileMenu />
       <EditMenu />
@@ -234,6 +233,5 @@ export function MyMenubar() {
       <div className="grow" />
       <ProjectMenu />
     </Menubar>
-    </div>
   )
 }

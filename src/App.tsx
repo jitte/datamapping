@@ -158,7 +158,9 @@ function DataFlowView() {
       }}
     >
       <div className="flex flex-col">
-        <MyMenubar />
+        <div className="z-10">
+          <MyMenubar />
+        </div>
         <div className="fixed w-screen h-screen" ref={ref}>
           <ReactFlow
             nodeTypes={nodeTypes}
