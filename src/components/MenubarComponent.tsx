@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import { GlobalContext } from '@/contexts'
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -15,6 +14,8 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import { useLocalStore } from '@/lib/store'
+import { GlobalContext } from '@/contexts'
 
 function FileMenu() {
   const { setShowExportModal } = useContext(GlobalContext)
@@ -34,7 +35,9 @@ function FileMenu() {
         </MenubarSub>
         <MenubarSeparator />
         <MenubarItem>Import...</MenubarItem>
-        <MenubarItem onClick={() => setShowExportModal(true)}>Export...</MenubarItem>
+        <MenubarItem onClick={() => setShowExportModal(true)}>
+          Export...
+        </MenubarItem>
       </MenubarContent>
     </MenubarMenu>
   )
@@ -95,18 +98,37 @@ function ViewMenu() {
 }
 
 function ProjectMenu() {
-  const { setShowProjectModal } = useContext(GlobalContext)
+  const { setShowProjectModal, currentProject, setCurrentProject } =
+    useContext(GlobalContext)
+  const projects = useLocalStore((state) => state.projects)
+
+  function ProjectList() {
+    function handleChange(value: string) {
+      const project = projects.find((project) => project.id === Number(value))
+      if (project) setCurrentProject(project)
+    }
+    return (
+      <MenubarRadioGroup
+        value={String(currentProject.id)}
+        onValueChange={(value) => handleChange(value)}
+      >
+        {projects.map((project) => (
+          <MenubarRadioItem value={String(project.id)} key={String(project.id)}>
+            {project.name}
+          </MenubarRadioItem>
+        ))}
+      </MenubarRadioGroup>
+    )
+  }
   return (
     <MenubarMenu>
       <MenubarTrigger>Projects</MenubarTrigger>
       <MenubarContent>
-        <MenubarRadioGroup value="benoit">
-          <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
-          <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
-          <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
-        </MenubarRadioGroup>
+        <ProjectList />
         <MenubarSeparator />
-        <MenubarItem inset onClick={()=>setShowProjectModal(true)}>Edit...</MenubarItem>
+        <MenubarItem inset onClick={() => setShowProjectModal(true)}>
+          Edit...
+        </MenubarItem>
         <MenubarSeparator />
         <MenubarItem inset>Add Profile...</MenubarItem>
       </MenubarContent>

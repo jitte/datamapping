@@ -1,65 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { Panel, Node } from 'reactflow'
-import { Menu, Listbox, Combobox } from '@headlessui/react'
+import { Menu, Combobox } from '@headlessui/react'
 import { PlusIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/outline'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { DataFlowContext } from '../contexts/dataFlowContext'
 import { useLocalStore, allNodes } from '../lib/store'
 import { nodeInfo } from '../constants'
-
-function ProjectList() {
-  // load projects from localStore
-	const projects = useLocalStore((state) => state.projects)
-
-  // current project from global context
-  const { currentProject, setCurrentProject, setEntityMenuOpen } = useContext(GlobalContext)
-
-  //console.log({ at: 'ProjectList', projects, currentProject })
-  return (
-    <Listbox value={currentProject} onChange={setCurrentProject}>
-      <Listbox.Button
-        onClick={()=>setEntityMenuOpen(false)}
-        className="px-3 py-2 text-left w-52"
-      >
-        <div className="flex flex-row gap-2">
-          <div className="grow">{currentProject.name}</div>
-          <ChevronUpDownIcon className="w-5 h-5" />
-        </div>
-      </Listbox.Button>
-      <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg  max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-        {projects.map((project) => (
-          <Listbox.Option
-            key={project.id}
-            className={({ active }) =>
-              `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
-              }`
-            }
-            value={project}
-          >
-            {({ selected }) => (
-              <>
-                <span
-                  className={`block truncate ${
-                    selected ? 'font-medium' : 'font-normal'
-                  }`}
-                >
-                  {project.name}
-                </span>
-                {selected ? (
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                    <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                  </span>
-                ) : null}
-              </>
-            )}
-          </Listbox.Option>
-        ))}
-      </Listbox.Options>
-    </Listbox>
-  )
-}
 
 function DraggableMenu({ name, icon, items }:
   { name: string, icon: React.ElementType, items: any[] })
@@ -101,12 +48,12 @@ function DraggableMenu({ name, icon, items }:
       <Menu.Button onClick={
         () => setEntityMenuOpen(!entityMenuOpen)
       }
-      className="inline-flex w-full gap-2 p-2 text-sm font-medium bg-white rounded-md  hover:text-white hover:bg-blue-500">
+      className="inline-flex w-full gap-2 p-2 text-sm font-medium bg-white rounded-md hover:text-white hover:bg-blue-500">
         <IconElement className="w-5 h-5" />
         {name}
       </Menu.Button>
       { entityMenuOpen ?
-        <Menu.Items static className="absolute mt-2 bg-white divide-y divide-gray-100 rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items static className="absolute mt-2 bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="m-1 text-xs text-gray-500">
             Drag item to create entity
           </div>
@@ -243,18 +190,6 @@ export function TopLeftPanel() {
         </div>
         <div className="inline-flex items-center text-sm font-medium bg-white rounded-md shadow-md">
           <ReuseMenu />
-        </div>
-      </div>
-    </Panel>
-  )
-}
-
-export function TopRightPanel() {
-  return (
-    <Panel position='top-right'>
-      <div className="flex gap-2 flox-row">
-        <div className="relative bg-white rounded-lg shadow-md cursor-default  focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-          <ProjectList />
         </div>
       </div>
     </Panel>

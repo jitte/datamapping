@@ -15,7 +15,7 @@ import './App.css'
 import { nodeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
-import { TopLeftPanel, TopRightPanel } from './components/Panels'
+import { TopLeftPanel } from './components/Panels'
 import ProjectsModal from './modals/projectsModal'
 import ExportModal from './modals/exportModal'
 import { useLocalStore } from './lib/store'
@@ -166,7 +166,6 @@ function DataFlowView() {
           fitView
         >
           <TopLeftPanel />
-          <TopRightPanel />
           <Controls />
           <MiniMap />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
