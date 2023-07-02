@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { GlobalContext } from '../contexts'
-import { useLocalStore } from '../store'
+import { useLocalStore } from '../lib/store'
 
 function normalCaseToSnakeCase(str: string) {
   return str

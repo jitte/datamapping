@@ -18,7 +18,7 @@ import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { TopLeftPanel, TopRightPanel } from './components/Panels'
 import ProjectsModal from './modals/projectsModal'
 import ExportModal from './modals/exportModal'
-import { useLocalStore } from './store'
+import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
 import { MyMenubar } from './components/MenubarComponent'
 

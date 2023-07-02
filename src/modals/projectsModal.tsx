@@ -8,7 +8,7 @@ import {
 	DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'
 
-import { useLocalStore } from '../store'
+import { useLocalStore } from '../lib/store'
 import { GlobalContext } from '../contexts'
 import { initialProject } from '../constants'
 

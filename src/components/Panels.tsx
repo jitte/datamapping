@@ -5,7 +5,7 @@ import { PlusIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/ou
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { DataFlowContext } from '../contexts/dataFlowContext'
-import { useLocalStore, allNodes } from '../store'
+import { useLocalStore, allNodes } from '../lib/store'
 import { nodeInfo } from '../constants'
 
 function ProjectList() {
