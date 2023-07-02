@@ -16,22 +16,45 @@ import {
 } from '@/components/ui/menubar'
 import { useLocalStore } from '@/lib/store'
 import { GlobalContext } from '@/contexts'
+import { nodeInfo } from '@/constants'
 
 function FileMenu() {
   const { setShowExportModal } = useContext(GlobalContext)
-
+  const entityList = [
+    'piiSubject',
+    'piiController',
+    'piiProcessor',
+    'thirdParty',
+  ]
+  const items = entityList.map((type) => {
+    return { name: nodeInfo[type].title, type }
+  })
+  function EntityItems() {
+    const onDragStart = (event: React.DragEvent, type: string) => {
+      event.dataTransfer.setData('application/reactflow', type)
+      event.dataTransfer.effectAllowed = 'move'
+    }
+    return (
+      <MenubarSubContent>
+        {items.map((item) => (
+          <MenubarItem
+            key={item.type}
+            draggable
+            onDragStart={(event) => onDragStart(event, item.type)}
+          >
+            {item.name}
+          </MenubarItem>
+        ))}
+      </MenubarSubContent>
+    )
+  }
   return (
     <MenubarMenu>
       <MenubarTrigger>File</MenubarTrigger>
       <MenubarContent>
         <MenubarSub>
           <MenubarSubTrigger>New Entity</MenubarSubTrigger>
-          <MenubarSubContent>
-            <MenubarItem>PII Subject</MenubarItem>
-            <MenubarItem>PII Controller</MenubarItem>
-            <MenubarItem>PII Processor</MenubarItem>
-            <MenubarItem>Third Party</MenubarItem>
-          </MenubarSubContent>
+          <EntityItems />
         </MenubarSub>
         <MenubarSeparator />
         <MenubarItem>Import...</MenubarItem>

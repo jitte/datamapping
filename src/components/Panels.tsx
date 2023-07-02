@@ -1,91 +1,11 @@
-import React, { useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { Panel, Node } from 'reactflow'
-import { Menu, Combobox } from '@headlessui/react'
-import { PlusIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/outline'
+import { Combobox } from '@headlessui/react'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { DataFlowContext } from '../contexts/dataFlowContext'
 import { useLocalStore, allNodes } from '../lib/store'
-import { nodeInfo } from '../constants'
-
-function DraggableMenu({ name, icon, items }:
-  { name: string, icon: React.ElementType, items: any[] })
-{
-  const { entityMenuOpen, setEntityMenuOpen } = useContext(GlobalContext)
-  const IconElement = icon
-  // Draggable menu item
-  function MenuItem({ name, type }:
-    { name: string,
-      type: string,
-    })
-  {
-    const onDragStart = (event: React.DragEvent, type: string) => {
-      event.dataTransfer.setData('application/reactflow', type);
-      event.dataTransfer.effectAllowed = 'move';
-    }
-    return (
-      <Menu.Item>
-        {({ active }) => (
-          <div
-            className={
-              `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
-              flex flex-row gap-2 text-left w-full rounded-md px-2 py-2 text-sm
-              cursor-grab active:cursor-grabbing`
-            }
-            draggable
-            onDragStart={(event) => onDragStart(event, type)}
-          >
-            {name}
-            <div className="flex-grow" />
-            <Bars2Icon className="w-5 h-5" />
-          </div>
-        )}
-      </Menu.Item>
-    )
-  }
-  return (
-    <Menu as="div" className="w-full text-left">
-      <Menu.Button onClick={
-        () => setEntityMenuOpen(!entityMenuOpen)
-      }
-      className="inline-flex w-full gap-2 p-2 text-sm font-medium bg-white rounded-md hover:text-white hover:bg-blue-500">
-        <IconElement className="w-5 h-5" />
-        {name}
-      </Menu.Button>
-      { entityMenuOpen ?
-        <Menu.Items static className="absolute mt-2 bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="m-1 text-xs text-gray-500">
-            Drag item to create entity
-          </div>
-          {items.map((item) => (
-            <MenuItem name={item.name} key={item.name} type={item.type} />
-          ))}
-        </Menu.Items>
-      : ''
-      }
-    </Menu>
-  )
-}
-
-function EntityMenu() {
-  const entityList = [
-    'piiSubject',
-    'piiController',
-    'piiProcessor',
-    'thirdParty',
-  ]
-  const items = entityList.map((type) => {
-    return { name: nodeInfo[type].title, type }
-  })
-
-  return (
-    <DraggableMenu
-      name="New"
-      icon={PlusIcon}
-      items={items}
-    />
-  )
-}
 
 function ReuseMenu() {
   // imports from global context
@@ -185,9 +105,6 @@ export function TopLeftPanel() {
   return (
     <Panel position='top-left'>
       <div className="flex flex-row items-center gap-2">
-        <div className="inline-flex items-center text-sm font-medium bg-white rounded-md shadow-md">
-          <EntityMenu />
-        </div>
         <div className="inline-flex items-center text-sm font-medium bg-white rounded-md shadow-md">
           <ReuseMenu />
         </div>
