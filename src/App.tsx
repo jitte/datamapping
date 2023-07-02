@@ -202,7 +202,6 @@ export default function App() {
   const [projectUpdated, setProjectUpdated] = useState(false)
   const [showProjectModal, setShowProjectModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
-  const [entityMenuOpen, setEntityMenuOpen] = useState(false)
 
   return (
     <GlobalContextProvider value={{
@@ -210,7 +209,6 @@ export default function App() {
       projectUpdated, setProjectUpdated,
       showProjectModal, setShowProjectModal,
       showExportModal, setShowExportModal,
-      entityMenuOpen, setEntityMenuOpen,
     }} >
       <ReactFlowProvider>
         <DataFlowView />
