@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Panel, Node } from 'reactflow'
 import { Menu, Listbox, Combobox } from '@headlessui/react'
-import { PlusIcon, CogIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/outline'
+import { PlusIcon, MagnifyingGlassIcon, Bars2Icon } from '@heroicons/react/24/outline'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { GlobalContext } from '../contexts'
 import { DataFlowContext } from '../contexts/dataFlowContext'
@@ -20,17 +20,14 @@ function ProjectList() {
     <Listbox value={currentProject} onChange={setCurrentProject}>
       <Listbox.Button
         onClick={()=>setEntityMenuOpen(false)}
-        className="w-52 text-left py-2 px-3"
+        className="px-3 py-2 text-left w-52"
       >
         <div className="flex flex-row gap-2">
           <div className="grow">{currentProject.name}</div>
-          <ChevronUpDownIcon className="h-5 w-5" />
+          <ChevronUpDownIcon className="w-5 h-5" />
         </div>
       </Listbox.Button>
-      <Listbox.Options className="
-        absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1
-        text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm
-      ">
+      <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg  max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
         {projects.map((project) => (
           <Listbox.Option
             key={project.id}
@@ -52,7 +49,7 @@ function ProjectList() {
                 </span>
                 {selected ? (
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                    <CheckIcon className="w-5 h-5" aria-hidden="true" />
                   </span>
                 ) : null}
               </>
@@ -100,39 +97,17 @@ function DraggableMenu({ name, icon, items }:
     )
   }
   return (
-    <Menu as="div" className="text-left w-full">
+    <Menu as="div" className="w-full text-left">
       <Menu.Button onClick={
         () => setEntityMenuOpen(!entityMenuOpen)
       }
-      className="
-        inline-flex
-        w-full
-        rounded-md
-        p-2
-        gap-2
-        text-sm
-        font-medium
-        bg-white
-        hover:text-white
-        hover:bg-blue-500
-      ">
-        <IconElement className="h-5 w-5" />
+      className="inline-flex w-full gap-2 p-2 text-sm font-medium bg-white rounded-md  hover:text-white hover:bg-blue-500">
+        <IconElement className="w-5 h-5" />
         {name}
       </Menu.Button>
       { entityMenuOpen ?
-        <Menu.Items static className="
-          absolute mt-2
-          divide-y
-          divide-gray-100
-          rounded-md
-          bg-white
-          shadow-lg
-          ring-1
-          ring-black
-          ring-opacity-5
-          focus:outline-none
-        ">
-          <div className="text-xs text-gray-500 m-1">
+        <Menu.Items static className="absolute mt-2 bg-white divide-y divide-gray-100 rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="m-1 text-xs text-gray-500">
             Drag item to create entity
           </div>
           {items.map((item) => (
@@ -160,81 +135,6 @@ function EntityMenu() {
     <DraggableMenu
       name="New"
       icon={PlusIcon}
-      items={items}
-    />
-  )
-}
-
-function GenericMenu({ name, icon, items }: { name: string, icon: React.ElementType, items: any[] }) {
-  const IconElement = icon
-  function MenuItem({ name, onClick }: { name: string, onClick: any }) {
-    return (
-      <Menu.Item>
-        {({ active }) => (
-          <button
-            className={
-              `${active ? 'bg-blue-500 text-white' : 'text-gray-900'}
-              text-left w-full rounded-md px-2 py-2 text-sm`
-            }
-            onClick={onClick}
-          >
-            {name}
-          </button>
-        )}
-      </Menu.Item>
-    )
-  }
-  return (
-    <Menu as="div" className="text-left w-full">
-      <Menu.Button className="
-        inline-flex
-        w-full
-        rounded-md
-        p-2
-        gap-2
-        text-sm
-        font-medium
-        bg-white
-        hover:text-white
-        hover:bg-blue-500
-      ">
-        <IconElement className="h-5 w-5" />
-        {name}
-      </Menu.Button>
-      <Menu.Items className="
-        absolute mt-2
-        divide-y
-        divide-gray-100
-        rounded-md
-        bg-white
-        shadow-lg
-        ring-1
-        ring-black
-        ring-opacity-5
-        focus:outline-none
-      ">
-        {items.map((item) => (
-          <MenuItem name={item.name} key={item.name} onClick={item.onClick} />
-        ))}
-      </Menu.Items>
-    </Menu>
-  )
-}
-
-function ConfigMenu() {
-  const {
-    setShowProjectModal,
-    setShowExportModal
-  } = useContext(GlobalContext)
-
-  const items = [
-    { name: 'Projects', onClick: () => setShowProjectModal(true) },
-    { name: 'Export', onClick: () => setShowExportModal(true) },
-  ]
-  return (
-    <GenericMenu
-      name="Config"
-      icon={CogIcon}
       items={items}
     />
   )
@@ -283,9 +183,9 @@ function ReuseMenu() {
     <Combobox value={selectedNode} onChange={setSelectedNode}>
       <div className="relative">
         <div className="flex flex-row items-center">
-          <MagnifyingGlassIcon className="w-5 h-5 absolute left-3" />
+          <MagnifyingGlassIcon className="absolute w-5 h-5 left-3" />
           <Combobox.Input
-            className="border-none rounded-md text-sm px-10"
+            className="px-10 text-sm border-none rounded-md"
             onChange={(event) => {
               setQuery(event.target.value)
               entityMenuClose()
@@ -297,17 +197,17 @@ function ReuseMenu() {
             className="absolute inset-y-0 right-0 flex items-center pr-2"
             onClick={entityMenuClose}
           >
-            <ChevronUpDownIcon className="h-5 w-5" aria-hidden="true" />
+            <ChevronUpDownIcon className="w-5 h-5" aria-hidden="true" />
           </Combobox.Button>
         </div>
-        <Combobox.Options className="absolute nowheel mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-lg">
+        <Combobox.Options className="absolute w-full py-1 mt-1 overflow-auto text-sm bg-white rounded-md shadow-lg nowheel max-h-60">
           {filteredNode.length === 0 ? (
-            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+            <div className="relative px-4 py-2 text-gray-700 cursor-default select-none">
               Nothing found.
             </div>
           ) : (
             <>
-              <div className="text-xs text-gray-500 m-1">
+              <div className="m-1 text-xs text-gray-500">
                 Click item to reuse entity
               </div>
               {filteredNode.map((node: Node) => (
@@ -338,10 +238,10 @@ export function TopLeftPanel() {
   return (
     <Panel position='top-left'>
       <div className="flex flex-row items-center gap-2">
-        <div className="rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+        <div className="inline-flex items-center text-sm font-medium bg-white rounded-md shadow-md">
           <EntityMenu />
         </div>
-        <div className="rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
+        <div className="inline-flex items-center text-sm font-medium bg-white rounded-md shadow-md">
           <ReuseMenu />
         </div>
       </div>
@@ -352,17 +252,9 @@ export function TopLeftPanel() {
 export function TopRightPanel() {
   return (
     <Panel position='top-right'>
-      <div className="flex flox-row gap-2">
-        <div className="
-          relative cursor-default rounded-lg bg-white
-          shadow-md focus:outline-none focus-visible:border-indigo-500
-          focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75
-          focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm
-        ">
+      <div className="flex gap-2 flox-row">
+        <div className="relative bg-white rounded-lg shadow-md cursor-default  focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
           <ProjectList />
-        </div>
-        <div className="rounded-md shadow-md text-sm font-medium bg-white inline-flex items-center">
-          <ConfigMenu />
         </div>
       </div>
     </Panel>

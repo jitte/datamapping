@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { GlobalContext } from '@/contexts'
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -15,6 +17,8 @@ import {
 } from '@/components/ui/menubar'
 
 function FileMenu() {
+  const { setShowExportModal } = useContext(GlobalContext)
+
   return (
     <MenubarMenu>
       <MenubarTrigger>File</MenubarTrigger>
@@ -30,7 +34,7 @@ function FileMenu() {
         </MenubarSub>
         <MenubarSeparator />
         <MenubarItem>Import...</MenubarItem>
-        <MenubarItem>Export...</MenubarItem>
+        <MenubarItem onClick={() => setShowExportModal(true)}>Export...</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
   )
@@ -91,6 +95,7 @@ function ViewMenu() {
 }
 
 function ProjectMenu() {
+  const { setShowProjectModal } = useContext(GlobalContext)
   return (
     <MenubarMenu>
       <MenubarTrigger>Projects</MenubarTrigger>
@@ -101,7 +106,7 @@ function ProjectMenu() {
           <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
         </MenubarRadioGroup>
         <MenubarSeparator />
-        <MenubarItem inset>Edit...</MenubarItem>
+        <MenubarItem inset onClick={()=>setShowProjectModal(true)}>Edit...</MenubarItem>
         <MenubarSeparator />
         <MenubarItem inset>Add Profile...</MenubarItem>
       </MenubarContent>
