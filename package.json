@@ -12,10 +12,13 @@
   "dependencies": {
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
+    "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-menubar": "^1.0.3",
+    "@radix-ui/react-slot": "^1.0.2",
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
+    "cmdk": "^0.2.0",
     "countries-list": "^2.6.1",
     "lucide-react": "^0.257.0",
     "postcss": "^8.4.23",

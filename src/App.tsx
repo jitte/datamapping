@@ -4,6 +4,7 @@ import ReactFlow, {
   NodeChange, applyNodeChanges,
   EdgeChange, applyEdgeChanges, addEdge,
   Connection,
+  Panel,
   MiniMap, Controls,
   Background, BackgroundVariant,
   ReactFlowProvider,
@@ -15,7 +16,6 @@ import './App.css'
 import { nodeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
-import { TopLeftPanel } from './components/Panels'
 import ProjectsModal from './modals/projectsModal'
 import ExportModal from './modals/exportModal'
 import { useLocalStore } from './lib/store'
@@ -23,24 +23,26 @@ import { initialProject } from './constants'
 import { MyMenubar } from './components/MenubarComponent'
 
 function DataFlowView() {
-	// load projects from localStore
-	const projects  = useLocalStore((state) => state.projects)
-	const setProjects = useLocalStore((state) => state.setProjects)
+  // load projects from localStore
+  const projects = useLocalStore((state) => state.projects)
+  const setProjects = useLocalStore((state) => state.setProjects)
   const newNodeId = useLocalStore((state) => state.newNodeId)
 
   // current project from global context
   const {
-    currentProject, setEntityMenuOpen,
-    projectUpdated, setProjectUpdated,
+    currentProject,
+    setEntityMenuOpen,
+    projectUpdated,
+    setProjectUpdated,
   } = useContext(GlobalContext)
 
   // reactflow states
-  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow());
-  const [nodes, setNodes] = useState(currentProject.nodes);
-  const [edges, setEdges] = useState(currentProject.edges);
+  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
+  const [nodes, setNodes] = useState(currentProject.nodes)
+  const [edges, setEdges] = useState(currentProject.edges)
 
   // creating ref
-  const ref: React.MutableRefObject<any> = useRef(null);
+  const ref: React.MutableRefObject<any> = useRef(null)
 
   console.log('at: DataFlowView', { projects, currentProject, nodes, edges })
 
@@ -70,19 +72,19 @@ function DataFlowView() {
   }, [projectUpdated, setProjectUpdated])
 
   // utility function
-  function deleteNode(deleteId : string) : void {
+  function deleteNode(deleteId: string): void {
     console.log('at: deleteNode', { deleteId, reactFlowInstance })
     // 指定されたidのノードを削除
     reactFlowInstance.setNodes(
-      reactFlowInstance.getNodes().filter(
-        (nds : any) => nds.id !== deleteId
-      )
-    );
+      reactFlowInstance.getNodes().filter((nds: any) => nds.id !== deleteId)
+    )
     // 指定されたidにつながっているエッジを削除
     reactFlowInstance.setEdges(
-      reactFlowInstance.getEdges().filter(
-        (nds : any) => nds.source !== deleteId && nds.target !== deleteId
-      )
+      reactFlowInstance
+        .getEdges()
+        .filter(
+          (nds: any) => nds.source !== deleteId && nds.target !== deleteId
+        )
     )
   }
   // callbacks
@@ -92,36 +94,37 @@ function DataFlowView() {
       setNodes(function (nds) {
         return applyNodeChanges(changes, nds)
       })
-    }, [setNodes]
+    },
+    [setNodes]
   )
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       console.log('at: onEdgesChange', { changes })
       setEdges((eds) => applyEdgeChanges(changes, eds))
-    }, [setEdges]
+    },
+    [setEdges]
   )
   const onConnect = useCallback(
     (connection: Connection) => {
-      console.log({at: 'onConnect', connection});
+      console.log({ at: 'onConnect', connection })
       setEdges((eds) => addEdge(connection, eds))
-    }, [setEdges]
-  );
-  const onDragOver = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault()
-      event.dataTransfer.dropEffect = 'move'
-    }, []
+    },
+    [setEdges]
   )
+  const onDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+  }, [])
   const onDrop = useCallback(
     (event: React.DragEvent) => {
-      event.preventDefault();
+      event.preventDefault()
 
-      const reactFlowBounds = ref.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData('application/reactflow');
+      const reactFlowBounds = ref.current.getBoundingClientRect()
+      const type = event.dataTransfer.getData('application/reactflow')
 
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
-        return;
+        return
       }
 
       const position = reactFlowInstance.project({
@@ -138,40 +141,49 @@ function DataFlowView() {
 
       setNodes((nds) => nds.concat(newNode))
       setEntityMenuOpen(false)
-    }, [reactFlowInstance]
+    },
+    [reactFlowInstance]
   )
 
   return (
-    <DataFlowContextProvider value={{
-      reactFlowInstance, setReactFlowInstance,
-      nodes, setNodes,
-      edges, setEdges,
-      deleteNode
+    <DataFlowContextProvider
+      value={{
+        reactFlowInstance,
+        setReactFlowInstance,
+        nodes,
+        setNodes,
+        edges,
+        setEdges,
+        deleteNode,
       }}
     >
-      <div className="w-screen h-screen" ref={ref}>
-        <ReactFlow
-          nodeTypes={nodeTypes}
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          defaultEdgeOptions={{
-            animated: true,
-            style: { strokeWidth: 8 }
-          }}
-          fitView
-        >
-          <TopLeftPanel />
-          <Controls />
-          <MiniMap />
-          <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-          <ProjectsModal />
-          <ExportModal />
-        </ReactFlow>
+      <div className="flex flex-col">
+        <MyMenubar />
+        <div className="fixed w-screen h-screen" ref={ref}>
+          <ReactFlow
+            nodeTypes={nodeTypes}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            defaultEdgeOptions={{
+              animated: true,
+              style: { strokeWidth: 8 },
+            }}
+            fitView
+          >
+            <Panel position="top-left">
+            </Panel>
+            <Controls />
+            <MiniMap />
+            <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+            <ProjectsModal />
+            <ExportModal />
+          </ReactFlow>
+        </div>
       </div>
     </DataFlowContextProvider>
   )
@@ -198,14 +210,9 @@ export default function App() {
       showExportModal, setShowExportModal,
       entityMenuOpen, setEntityMenuOpen,
     }} >
-      <div className="flex flex-row w-screen h-screen">
-        <ReactFlowProvider>
-          <div className="flex flex-col">
-            <MyMenubar />
-            <DataFlowView />
-          </div>
-        </ReactFlowProvider>
-      </div>
+      <ReactFlowProvider>
+        <DataFlowView />
+      </ReactFlowProvider>
     </GlobalContextProvider>
   );
 }
