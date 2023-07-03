@@ -43,6 +43,7 @@ import { nodeInfo } from '@/constants'
 function ExportProjects() {
   const projects = useLocalStore((state) => state.projects)
   const [fileName, setFileName] = useState('Data mapping')
+  const [open, setOpen] = useState(false)
 
   function normalCaseToSnakeCase(str: string) {
     return str
@@ -69,11 +70,12 @@ function ExportProjects() {
 
     // simulate a click on the link element to trigger the download
     link.click()
+    setOpen(false)
   }
 
   return (
     <MenubarSub>
-      <Dialog>
+      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger className="w-full px-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
           Export...
         </DialogTrigger>
@@ -92,7 +94,6 @@ function ExportProjects() {
                 className="col-span-3"
                 value={fileName}
                 onChange={(event) => {
-                  console.log('onChange: ', event.target.value)
                   setFileName(event.target.value)
                 }}
               />
@@ -300,7 +301,7 @@ function ProjectMenu() {
 
 export function MyMenubar() {
   return (
-    <Menubar className='bg-white/50'>
+    <Menubar className="bg-white/50">
       <FileMenu />
       <EditMenu />
       <ViewMenu />
