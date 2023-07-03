@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { Node } from 'reactflow'
 import { ChevronsUpDown } from 'lucide-react'
 import {
@@ -24,14 +24,92 @@ import {
   CommandInput,
   CommandItem,
 } from '@/components/ui/command'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
 
 import { useLocalStore, allNodes } from '@/lib/store'
 import { GlobalContext } from '@/contexts'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { nodeInfo } from '@/constants'
 
+function ExportProjects() {
+  const projects = useLocalStore((state) => state.projects)
+  const [fileName, setFileName] = useState('Data mapping')
+
+  function normalCaseToSnakeCase(str: string) {
+    return str
+      .split(' ')
+      .map((word, index) => {
+        if (index === 0) {
+          return word[0].toUpperCase() + word.slice(1).toLowerCase()
+        }
+        return word.toLowerCase()
+      })
+      .join('_')
+  }
+
+  function downloadFlow() {
+    // create a data URI with the current flow data
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(projects, null, '\t')
+    )}`
+
+    // create a link element and set its properties
+    const link = document.createElement('a')
+    link.href = jsonString
+    link.download = `${normalCaseToSnakeCase(fileName)}.json`
+
+    // simulate a click on the link element to trigger the download
+    link.click()
+  }
+
+  return (
+    <MenubarSub>
+      <Dialog>
+        <DialogTrigger className="w-full px-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
+          Export...
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Export projects</DialogTitle>
+            <DialogDescription>
+              Export all projects in JSON format.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid items-center grid-cols-4 gap-4">
+              <div>Filename</div>
+              <Input
+                id="name"
+                className="col-span-3"
+                value={fileName}
+                onChange={(event) => {
+                  console.log('onChange: ', event.target.value)
+                  setFileName(event.target.value)
+                }}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={downloadFlow}>
+              Export
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </MenubarSub>
+  )
+}
+
 function FileMenu() {
-  const { setShowExportModal } = useContext(GlobalContext)
   const entityList = [
     'piiSubject',
     'piiController',
@@ -70,60 +148,7 @@ function FileMenu() {
         </MenubarSub>
         <MenubarSeparator />
         <MenubarItem>Import...</MenubarItem>
-        <MenubarItem onClick={() => setShowExportModal(true)}>
-          Export...
-        </MenubarItem>
-      </MenubarContent>
-    </MenubarMenu>
-  )
-}
-
-function ReuseMenu() {
-  // imports from global context
-  const { currentProject } = useContext(GlobalContext)
-
-  // imports from dataflow context
-  const { nodes, setNodes } = useContext(DataFlowContext)
-
-  // all projects and nodes that has own entity name
-  const projects = useLocalStore((state) => state.projects)
-  const filteredNodes = allNodes(projects).filter(
-    (node) =>
-      (node.data.entity_name ?? '').length > 0 &&
-      !currentProject.nodes.find((nd) => nd.id === node.id)
-  )
-  function handleSelect(node: Node) {
-    console.log('at: ReuseMenu', { node, nodes })
-    setNodes((nds) => nds.concat(node))
-    setOpen(false)
-  }
-
-  const [open, setOpen] = useState(false)
-  return (
-    <MenubarMenu>
-      <MenubarTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          Search entity
-          <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
-        </Button>
-      </MenubarTrigger>
-      <MenubarContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Filter..." />
-          <CommandEmpty>Nothing found.</CommandEmpty>
-          <CommandGroup>
-            {filteredNodes.map((node) => (
-              <CommandItem key={node.id} onSelect={() => handleSelect(node)}>
-                {node.data.entity_name}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
+        <ExportProjects />
       </MenubarContent>
     </MenubarMenu>
   )
@@ -178,6 +203,57 @@ function ViewMenu() {
         <MenubarItem inset>Toggle Fullscreen</MenubarItem>
         <MenubarSeparator />
         <MenubarItem inset>Hide Sidebar</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+  )
+}
+
+function ReuseMenu() {
+  // imports from global context
+  const { currentProject } = useContext(GlobalContext)
+
+  // imports from dataflow context
+  const { nodes, setNodes } = useContext(DataFlowContext)
+
+  // all projects and nodes that has own entity name
+  const projects = useLocalStore((state) => state.projects)
+  const filteredNodes = allNodes(projects).filter(
+    (node) =>
+      (node.data.entity_name ?? '').length > 0 &&
+      !currentProject.nodes.find((nd) => nd.id === node.id)
+  )
+  function handleSelect(node: Node) {
+    console.log('at: ReuseMenu', { node, nodes })
+    setNodes((nds) => nds.concat(node))
+    setOpen(false)
+  }
+
+  const [open, setOpen] = useState(false)
+  return (
+    <MenubarMenu>
+      <MenubarTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
+        >
+          Search entity
+          <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
+        </Button>
+      </MenubarTrigger>
+      <MenubarContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="Filter..." />
+          <CommandEmpty>Nothing found.</CommandEmpty>
+          <CommandGroup>
+            {filteredNodes.map((node) => (
+              <CommandItem key={node.id} onSelect={() => handleSelect(node)}>
+                {node.data.entity_name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
       </MenubarContent>
     </MenubarMenu>
   )

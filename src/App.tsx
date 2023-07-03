@@ -17,7 +17,6 @@ import { nodeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import ProjectsModal from './modals/projectsModal'
-import ExportModal from './modals/exportModal'
 import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
 import { MyMenubar } from './components/MenubarComponent'
@@ -180,7 +179,6 @@ function DataFlowView() {
             <MiniMap />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
             <ProjectsModal />
-            <ExportModal />
           </ReactFlow>
         </div>
       </div>
