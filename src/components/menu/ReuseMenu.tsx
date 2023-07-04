@@ -47,7 +47,7 @@ export function ReuseMenu() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[200px] h-8 justify-between"
         >
           Search entity
           <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
