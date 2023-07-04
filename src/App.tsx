@@ -4,7 +4,6 @@ import ReactFlow, {
   NodeChange, applyNodeChanges,
   EdgeChange, applyEdgeChanges, addEdge,
   Connection,
-  Panel,
   MiniMap, Controls,
   Background, BackgroundVariant,
   ReactFlowProvider,
@@ -19,7 +18,7 @@ import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import ProjectsModal from './modals/projectsModal'
 import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
-import { MyMenubar } from './components/MenubarComponent'
+import { MyMenubar } from './components/menu'
 
 function DataFlowView() {
   // load projects from localStore
@@ -173,8 +172,6 @@ function DataFlowView() {
             }}
             fitView
           >
-            <Panel position="top-left">
-            </Panel>
             <Controls />
             <MiniMap />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
