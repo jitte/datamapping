@@ -19,7 +19,7 @@ import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import ProjectsModal from './modals/projectsModal'
 import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
-import { MyMenubar } from './components/MenubarComponent'
+import { MyMenubar } from './components/menu'
 
 function DataFlowView() {
   // load projects from localStore
@@ -209,5 +209,5 @@ export default function App() {
         <DataFlowView />
       </ReactFlowProvider>
     </GlobalContextProvider>
-  );
+  )
 }
