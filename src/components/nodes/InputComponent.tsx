@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { GlobalContext } from '../contexts';
+import { GlobalContext } from '../../contexts';
 
 type InputType = {
   name: string,

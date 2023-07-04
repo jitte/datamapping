@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { DataFlowContext } from '../contexts/dataFlowContext'
-import { nodeInfo } from '../constants'
+import { DataFlowContext } from '../../contexts/dataFlowContext'
+import { nodeInfo } from '../../constants'
 
 export default function TitleComponent({
   nodeType,

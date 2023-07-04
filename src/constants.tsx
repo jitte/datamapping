@@ -18,7 +18,7 @@ import {
   PiiControllerNode,
   PiiProcessorNode,
   ThirdPartyNode,
-} from './components/CustomNodes'
+} from './components/nodes'
 
 export const nodeTypes: {[key: string]: any}= {
   piiSubject:    PiiSubjectNode,
