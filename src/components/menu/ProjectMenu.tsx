@@ -1,4 +1,5 @@
-import { useContext } from 'react'
+import { useState, useContext } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   MenubarContent,
   MenubarItem,
@@ -6,11 +7,51 @@ import {
   MenubarRadioGroup,
   MenubarRadioItem,
   MenubarSeparator,
+  MenubarSub,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog'
 
 import { useLocalStore } from '@/lib/store'
 import { GlobalContext } from '@/contexts'
+import ProjectPage from '@/projects/page'
+
+function ProjectsDialog() {
+  const [open, setOpen] = useState(false)
+  return (
+    <MenubarSub>
+      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+        <DialogTrigger className="w-full pl-8 pr-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
+          Edit...
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Edit Projects
+            </DialogTitle>
+            <DialogDescription>
+              Add, Edit, Duplicate or Delete projects.
+            </DialogDescription>
+          </DialogHeader>
+          <ProjectPage />
+          <DialogFooter>
+            <Button type="submit" onClick={() => setOpen(false)}>
+              Done
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </MenubarSub>
+  )
+}
 
 export function ProjectMenu() {
   const { setShowProjectModal, currentProject, setCurrentProject } =
@@ -45,7 +86,7 @@ export function ProjectMenu() {
           Edit...
         </MenubarItem>
         <MenubarSeparator />
-        <MenubarItem inset>Add Profile...</MenubarItem>
+        <ProjectsDialog />
       </MenubarContent>
     </MenubarMenu>
   )
