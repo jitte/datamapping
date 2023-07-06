@@ -1,5 +1,6 @@
 import { Node, Edge } from 'reactflow'
 import { ColumnDef } from '@tanstack/react-table'
+import { Pencil, Copy, Trash2 } from 'lucide-react'
 
 export type Project = {
   id: number
@@ -11,15 +12,39 @@ export type Project = {
 
 export const columns: ColumnDef<Project>[] = [
   {
-    accessorKey: 'id',
     header: 'ID',
+    accessorKey: 'id',
   },
   {
-    accessorKey: 'name',
     header: 'Name',
+    accessorKey: 'name',
   },
   {
-    accessorKey: 'description',
     header: 'Description',
+    accessorKey: 'description',
+  },
+  {
+    header: 'Actions',
+    id: 'actions',
+    cell: ({ row }) => {
+      const pj = row.original
+      return (
+        <>
+          <button onClick={() => handleEdit(pj.id)}>
+            <Pencil className="h-5 w-5 m-0.5" />
+          </button>
+          <button onClick={() => handleDuplicate(pj.id)}>
+            <Copy className="h-5 w-5 m-0.5" />
+          </button>
+          <button onClick={() => handleDelete(pj.id)}>
+            <Trash2 className="h-5 w-5 m-0.5" />
+          </button>
+        </>
+      )
+    },
   },
 ]
+
+function handleEdit(id: number) {}
+function handleDuplicate(id: number) {}
+function handleDelete(id: number) {}
