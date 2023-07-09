@@ -1,7 +1,9 @@
 import { useState, useContext, useCallback, useRef, useEffect } from 'react'
 import ReactFlow, {
   useReactFlow,
+  Node,
   NodeChange, applyNodeChanges,
+  Edge,
   EdgeChange, applyEdgeChanges, addEdge,
   Connection,
   Panel,
@@ -16,7 +18,6 @@ import './App.css'
 import { nodeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
-import ProjectsModal from './modals/projectsModal'
 import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
 import { MyMenubar } from './components/menu'
@@ -88,7 +89,7 @@ function DataFlowView() {
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
       console.log('at: onNodesChange', { changes })
-      setNodes(function (nds) {
+      setNodes(function (nds: Node[]) {
         return applyNodeChanges(changes, nds)
       })
     },
@@ -97,14 +98,14 @@ function DataFlowView() {
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       console.log('at: onEdgesChange', { changes })
-      setEdges((eds) => applyEdgeChanges(changes, eds))
+      setEdges((eds: Edge[]) => applyEdgeChanges(changes, eds))
     },
     [setEdges]
   )
   const onConnect = useCallback(
     (connection: Connection) => {
       console.log({ at: 'onConnect', connection })
-      setEdges((eds) => addEdge(connection, eds))
+      setEdges((eds: Edge[]) => addEdge(connection, eds))
     },
     [setEdges]
   )
@@ -136,7 +137,7 @@ function DataFlowView() {
       }
       console.log('at: onDrop', { event, newNode })
 
-      setNodes((nds) => nds.concat(newNode))
+      setNodes((nds: Node[]) => nds.concat(newNode))
     },
     [reactFlowInstance]
   )
@@ -178,7 +179,6 @@ function DataFlowView() {
             <Controls />
             <MiniMap />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-            <ProjectsModal />
           </ReactFlow>
         </div>
       </div>
