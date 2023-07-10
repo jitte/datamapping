@@ -84,7 +84,9 @@ function ProjectsTable() {
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger asChild>
-          <Pencil className="h-5 w-5 m-0.5" />
+          <button>
+            <Pencil className="h-5 w-5 m-0.5" />
+          </button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
