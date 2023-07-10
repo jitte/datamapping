@@ -14,17 +14,22 @@ export const countryInfo:
 export const countryList = Object.keys(countryInfo).sort()
 
 import {
+  NodeParamType,
+  GenericNode,
   PiiSubjectNode,
   PiiControllerNode,
   PiiProcessorNode,
   ThirdPartyNode,
 } from './components/nodes'
 
-export const nodeTypes: {[key: string]: any}= {
-  piiSubject:    PiiSubjectNode,
+export const nodeTypes: {
+  [key: string]: (param: NodeParamType) => JSX.Element
+} = {
+  genericNode: GenericNode,
+  piiSubject: PiiSubjectNode,
   piiController: PiiControllerNode,
-  piiProcessor:  PiiProcessorNode,
-  thirdParty:    ThirdPartyNode,
+  piiProcessor: PiiProcessorNode,
+  thirdParty: ThirdPartyNode,
 }
 
 type nodeInfoType = {
@@ -35,6 +40,12 @@ type nodeInfoType = {
 }
 
 export const nodeInfo: { [key: string]: nodeInfoType } = {
+  genericNode: {
+    title: 'Generic Node',
+    icon: UsersIcon,
+    from: 'from-rose-600',
+    to: 'to-purple-600',
+  },
   piiSubject: {
     title: 'PII Subject',
     icon: UsersIcon,

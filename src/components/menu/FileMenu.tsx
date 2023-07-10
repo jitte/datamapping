@@ -96,6 +96,7 @@ function ExportProjects() {
 
 export function FileMenu() {
   const entityList = [
+    'genericNode',
     'piiSubject',
     'piiController',
     'piiProcessor',
