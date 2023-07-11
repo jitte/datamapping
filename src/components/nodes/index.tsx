@@ -1,6 +1,27 @@
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
 import { Cog } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Textarea } from '@/components/ui/textarea'
 
 import TitleComponent from './TitleComponent'
 import InputComponent from './InputComponent'
@@ -36,27 +57,6 @@ export type NodeDataType = {
   hasNonPiiFlow?: boolean
 }
 
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from '@/components/ui/textarea'
 
 const roleList: string[] = [
   'PII Principal',
@@ -87,15 +87,17 @@ export function GenericNode({
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className='flex flex-col gap-2'>
+              <div className="flex flex-col gap-2">
                 <Label>Role</Label>
                 <Select>
-                  <SelectTrigger >
+                  <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {roleList.map((role) => (
-                      <SelectItem value="role">{role}</SelectItem>
+                      <SelectItem key={role} value="role">
+                        {role}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -156,11 +158,11 @@ export function GenericNode({
               </div>
             </div>
           </div>
-          <DialogFooter className='flex flex-row'>
+          <DialogFooter className="flex flex-row">
             <Button variant="destructive" type="submit">
               Delete Node
             </Button>
-            <div className='grow' />
+            <div className="grow" />
             <Button type="submit">Save Changes</Button>
           </DialogFooter>
         </DialogContent>
