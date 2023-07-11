@@ -43,7 +43,7 @@ function DataFlowView() {
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
 
-  console.log('at: DataFlowView', { projects, currentProject, nodes, edges })
+  //console.log('at: DataFlowView', { projects, currentProject, nodes, edges })
 
   // update nodes and edges after changing current project
   useEffect(() => {
@@ -88,7 +88,7 @@ function DataFlowView() {
   // callbacks
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
-      console.log('at: onNodesChange', { changes })
+      //console.log('at: onNodesChange', { changes })
       setNodes(function (nds: Node[]) {
         return applyNodeChanges(changes, nds)
       })
@@ -97,7 +97,7 @@ function DataFlowView() {
   )
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      console.log('at: onEdgesChange', { changes })
+      //console.log('at: onEdgesChange', { changes })
       setEdges((eds: Edge[]) => applyEdgeChanges(changes, eds))
     },
     [setEdges]
