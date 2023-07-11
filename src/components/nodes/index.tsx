@@ -30,10 +30,6 @@ import DataFlowComponent from './DataFlowComponent'
 import { nodeInfo } from '@/constants'
 import { CountryCombobox } from './country'
 
-function classNames(...classes: Array<string>) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export type NodeParamType = {
   id: string
   data: NodeDataType
@@ -212,7 +208,7 @@ export function PiiSubjectNode({
 }: NodeParamType): JSX.Element {
   return (
     <div
-      className={classNames(
+      className={cn(
         'flex flex-col w-80 bg-white border border-black rounded-lg',
         selected ? 'border border-blue-500' : 'border dark:border-gray-700'
       )}
@@ -239,7 +235,7 @@ export function PiiControllerNode({
 }: NodeParamType): JSX.Element {
   return (
     <div
-      className={classNames(
+      className={cn(
         'flex flex-col w-80 bg-white border border-black rounded-lg',
         selected ? 'border border-blue-500' : 'border dark:border-gray-700'
       )}
@@ -267,7 +263,7 @@ export function PiiProcessorNode({
 }: NodeParamType): JSX.Element {
   return (
     <div
-      className={classNames(
+      className={cn(
         'flex flex-col w-80 bg-white border border-black rounded-lg',
         selected ? 'border border-blue-500' : 'border dark:border-gray-700'
       )}
@@ -295,7 +291,7 @@ export function ThirdPartyNode({
 }: NodeParamType): JSX.Element {
   return (
     <div
-      className={classNames(
+      className={cn(
         'flex flex-col w-80 bg-white border border-black rounded-lg',
         selected ? 'border border-blue-500' : 'border dark:border-gray-700'
       )}
