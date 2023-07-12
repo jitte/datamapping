@@ -14,13 +14,13 @@ export const countryInfo:
 export const countryList = Object.keys(countryInfo).sort()
 
 import {
-  NodeParamType,
   GenericNode,
   PiiSubjectNode,
   PiiControllerNode,
   PiiProcessorNode,
   ThirdPartyNode,
 } from './components/nodes'
+import { NodeParamType } from './components/nodes/types';
 
 export const nodeTypes: {
   [key: string]: (param: NodeParamType) => JSX.Element

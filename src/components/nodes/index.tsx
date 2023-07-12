@@ -1,65 +1,15 @@
-import { useState } from 'react'
-import { Cog } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from '@/components/ui/textarea'
 
 import TitleComponent from './TitleComponent'
 import InputComponent from './InputComponent'
 import ComboboxComponent from './ComboboxComponent'
 import DataFlowComponent from './DataFlowComponent'
+
 import { nodeInfo } from '@/constants'
 import { CountryCombobox } from './country'
+import { ConfigDialog } from './config'
+import { NodeParamType } from './types'
 
-export type NodeParamType = {
-  id: string
-  data: NodeDataType
-  type: string
-  selected: boolean
-}
-
-export type NodeDataType = {
-  entity_name?: string
-  country_name?: string
-  country?: string
-  role?: string
-  name?: string
-  showName?: boolean
-  icon?: string
-  showIcon?: boolean
-  description?: string
-  showDescription?: boolean
-  hasContract?: boolean
-  hasPiiFlow?: boolean
-  hasNonPiiFlow?: boolean
-}
-
-
-const roleList: string[] = [
-  'PII Principal',
-  'PII Controller',
-  'PII Processor',
-  'Third Party'
-]
 export function GenericNode({
   id,
   data,
@@ -67,104 +17,6 @@ export function GenericNode({
   selected,
 }: NodeParamType): JSX.Element {
 
-  function ConfigDialog() {
-    const [open, setOpen] = useState(false)
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Cog className="w-5 h-5" />
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Node Settings</DialogTitle>
-            <DialogDescription>
-              Make changes to your node here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
-                <Label>Role</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roleList.map((role) => (
-                      <SelectItem key={role} value="role">
-                        {role}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Country</Label>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1">
-              <div className="flex flex-row items-center gap-2">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <div className="grow" />
-                <Switch id="showName" />
-                <Label htmlFor="showName">Show</Label>
-              </div>
-              <Input id="name" onChange={() => {}} />
-            </div>
-            <div className="flex flex-col gap-1">
-              <div className="flex flex-row items-center gap-2">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <div className="grow" />
-                <Switch id="showDescription" />
-                <Label htmlFor="showDescription">Show</Label>
-              </div>
-              <Textarea id="description" onChange={() => {}} />
-            </div>
-            <div className="grid grid-cols-2 gap-8">
-              <div className="flex flex-col gap-2">
-                <div className="flex flex-row items-center gap-2">
-                  <Label htmlFor="icon" className="text-right">
-                    Icon
-                  </Label>
-                  <div className="grow" />
-                  <Switch id="showIcon" />
-                  <Label htmlFor="showIcon">Show</Label>
-                </div>
-                <div></div>
-              </div>
-              <div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-row items-center gap-2">
-                    <Switch id="hasContractScheme" />
-                    <Label htmlFor="hasContractScheme">Contract Scheme</Label>
-                  </div>
-                  <div className="flex flex-row items-center gap-2">
-                    <Switch id="hasPiiFlow" />
-                    <Label htmlFor="hasPiiFlow">PII Flow</Label>
-                  </div>
-                  <div className="flex flex-row items-center gap-2">
-                    <Switch id="hasNonPiiFlow" />
-                    <Label htmlFor="hasNonPiiFlow">Non PII Flow</Label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <DialogFooter className="flex flex-row">
-            <Button variant="destructive" type="submit">
-              Delete Node
-            </Button>
-            <div className="grow" />
-            <Button type="submit">Save Changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    )
-  }
   function TitleComponent(): JSX.Element {
     const info = nodeInfo[type]
     return (
@@ -178,7 +30,7 @@ export function GenericNode({
       >
         <CountryCombobox data={data} />
         <div className="text-lg">{info.title}</div>
-        <ConfigDialog />
+        <ConfigDialog data={data}/>
       </div>
     )
   }

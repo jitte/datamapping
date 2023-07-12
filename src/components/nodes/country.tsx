@@ -17,7 +17,7 @@ import { ReactCountryFlag } from 'react-country-flag'
 
 import { countryInfo, countryList } from '@/constants'
 import { GlobalContext } from '@/contexts'
-import { NodeDataType } from '.'
+import { NodeDataType } from './types'
 
 export function CountryCombobox({ data }: { data: NodeDataType }) {
   const countryCode =
