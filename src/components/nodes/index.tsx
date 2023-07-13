@@ -6,7 +6,7 @@ import ComboboxComponent from './ComboboxComponent'
 import DataFlowComponent from './DataFlowComponent'
 
 import { nodeInfo } from '@/constants'
-import { CountryCombobox } from './country'
+import { CountryFlag } from './config/country'
 import { ConfigDialog } from './config'
 import { NodeParamType } from './types'
 
@@ -28,8 +28,8 @@ export function GenericNode({
           info.to // gradient to
         )}
       >
-        <CountryCombobox data={data} />
-        <div className="text-lg">{info.title}</div>
+        <CountryFlag countryCode={data.country} />
+        <div className="text-lg">{data.role ?? 'No Role'}</div>
         <ConfigDialog data={data}/>
       </div>
     )
