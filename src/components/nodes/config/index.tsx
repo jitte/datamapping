@@ -20,6 +20,7 @@ import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { NodeConfigContext, NodeDataType } from '../types'
 
 import { RoleCompoment } from './role'
+import { CountryComponent } from './country'
 import { NameComponent } from './name'
 import { DescriptionComponent } from './description'
 import { IconComponent } from './icon'
@@ -66,9 +67,7 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <RoleCompoment />
-              <div>
-                <Label>Country</Label>
-              </div>
+              <CountryComponent />
             </div>
             <NameComponent />
             <DescriptionComponent />
