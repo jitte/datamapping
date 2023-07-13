@@ -67,7 +67,7 @@ export function CountryComponent() {
 
   return (
     <div className="flex flex-col gap-2">
-      <Label>Name</Label>
+      <Label>Country</Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
