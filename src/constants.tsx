@@ -1,11 +1,92 @@
+/**
+ * Icons
+ */
 import {
   UsersIcon,
   CogIcon,
   CpuChipIcon,
   DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/24/outline'
+import {
+  LucideIcon,
+  Users,
+  Building,
+  Cpu,
+  Share,
+  Server,
+  Workflow,
+  Smartphone,
+  Laptop,
+  Box,
+  HelpCircle,
+} from 'lucide-react'
 
+/**
+ * Roles
+ */
+type roleInfoType<IconType> = {
+  icon: IconType,
+	from: string,
+	to: string,
+}
 
+export const roleInfo: { [key: string]: roleInfoType<LucideIcon> } = {
+  'PII Principals': {
+    icon: Users,
+    from: 'from-rose-600',
+    to: 'to-purple-600',
+  },
+  'PII Controller': {
+    icon: Building,
+    from: 'from-orange-600',
+    to: 'to-yellow-600',
+  },
+  'PII Processor': {
+    icon: Cpu,
+    from: 'from-lime-600',
+    to: 'to-teal-600',
+  },
+  'Third Party': {
+    icon: Share,
+    from: 'from-blue-600',
+    to: 'to-cyan-600',
+  },
+  'Server': {
+    icon: Server,
+    from: 'from-slate-700',
+    to: 'to-slate-500',
+  },
+  'Gateway': {
+    icon: Workflow,
+    from: 'from-slate-700',
+    to: 'to-slate-500',
+  },
+  'Smartphone': {
+    icon: Smartphone,
+    from: 'from-slate-700',
+    to: 'to-slate-500',
+  },
+  'PC': {
+    icon: Laptop,
+    from: 'from-slate-700',
+    to: 'to-slate-500',
+  },
+  'Product': {
+    icon: Box,
+    from: 'from-slate-700',
+    to: 'to-slate-500',
+  },
+  'Other': {
+    icon: HelpCircle,
+    from: 'from-slate-700',
+    to: 'to-slate-500',
+  },
+}
+export const roleList = Object.keys(roleInfo)
+
+/**
+ * Nodes
+ */
 import {
   GenericNode,
   PiiSubjectNode,

@@ -5,7 +5,7 @@ import InputComponent from './InputComponent'
 import ComboboxComponent from './ComboboxComponent'
 import DataFlowComponent from './DataFlowComponent'
 
-import { nodeInfo } from '@/constants'
+import { roleInfo } from '@/constants'
 import { CountryFlag } from './config/country'
 import { ConfigDialog } from './config'
 import { NodeParamType } from './types'
@@ -17,8 +17,11 @@ export function GenericNode({
   selected,
 }: NodeParamType): JSX.Element {
 
+  const role = data.role ?? 'Other'
+  const info = roleInfo[role]
+  const Icon = info.icon
+
   function TitleComponent(): JSX.Element {
-    const info = nodeInfo[type]
     return (
       <div
         className={cn(
@@ -29,11 +32,33 @@ export function GenericNode({
         )}
       >
         <CountryFlag countryCode={data.country} />
-        <div className="text-lg">{data.role ?? 'No Role'}</div>
+        <div hidden>{type}</div>
+        <div className="text-lg">{role}</div>
         <ConfigDialog data={data}/>
       </div>
     )
   }
+
+  function NameComponent() {
+    return data.showName ? (
+      <div className="text-lg">{data.name ?? 'No name'}</div>
+    ) : null
+  }
+
+  function IconComponent() {
+    return data.showIcon ? (
+      <div>
+        <Icon size={64} />
+      </div>
+    ) : null
+  }
+
+  function DescriptionComponent() {
+    return (data.showDescription && data.description) ? (
+      <div className="text-sm">{data.description}</div>
+    ) : null
+  }
+
   return (
     <div
       className={cn(
@@ -43,14 +68,11 @@ export function GenericNode({
     >
       <TitleComponent />
       <div className="w-full pb-2">
-        <div className='flex flex-col items-center'>
-          <div className='m-2 text-lg'>
-            {data.showName ? (data.name ?? 'No name') : null}
-          </div>
-          <div className='flex flex-row items-center m-2'>
-            <div className='text-sm'>
-              {data.showDescription ? (data.description ?? '') : null}
-            </div>
+        <div className="flex flex-col items-center m-2">
+          <NameComponent />
+          <div className="flex flex-row items-center gap-2 m-2">
+            <IconComponent />
+            <DescriptionComponent />
           </div>
         </div>
         <DataFlowComponent name="Contract Scheme" id={id} />

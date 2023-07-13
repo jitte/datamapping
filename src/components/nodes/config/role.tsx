@@ -8,13 +8,7 @@ import {
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { NodeConfigContext } from '../types'
-
-const roleList: string[] = [
-  'PII Principal',
-  'PII Controller',
-  'PII Processor',
-  'Third Party',
-]
+import { roleList } from '@/constants'
 
 export function RoleCompoment() {
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
