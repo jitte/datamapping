@@ -1,4 +1,3 @@
-import { countries } from 'countries-list'
 import {
   UsersIcon,
   CogIcon,
@@ -6,12 +5,6 @@ import {
   DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline';
 
-export const countryInfo:
-{ [key: string] : { name: string, emoji: string } } = {
-  EU: { name: 'European Union', emoji: String.fromCodePoint(0x1F1EA, 0x1F1FA) },
-  ...countries
-}
-export const countryList = Object.keys(countryInfo).sort()
 
 import {
   GenericNode,

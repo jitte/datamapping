@@ -16,10 +16,21 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { ReactCountryFlag } from 'react-country-flag'
-import { countryInfo, countryList } from '@/constants'
+import { countries } from 'countries-list'
 import { NodeConfigContext } from '../types'
 
-export function CountryFlag({ countryCode }: { countryCode: string | undefined }) {
+export const countryInfo: { [key: string]: { name: string; emoji: string } } = {
+  EU: { name: 'European Union', emoji: String.fromCodePoint(0x1f1ea, 0x1f1fa) },
+  ...countries,
+}
+
+export const countryList = Object.keys(countryInfo).sort()
+
+export function CountryFlag({
+  countryCode,
+}: {
+  countryCode: string | undefined
+}) {
   return countryCode ? (
     <ReactCountryFlag
       svg
@@ -35,7 +46,7 @@ export function CountryFlag({ countryCode }: { countryCode: string | undefined }
 function FlagAndCountry({ countryCode }: { countryCode: string | undefined }) {
   const data = countryInfo[countryCode ?? '']
   const flag = <CountryFlag countryCode={countryCode} />
-  
+
   return (
     <div className="flex flex-row items-center gap-2 text-sm">
       {flag}

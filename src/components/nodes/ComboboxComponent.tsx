@@ -2,7 +2,7 @@ import { useState, useContext, Fragment } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { ReactCountryFlag } from 'react-country-flag'
-import { countryInfo, countryList } from '../../constants'
+import { countryInfo, countryList } from './config/country'
 import { GlobalContext } from '../../contexts';
 
 type ComboboxType = {
