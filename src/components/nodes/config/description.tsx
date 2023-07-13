@@ -19,7 +19,7 @@ export function DescriptionComponent() {
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
         <Label htmlFor="description" className="text-right">
-          Name
+          Description
         </Label>
         <div className="grow" />
         <Switch
