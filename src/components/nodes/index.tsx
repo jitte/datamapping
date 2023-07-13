@@ -43,7 +43,16 @@ export function GenericNode({
     >
       <TitleComponent />
       <div className="w-full pb-2">
-        <ComboboxComponent name="country_name" caption="Country" data={data} />
+        <div className='flex flex-col items-center'>
+          <div className='m-2 text-lg'>
+            {data.showName ? (data.name ?? 'No name') : null}
+          </div>
+          <div className='flex flex-row items-center m-2'>
+            <div className='text-sm'>
+              {data.showDescription ? (data.description ?? '') : null}
+            </div>
+          </div>
+        </div>
         <DataFlowComponent name="Contract Scheme" id={id} />
         <DataFlowComponent name="PII Flow" id={id} />
         <DataFlowComponent name="Non PII Flow" id={id} />
