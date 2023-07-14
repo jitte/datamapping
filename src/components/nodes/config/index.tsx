@@ -62,7 +62,15 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
         setNodeData,
       }}
     >
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(newState) => {
+          if (newState === false) { // dialog is closing
+            setNodeData({...data}) // reset to original data
+          }
+          setOpen(newState)
+        }}
+      >
         <DialogTrigger asChild>
           <Cog className="w-5 h-5" />
         </DialogTrigger>
