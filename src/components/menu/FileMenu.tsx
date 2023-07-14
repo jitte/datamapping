@@ -174,7 +174,8 @@ export function FileMenu() {
         <MenubarSub>
           <MenubarSubTrigger>New Entity</MenubarSubTrigger>
           <MenubarSubContent>
-            <div className="text-xs">Drag item to create node</div>
+            <div className="text-xs">Drag item to create item</div>
+            <MenubarSeparator />
             <EntityItems />
           </MenubarSubContent>
         </MenubarSub>
