@@ -18,16 +18,15 @@ export function NameComponent() {
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
-        <Label htmlFor="name" className="text-right">
-          Name
-        </Label>
-        <div className="grow" />
         <Switch
           id="showName"
           checked={showName}
           onCheckedChange={handleSwitch}
         />
         <Label htmlFor="showName">Show</Label>
+        <Label htmlFor="name" className="text-right">
+          Name
+        </Label>
       </div>
       <Input id="name" defaultValue={name} onChange={handleInput} />
     </div>

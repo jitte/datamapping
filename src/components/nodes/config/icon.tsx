@@ -14,16 +14,12 @@ export function IconComponent() {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row items-center gap-2">
-        <Label htmlFor="icon" className="text-right">
-          Icon
-        </Label>
-        <div className="grow" />
         <Switch
           id="showIcon"
           checked={showIcon}
           onCheckedChange={handleSwitch}
         />
-        <Label htmlFor="showIcon">Show</Label>
+        <Label htmlFor="showIcon">Show Icon</Label>
       </div>
       <div></div>
     </div>

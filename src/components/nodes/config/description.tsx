@@ -18,16 +18,15 @@ export function DescriptionComponent() {
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-row items-center gap-2">
-        <Label htmlFor="description" className="text-right">
-          Description
-        </Label>
-        <div className="grow" />
         <Switch
           id="showDescription"
           checked={showDescription}
           onCheckedChange={handleSwitch}
         />
         <Label htmlFor="showDescription">Show</Label>
+        <Label htmlFor="description" className="text-right">
+          Description
+        </Label>
       </div>
       <Textarea
         id="description"
