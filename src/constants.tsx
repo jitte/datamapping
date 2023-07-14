@@ -25,9 +25,34 @@ import {
  * Roles
  */
 type roleInfoType<IconType> = {
-  icon: IconType,
-	from: string,
-	to: string,
+  icon: IconType
+  from: string
+  to: string
+  defaults: {
+    showName: boolean
+    showIcon: boolean
+    showDescription: boolean
+    hasContract: boolean
+    hasPiiFlow: boolean
+    hasNonPiiFlow: boolean
+  }
+}
+const defaultsForEntity = {
+  showName: true,
+  showIcon: true,
+  showDescription: false,
+  hasContract: true,
+  hasPiiFlow: true,
+  hasNonPiiFlow: true,
+}
+
+const defaultsForFlow = {
+  showName: true,
+  showIcon: true,
+  showDescription: false,
+  hasContract: false,
+  hasPiiFlow: true,
+  hasNonPiiFlow: true,
 }
 
 export const roleInfo: { [key: string]: roleInfoType<LucideIcon> } = {
@@ -35,51 +60,61 @@ export const roleInfo: { [key: string]: roleInfoType<LucideIcon> } = {
     icon: Users,
     from: 'from-rose-600',
     to: 'to-purple-600',
+    defaults: { ...defaultsForEntity, showName: false },
   },
   'PII Controller': {
     icon: Building,
     from: 'from-orange-600',
     to: 'to-yellow-600',
+    defaults: { ...defaultsForEntity },
   },
   'PII Processor': {
     icon: Cpu,
     from: 'from-lime-600',
     to: 'to-teal-600',
+    defaults: { ...defaultsForEntity },
   },
   'Third Party': {
     icon: Share,
     from: 'from-blue-600',
     to: 'to-cyan-600',
+    defaults: { ...defaultsForEntity },
   },
-  'Server': {
+  Server: {
     icon: Server,
     from: 'from-slate-800',
     to: 'to-slate-400',
+    defaults: { ...defaultsForFlow },
   },
-  'Gateway': {
+  Gateway: {
     icon: Workflow,
     from: 'from-slate-800',
     to: 'to-slate-400',
+    defaults: { ...defaultsForFlow },
   },
-  'Smartphone': {
+  Smartphone: {
     icon: Smartphone,
     from: 'from-slate-800',
     to: 'to-slate-400',
+    defaults: { ...defaultsForFlow },
   },
-  'PC': {
+  PC: {
     icon: Laptop,
     from: 'from-slate-800',
     to: 'to-slate-400',
+    defaults: { ...defaultsForFlow },
   },
-  'Product': {
+  Product: {
     icon: Box,
     from: 'from-slate-800',
     to: 'to-slate-400',
+    defaults: { ...defaultsForFlow },
   },
-  'Other': {
+  Other: {
     icon: HelpCircle,
     from: 'from-slate-800',
     to: 'to-slate-400',
+    defaults: { ...defaultsForEntity },
   },
 }
 export const roleList = Object.keys(roleInfo)
