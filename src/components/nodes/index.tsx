@@ -62,7 +62,7 @@ export function GenericNode({
   return (
     <div
       className={cn(
-        'flex flex-col w-80 bg-white border border-black rounded-lg',
+        'flex flex-col w-60 bg-white border border-black rounded-lg',
         selected ? 'border border-blue-500' : 'border dark:border-gray-700'
       )}
     >
@@ -75,7 +75,7 @@ export function GenericNode({
             <DescriptionComponent />
           </div>
         </div>
-        <DataFlowComponent name="Contract Scheme" id={id} />
+        <DataFlowComponent name="Contract Flow" id={id} />
         <DataFlowComponent name="PII Flow" id={id} />
         <DataFlowComponent name="Non PII Flow" id={id} />
       </div>
