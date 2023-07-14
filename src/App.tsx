@@ -119,7 +119,6 @@ function DataFlowView() {
       event.preventDefault()
 
       const reactFlowBounds = ref.current.getBoundingClientRect()
-      //const type = event.dataTransfer.getData('application/reactflow')
       const role = event.dataTransfer.getData('application/reactflow')
 
       // check if the dropped element is valid
