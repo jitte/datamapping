@@ -18,24 +18,6 @@ export function GenericNode({
   const info = roleInfo[role]
   const Icon = info.icon
 
-  function TitleComponent(): JSX.Element {
-    return (
-      <div
-        className={cn(
-          'flex flex-row items-center justify-between',
-          'rounded-t-lg p-2 text-white font-medium bg-gradient-to-br',
-          info.from, // gradient from
-          info.to // gradient to
-        )}
-      >
-        <CountryFlag countryCode={data.country} />
-        <div hidden>{type}</div>
-        <div className="text-lg">{role}</div>
-        <ConfigDialog data={data}/>
-      </div>
-    )
-  }
-
   function NameComponent() {
     return data.showName ? (
       <div className="text-lg text-center">{data.name ?? 'No name'}</div>
@@ -63,7 +45,22 @@ export function GenericNode({
         selected ? 'border border-blue-500' : 'border dark:border-gray-700'
       )}
     >
-      <TitleComponent />
+      <div
+        className={cn(
+          'flex flex-row items-center justify-between',
+          'rounded-t-lg p-2 text-white font-medium',
+          [
+            'bg-gradient-to-br',
+            info.from, // gradient from
+            info.to, // gradient to
+          ]
+        )}
+      >
+        <CountryFlag countryCode={data.country} />
+        <div hidden>{type}</div>
+        <div className="text-lg">{role}</div>
+        <ConfigDialog data={data} />
+      </div>
       <div className="w-full pb-2">
         <div className="flex flex-col items-center m-2">
           <NameComponent />

@@ -71,7 +71,7 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
           setOpen(newState)
         }}
       >
-        <DialogTrigger asChild>
+        <DialogTrigger>
           <Cog className="w-5 h-5" />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
