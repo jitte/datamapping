@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { Node, Edge } from 'reactflow'
-import { Pencil, Copy, Trash2, Plus } from 'lucide-react'
+import { Cog, Pencil, Copy, Trash2, Plus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -176,14 +176,15 @@ export function ProjectsDialog() {
   const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-      <DialogTrigger className="w-full pl-8 pr-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
-        Edit...
+      <DialogTrigger className="w-full pl-2 pr-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
+        <div className="flex flex-row items-center gap-2">
+          <Cog size={16}/>
+          Edit Projects...
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            Edit Projects
-          </DialogTitle>
+          <DialogTitle>Edit Projects</DialogTitle>
           <DialogDescription>
             Add, edit, duplicate or delete projects.
           </DialogDescription>

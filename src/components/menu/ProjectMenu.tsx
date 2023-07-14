@@ -8,6 +8,7 @@ import {
   MenubarSub,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import { Share2 } from 'lucide-react'
 
 import { useLocalStore } from '@/lib/store'
 import { GlobalContext } from '@/contexts'
@@ -39,13 +40,18 @@ export function ProjectMenu() {
 
   return (
     <MenubarMenu>
-      <MenubarTrigger>Projects</MenubarTrigger>
+      <MenubarTrigger>
+        <div className="flex flex-row items-center gap-2">
+          <Share2 />
+          {currentProject.name}
+        </div>
+      </MenubarTrigger>
       <MenubarContent>
-        <ProjectList />
-        <MenubarSeparator />
         <MenubarSub>
           <ProjectsDialog />
         </MenubarSub>
+        <MenubarSeparator />
+        <ProjectList />
       </MenubarContent>
     </MenubarMenu>
   )
