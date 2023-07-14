@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow'
 
-export default function DataFlowComponent({
+import { NodeDataType } from './types'
+
+export function FlowComponent({
   name,
   id,
+  data,
 }: {
-  name: string
-  id: string
+  name: string,
+  id: string,
+  data: NodeDataType,
 }): JSX.Element {
   const sourceId = 'source_' + name.toLowerCase().replace(/ /g, '_')
   const targetId = 'target_' + name.toLowerCase().replace(/ /g, '_')
@@ -18,14 +22,16 @@ export default function DataFlowComponent({
 
   // step1: calculate offset from ref
   useEffect(() => {
+    //console.log('at: FlowComponent/useEffect1')
     if (ref.current && ref.current.offsetTop && ref.current.clientHeight) {
       setPosition(ref.current.offsetTop + ref.current.clientHeight / 2)
       updateNodeInternals(id)
     }
-  }, [ref, updateNodeInternals])
+  }, [data, ref, updateNodeInternals])
 
   // step2: then propagate position
   useEffect(() => {
+    //console.log('at: FlowComponent/useEffect2')
     updateNodeInternals(id)
   }, [position, updateNodeInternals])
 
