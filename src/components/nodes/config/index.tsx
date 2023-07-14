@@ -32,8 +32,6 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
   const { nodes, setNodes } = useContext(DataFlowContext)
   const nodeId = useNodeId()
 
-  console.log('at: ConfigDialog', { data, nodeData })
-
   function handleDelete() {
     const otherNodes = nodes.filter(
       (node: Node) => node.id !== nodeId
