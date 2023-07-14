@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useReactFlow, getRectOfNodes, getTransformForBounds } from 'reactflow'
+import { toPng } from 'html-to-image'
 import { Grip } from 'lucide-react'
 import {
   MenubarContent,
@@ -24,6 +26,50 @@ import { Input } from '@/components/ui/input'
 
 import { useLocalStore } from '@/lib/store'
 import { roleInfo, roleList } from '@/constants'
+
+function DownloadImage() {
+  const imageWidth = 2048
+  const imageHeight = 1536
+  const { getNodes } = useReactFlow()
+
+  function downloadImage(dataUrl: string) {
+    const a = document.createElement('a')
+
+    a.setAttribute('download', 'reactflow.png')
+    a.setAttribute('href', dataUrl)
+    a.click()
+  }
+
+  const onClick = () => {
+    // we calculate a transform for the nodes so that all nodes are visible
+    // we then overwrite the transform of the `.react-flow__viewport` element
+    // with the style option of the html-to-image library
+    const nodesBounds = getRectOfNodes(getNodes())
+    const transform = getTransformForBounds(
+      nodesBounds,
+      imageWidth,
+      imageHeight,
+      0.5,
+      2
+    )
+
+    toPng(document.querySelector('.react-flow__viewport') as HTMLElement, {
+      width: imageWidth,
+      height: imageHeight,
+      style: {
+        width: String(imageWidth),
+        height: String(imageHeight),
+        transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+      },
+    }).then(downloadImage)
+  }
+
+  return (
+    <MenubarItem className="download-btn" onClick={onClick}>
+      Download Image
+    </MenubarItem>
+  )
+}
 
 function ExportProjects() {
   const projects = useLocalStore((state) => state.projects)
@@ -112,9 +158,9 @@ export function FileMenu() {
           onDragStart={(event) => onDragStart(event, item)}
         >
           <div className="flex flex-row items-center w-full gap-2">
-            <Icon size={16}/>
+            <Icon size={16} />
             {item}
-            <div className='grow' />
+            <div className="grow" />
             <Grip size={10} />
           </div>
         </MenubarItem>
@@ -128,10 +174,12 @@ export function FileMenu() {
         <MenubarSub>
           <MenubarSubTrigger>New Entity</MenubarSubTrigger>
           <MenubarSubContent>
-            <div className='text-xs '>Drag item to create node</div>
+            <div className="text-xs">Drag item to create node</div>
             <EntityItems />
           </MenubarSubContent>
         </MenubarSub>
+        <MenubarSeparator />
+        <DownloadImage />
         <MenubarSeparator />
         <MenubarItem disabled>Import...</MenubarItem>
         <ExportProjects />
