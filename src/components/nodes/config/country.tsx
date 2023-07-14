@@ -24,7 +24,21 @@ export const countryInfo: { [key: string]: { name: string; emoji: string } } = {
   ...countries,
 }
 
-export const countryList = Object.keys(countryInfo).sort()
+//export const countryList = Object.keys(countryInfo).sort()
+export const countryList = [
+  'JP',
+  'US',
+  'EU',
+  'GB',
+  'SG',
+  'IN',
+  'BR',
+  'CN',
+  'KR',
+  'TW',
+  'HK',
+  '',
+]
 
 export function CountryFlag({
   countryCode,
@@ -39,7 +53,7 @@ export function CountryFlag({
       style={{ width: '32px', height: '24px' }}
     />
   ) : (
-    <Globe className="w-5 h-5" />
+    <Globe className="w-5 h-5 mx-[6px]" />
   )
 }
 
@@ -50,7 +64,7 @@ function FlagAndCountry({ countryCode }: { countryCode: string | undefined }) {
   return (
     <div className="flex flex-row items-center gap-2 text-sm">
       {flag}
-      {data ? data.name : 'Unknown country'}
+      {data ? data.name : 'n/a'}
     </div>
   )
 }
