@@ -76,15 +76,27 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
               <div>
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-row items-center gap-2">
-                    <Switch id="hasContractScheme" />
+                    <Switch
+                      id="hasContractScheme"
+                      disabled
+                      defaultChecked={data.hasContract}
+                    />
                     <Label htmlFor="hasContractScheme">Contract Scheme</Label>
                   </div>
                   <div className="flex flex-row items-center gap-2">
-                    <Switch id="hasPiiFlow" />
+                    <Switch
+                      id="hasPiiFlow"
+                      disabled
+                      defaultChecked={data.hasPiiFlow}
+                    />
                     <Label htmlFor="hasPiiFlow">PII Flow</Label>
                   </div>
                   <div className="flex flex-row items-center gap-2">
-                    <Switch id="hasNonPiiFlow" />
+                    <Switch
+                      id="hasNonPiiFlow"
+                      disabled
+                      defaultChecked={data.hasNonPiiFlow}
+                    />
                     <Label htmlFor="hasNonPiiFlow">Non PII Flow</Label>
                   </div>
                 </div>
