@@ -37,6 +37,7 @@ function DataFlowView() {
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
+  const { fitView } = useReactFlow()
   const [nodes, setNodes] = useState(currentProject.nodes)
   const [edges, setEdges] = useState(currentProject.edges)
 
@@ -56,6 +57,7 @@ function DataFlowView() {
   useEffect(() => {
     currentProject.nodes = nodes
     currentProject.edges = edges
+    fitView()
     setProjectUpdated(true)
     console.log('at: useEffect(nodes/edges)', { currentProject, projects })
   }, [nodes, edges, storeProjects])
