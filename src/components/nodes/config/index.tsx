@@ -34,6 +34,15 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
 
   console.log('at: ConfigDialog', { data, nodeData })
 
+  function handleDelete() {
+    const otherNodes = nodes.filter(
+      (node: Node) => node.id !== nodeId
+    ) as Node[]
+    setNodes(otherNodes)
+    setProjectUpdated(true)
+    setOpen(false)
+  }
+
   function handleSubmit() {
     console.log('at: ConfigDialog/handleSubmit', nodeData)
     const currentNode = nodes.find((node: Node) => node.id === nodeId) as Node
@@ -104,7 +113,7 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
             </div>
           </div>
           <DialogFooter className="flex flex-row">
-            <Button variant="destructive" type="submit">
+            <Button variant="destructive" onClick={handleDelete}>
               Delete Node
             </Button>
             <div className="grow" />
