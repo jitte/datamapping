@@ -53,33 +53,33 @@ export const roleInfo: { [key: string]: roleInfoType<LucideIcon> } = {
   },
   'Server': {
     icon: Server,
-    from: 'from-slate-700',
-    to: 'to-slate-500',
+    from: 'from-slate-800',
+    to: 'to-slate-400',
   },
   'Gateway': {
     icon: Workflow,
-    from: 'from-slate-700',
-    to: 'to-slate-500',
+    from: 'from-slate-800',
+    to: 'to-slate-400',
   },
   'Smartphone': {
     icon: Smartphone,
-    from: 'from-slate-700',
-    to: 'to-slate-500',
+    from: 'from-slate-800',
+    to: 'to-slate-400',
   },
   'PC': {
     icon: Laptop,
-    from: 'from-slate-700',
-    to: 'to-slate-500',
+    from: 'from-slate-800',
+    to: 'to-slate-400',
   },
   'Product': {
     icon: Box,
-    from: 'from-slate-700',
-    to: 'to-slate-500',
+    from: 'from-slate-800',
+    to: 'to-slate-400',
   },
   'Other': {
     icon: HelpCircle,
-    from: 'from-slate-700',
-    to: 'to-slate-500',
+    from: 'from-slate-800',
+    to: 'to-slate-400',
   },
 }
 export const roleList = Object.keys(roleInfo)
