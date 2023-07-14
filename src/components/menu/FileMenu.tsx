@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Grip } from 'lucide-react'
 import {
   MenubarContent,
   MenubarItem,
@@ -22,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { useLocalStore } from '@/lib/store'
-import { nodeInfo } from '@/constants'
+import { roleInfo, roleList } from '@/constants'
 
 function ExportProjects() {
   const projects = useLocalStore((state) => state.projects)
@@ -95,34 +96,30 @@ function ExportProjects() {
 }
 
 export function FileMenu() {
-  const entityList = [
-    'genericNode',
-    'piiSubject',
-    'piiController',
-    'piiProcessor',
-    'thirdParty',
-  ]
-  const items = entityList.map((type) => {
-    return { name: nodeInfo[type].title, type }
-  })
+  const items = roleList
+
   function EntityItems() {
-    const onDragStart = (event: React.DragEvent, type: string) => {
-      event.dataTransfer.setData('application/reactflow', type)
+    const onDragStart = (event: React.DragEvent, role: string) => {
+      event.dataTransfer.setData('application/reactflow', role)
       event.dataTransfer.effectAllowed = 'move'
     }
-    return (
-      <MenubarSubContent>
-        {items.map((item) => (
-          <MenubarItem
-            key={item.type}
-            draggable
-            onDragStart={(event) => onDragStart(event, item.type)}
-          >
-            {item.name}
-          </MenubarItem>
-        ))}
-      </MenubarSubContent>
-    )
+    return items.map((item) => {
+      const Icon = roleInfo[item].icon
+      return (
+        <MenubarItem
+          key={item}
+          draggable
+          onDragStart={(event) => onDragStart(event, item)}
+        >
+          <div className="flex flex-row items-center w-full gap-2">
+            <Icon size={16}/>
+            {item}
+            <div className='grow' />
+            <Grip size={10} />
+          </div>
+        </MenubarItem>
+      )
+    })
   }
   return (
     <MenubarMenu>
@@ -130,10 +127,13 @@ export function FileMenu() {
       <MenubarContent>
         <MenubarSub>
           <MenubarSubTrigger>New Entity</MenubarSubTrigger>
-          <EntityItems />
+          <MenubarSubContent>
+            <div className='text-xs '>Drag item to create node</div>
+            <EntityItems />
+          </MenubarSubContent>
         </MenubarSub>
         <MenubarSeparator />
-        <MenubarItem>Import...</MenubarItem>
+        <MenubarItem disabled>Import...</MenubarItem>
         <ExportProjects />
       </MenubarContent>
     </MenubarMenu>

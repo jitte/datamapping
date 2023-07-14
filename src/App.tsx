@@ -21,6 +21,7 @@ import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
 import { MyMenubar } from './components/menu'
+import { roleInfo } from './constants'
 
 function DataFlowView() {
   // load projects from localStore
@@ -118,10 +119,11 @@ function DataFlowView() {
       event.preventDefault()
 
       const reactFlowBounds = ref.current.getBoundingClientRect()
-      const type = event.dataTransfer.getData('application/reactflow')
+      //const type = event.dataTransfer.getData('application/reactflow')
+      const role = event.dataTransfer.getData('application/reactflow')
 
       // check if the dropped element is valid
-      if (typeof type === 'undefined' || !type) {
+      if (typeof role === 'undefined' || !role) {
         return
       }
 
@@ -131,9 +133,9 @@ function DataFlowView() {
       })
       const newNode = {
         id: newNodeId(),
-        type,
+        type: 'genericNode',
         position,
-        data: {},
+        data: { ...roleInfo[role].defaults, role },
       }
       console.log('at: onDrop', { event, newNode })
 
