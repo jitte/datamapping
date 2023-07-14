@@ -38,7 +38,7 @@ export function GenericNode({
 
   function NameComponent() {
     return data.showName ? (
-      <div className="text-lg">{data.name ?? 'No name'}</div>
+      <div className="text-lg text-center">{data.name ?? 'No name'}</div>
     ) : null
   }
 
