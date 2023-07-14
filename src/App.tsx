@@ -6,7 +6,6 @@ import ReactFlow, {
   Edge,
   EdgeChange, applyEdgeChanges, addEdge,
   Connection,
-  Panel,
   MiniMap, Controls,
   Background, BackgroundVariant,
   ReactFlowProvider,
@@ -174,9 +173,10 @@ function DataFlowView() {
               style: { strokeWidth: 8 },
             }}
             fitView
+            minZoom={0.2}
+            snapGrid={[12, 12]}
+            snapToGrid
           >
-            <Panel position="top-left">
-            </Panel>
             <Controls />
             <MiniMap />
             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
