@@ -75,9 +75,13 @@ export function GenericNode({
             <DescriptionComponent />
           </div>
         </div>
-        <DataFlowComponent name="Contract Flow" id={id} />
-        <DataFlowComponent name="PII Flow" id={id} />
-        <DataFlowComponent name="Non PII Flow" id={id} />
+        {data.hasContract ? (
+          <DataFlowComponent name="Contract Flow" id={id} />
+        ) : null}
+        {data.hasPiiFlow ? <DataFlowComponent name="PII Flow" id={id} /> : null}
+        {data.hasNonPiiFlow ? (
+          <DataFlowComponent name="Non PII Flow" id={id} />
+        ) : null}
       </div>
     </div>
   )
