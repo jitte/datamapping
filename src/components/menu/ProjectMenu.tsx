@@ -1,4 +1,5 @@
-import { useContext } from 'react'
+import { useEffect, useContext } from 'react'
+import { useReactFlow } from 'reactflow'
 import {
   MenubarContent,
   MenubarMenu,
@@ -16,14 +17,22 @@ import { ProjectsDialog } from '@/projects'
 
 export function ProjectMenu() {
   const projects = useLocalStore((state) => state.projects)
-  const { currentProject, setCurrentProject } =
-    useContext(GlobalContext)
+  const { currentProject, setCurrentProject } = useContext(GlobalContext)
+  const { fitView } = useReactFlow()
 
+  useEffect(() => {
+    //console.log('at: ProjectMenu/useEffect')
+    setTimeout(() => {
+      fitView({ duration: 500 })
+    }, 100)
+  }, [currentProject])
+
+  function handleChange(value: string) {
+    //console.log('at: ProjectMenu/handleChange')
+    const project = projects.find((project) => project.id === Number(value))
+    if (project) setCurrentProject(project)
+  }
   function ProjectList() {
-    function handleChange(value: string) {
-      const project = projects.find((project) => project.id === Number(value))
-      if (project) setCurrentProject(project)
-    }
     return (
       <MenubarRadioGroup
         value={String(currentProject.id)}
