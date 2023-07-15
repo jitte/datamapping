@@ -29,14 +29,12 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
   const [open, setOpen] = useState(false)
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
   const { setProjectUpdated } = useContext(GlobalContext)
-  const { nodes, setNodes } = useContext(DataFlowContext)
+  const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)
   const nodeId = useNodeId()
 
   function handleDelete() {
-    const otherNodes = nodes.filter(
-      (node: Node) => node.id !== nodeId
-    ) as Node[]
-    setNodes(otherNodes)
+    const node = nodes.find((node: Node) => node.id === nodeId) as Node
+    reactFlowInstance?.deleteElements({ nodes: [node] })
     setProjectUpdated(true)
     setOpen(false)
   }
