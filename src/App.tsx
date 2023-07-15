@@ -69,22 +69,6 @@ function DataFlowView() {
     }
   }, [projectUpdated, setProjectUpdated])
 
-  // utility function
-  function deleteNode(deleteId: string): void {
-    console.log('at: deleteNode', { deleteId, reactFlowInstance })
-    // 指定されたidのノードを削除
-    reactFlowInstance.setNodes(
-      reactFlowInstance.getNodes().filter((nds: any) => nds.id !== deleteId)
-    )
-    // 指定されたidにつながっているエッジを削除
-    reactFlowInstance.setEdges(
-      reactFlowInstance
-        .getEdges()
-        .filter(
-          (nds: any) => nds.source !== deleteId && nds.target !== deleteId
-        )
-    )
-  }
   // callbacks
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
@@ -151,7 +135,6 @@ function DataFlowView() {
         setNodes,
         edges,
         setEdges,
-        deleteNode,
       }}
     >
       <div className="flex flex-col">
