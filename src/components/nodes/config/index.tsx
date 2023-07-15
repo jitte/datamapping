@@ -24,29 +24,47 @@ import { CountryComponent } from './country'
 import { NameComponent } from './name'
 import { DescriptionComponent } from './description'
 import { IconComponent } from './icon'
+import { findNode } from '../utils'
+import { EdgeType } from '@/components/edges/utils'
 
 export function ConfigDialog({ data }: { data: NodeDataType }) {
   const [open, setOpen] = useState(false)
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
   const { setProjectUpdated } = useContext(GlobalContext)
-  const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)
-  const nodeId = useNodeId()
+  const { nodes, setNodes, edges, setEdges, reactFlowInstance } =
+    useContext(DataFlowContext)
+  const nodeId = useNodeId() ?? ''
 
   function handleDelete() {
-    const node = nodes.find((node: Node) => node.id === nodeId) as Node
+    const node = findNode(nodes, nodeId)
     reactFlowInstance?.deleteElements({ nodes: [node] })
     setProjectUpdated(true)
     setOpen(false)
   }
 
-  function handleSubmit() {
-    console.log('at: ConfigDialog/handleSubmit', nodeData)
-    const currentNode = nodes.find((node: Node) => node.id === nodeId) as Node
+  function updateNodes(currentNode: Node) {
     currentNode.data = nodeData
     const otherNodes = nodes.filter(
       (node: Node) => node.id !== nodeId
     ) as Node[]
     setNodes([...otherNodes, currentNode])
+  }
+
+  function updateEdges() {
+    console.log('at ConfigDialog/updateEdges', { edges })
+    for (let edge of edges) {
+      edge.type = EdgeType(edge.source, edge.target, nodes)
+      console.log(`${edge.source} and ${edge.target} is ${edge.type}`)
+    }
+    console.log('at ConfigDialog/updateEdges', { edges })
+    setEdges([...edges])
+  }
+
+  function handleSubmit() {
+    console.log('at: ConfigDialog/handleSubmit', nodeData)
+    const currentNode = findNode(nodes, nodeId)
+    updateNodes(currentNode)
+    updateEdges()
     setProjectUpdated(true)
     setOpen(false)
   }

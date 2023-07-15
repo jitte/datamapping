@@ -1,5 +1,4 @@
 import { Node, Edge } from 'reactflow'
-import { NodeDataType } from '../nodes/types'
 import { findNode } from '../nodes/utils'
 
 export function findEdge(edges: Edge[], id: string): Edge {
@@ -9,8 +8,11 @@ export function findEdge(edges: Edge[], id: string): Edge {
 export function EdgeType(source: string, target: string, nodes: Node[]) {
   const sourceNode = findNode(nodes, source)
   const targetNode = findNode(nodes, target)
-  return (sourceNode.data as NodeDataType).country ===
-    (targetNode.data as NodeDataType).country
-    ? 'domestic'
-    : 'crossborder'
+  if (sourceNode === undefined || targetNode === undefined) return 'domestic' // default
+
+  const sourceCountry = sourceNode.data.country ?? ''
+  const targetCountry = targetNode.data.country ?? ''
+  if (sourceCountry === '' || targetCountry === '') return 'domestic' // default
+
+  return sourceCountry === targetCountry ? 'domestic' : 'crossborder'
 }
