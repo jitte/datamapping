@@ -196,15 +196,11 @@ export default function App() {
   }
   const [currentProject, setCurrentProject] = useState(projects[0])
   const [projectUpdated, setProjectUpdated] = useState(false)
-  const [showProjectModal, setShowProjectModal] = useState(false)
-  const [showExportModal, setShowExportModal] = useState(false)
 
   return (
     <GlobalContextProvider value={{
       currentProject, setCurrentProject,
       projectUpdated, setProjectUpdated,
-      showProjectModal, setShowProjectModal,
-      showExportModal, setShowExportModal,
     }} >
       <ReactFlowProvider>
         <DataFlowView />

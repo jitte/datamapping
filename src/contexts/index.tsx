@@ -1,20 +1,16 @@
 import { useState, createContext, ReactNode } from 'react'
-import { ProjectType } from '@/projects';
+import { ProjectType } from '@/projects'
 
 // Context Types
 type GlobalContextType = {
-  currentProject: ProjectType,
-  setCurrentProject: React.Dispatch<React.SetStateAction<ProjectType>>,
-  projectUpdated: boolean,
-  setProjectUpdated: React.Dispatch<React.SetStateAction<boolean>>,
-  showProjectModal: boolean,
-  setShowProjectModal: React.Dispatch<React.SetStateAction<boolean>>,
-  showExportModal: boolean,
-  setShowExportModal: React.Dispatch<React.SetStateAction<boolean>>,
+  currentProject: ProjectType
+  setCurrentProject: React.Dispatch<React.SetStateAction<ProjectType>>
+  projectUpdated: boolean
+  setProjectUpdated: React.Dispatch<React.SetStateAction<boolean>>
 }
 type PopUpContextType = {
-	openPopUp: (popUpElement: JSX.Element) => void;
-	closePopUp: () => void;
+  openPopUp: (popUpElement: JSX.Element) => void
+  closePopUp: () => void
 }
 
 // Contexts
@@ -23,10 +19,6 @@ export const GlobalContext = createContext<GlobalContextType>({
   setCurrentProject: () => {},
   projectUpdated: false,
   setProjectUpdated: () => {},
-  showProjectModal: false,
-  setShowProjectModal: () => {},
-  showExportModal: false,
-  setShowExportModal: () => {},
 })
 export const PopUpContext = createContext<PopUpContextType>({
   openPopUp: () => {},
@@ -35,14 +27,14 @@ export const PopUpContext = createContext<PopUpContextType>({
 
 // Context Provider
 const PopUpContextProvider = ({ children }: { children: ReactNode }) => {
-  const [popUpElements, setPopUpElements] = useState<JSX.Element[]>([]);
+  const [popUpElements, setPopUpElements] = useState<JSX.Element[]>([])
 
   const openPopUp = (element: JSX.Element) => {
-    setPopUpElements(prevPopUps => [element, ...prevPopUps]);
+    setPopUpElements((prevPopUps) => [element, ...prevPopUps])
   }
 
   const closePopUp = () => {
-    setPopUpElements(prevPopUps => prevPopUps.slice(1));
+    setPopUpElements((prevPopUps) => prevPopUps.slice(1))
   }
 
   return (
@@ -52,14 +44,17 @@ const PopUpContextProvider = ({ children }: { children: ReactNode }) => {
     </PopUpContext.Provider>
   )
 }
-export function GlobalContextProvider(
-	{ value, children }: { value: GlobalContextType, children: ReactNode }
-): JSX.Element {
-	return (
+
+export function GlobalContextProvider({
+  value,
+  children,
+}: {
+  value: GlobalContextType
+  children: ReactNode
+}): JSX.Element {
+  return (
     <GlobalContext.Provider value={value}>
-			<PopUpContextProvider>
-				{children}
-			</PopUpContextProvider>
-		</GlobalContext.Provider>
-	)
+      <PopUpContextProvider>{children}</PopUpContextProvider>
+    </GlobalContext.Provider>
+  )
 }
