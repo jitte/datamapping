@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useReactFlow, getRectOfNodes, getTransformForBounds } from 'reactflow'
-import { toPng } from 'html-to-image'
+import { useReactFlow, getRectOfNodes } from 'reactflow'
 import { Grip } from 'lucide-react'
 import {
   MenubarContent,
@@ -26,48 +25,27 @@ import { Input } from '@/components/ui/input'
 
 import { useLocalStore } from '@/lib/store'
 import { roleInfo, roleList } from '@/constants'
+import { downloadImage } from '@/lib/image'
 
-function DownloadImage() {
-  const imageWidth = 2048
-  const imageHeight = 1536
+function DownloadMenu() {
   const { getNodes } = useReactFlow()
 
-  function downloadImage(dataUrl: string) {
-    const a = document.createElement('a')
-
-    a.setAttribute('download', 'reactflow.png')
-    a.setAttribute('href', dataUrl)
-    a.click()
-  }
-
-  const onClick = () => {
-    // we calculate a transform for the nodes so that all nodes are visible
-    // we then overwrite the transform of the `.react-flow__viewport` element
-    // with the style option of the html-to-image library
-    const nodesBounds = getRectOfNodes(getNodes())
-    const transform = getTransformForBounds(
-      nodesBounds,
-      imageWidth,
-      imageHeight,
-      0.5,
-      2
-    )
-
-    toPng(document.querySelector('.react-flow__viewport') as HTMLElement, {
-      width: imageWidth,
-      height: imageHeight,
-      style: {
-        width: String(imageWidth),
-        height: String(imageHeight),
-        transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
-      },
-    }).then(downloadImage)
+  function onClick(format: 'svg' | 'png') {
+    downloadImage(getRectOfNodes(getNodes()), format)
   }
 
   return (
-    <MenubarItem className="download-btn" onClick={onClick}>
-      Download Image
-    </MenubarItem>
+    <MenubarSub>
+      <MenubarSubTrigger>Download</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem className="download-btn" onClick={() => onClick('svg')}>
+          SVG Image
+        </MenubarItem>
+        <MenubarItem className="download-btn" onClick={() => onClick('png')}>
+          PNG Image
+        </MenubarItem>
+      </MenubarSubContent>
+    </MenubarSub>
   )
 }
 
@@ -180,7 +158,7 @@ export function FileMenu() {
           </MenubarSubContent>
         </MenubarSub>
         <MenubarSeparator />
-        <DownloadImage />
+        <DownloadMenu />
         <MenubarSeparator />
         <MenubarItem disabled>Import...</MenubarItem>
         <ExportProjects />
