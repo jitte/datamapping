@@ -176,6 +176,19 @@ export const nodeInfo: { [key: string]: nodeInfoType } = {
   },
 }
 
+/**
+ * Edges
+ */
+import { DomesticEdge, CrossBorderEdge } from './components/edges'
+
+export const edgeTypes = {
+  domestic: DomesticEdge,
+  crossborder: CrossBorderEdge,
+}
+
+/**
+ * Projects
+ */
 export function initialProject(id: number) {
 	const node1 = `pj_${id}_node_1`
 	const node2 = `pj_${id}_node_2`

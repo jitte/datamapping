@@ -1,0 +1,21 @@
+.react-flow__edge-domestic .react-flow__edge-path {
+  stroke: #aaa;
+  stroke-width: 8;
+}
+
+.react-flow__edge-domestic.selected .react-flow__edge-path,
+.react-flow__edge-domestic:focus .react-flow__edge-path,
+.react-flow__edge-domestic:focus-visible .react-flow__edge-path {
+  stroke: #555;
+}
+
+.react-flow__edge-crossborder .react-flow__edge-path {
+  stroke: #faa;
+  stroke-width: 8;
+}
+
+.react-flow__edge-crossborder.selected .react-flow__edge-path,
+.react-flow__edge-crossborder:focus .react-flow__edge-path,
+.react-flow__edge-crossborder:focus-visible .react-flow__edge-path {
+  stroke: #f88;
+}

@@ -14,13 +14,14 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import './App.css'
 
-import { nodeTypes } from './constants'
+import { nodeTypes, edgeTypes } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { useLocalStore } from './lib/store'
 import { initialProject } from './constants'
 import { MyMenubar } from './components/menu'
 import { roleInfo } from './constants'
+import { EdgeType } from './components/edges/utils'
 
 function DataFlowView() {
   // load projects from localStore
@@ -88,8 +89,9 @@ function DataFlowView() {
   )
   const onConnect = useCallback(
     (connection: Connection) => {
-      console.log({ at: 'onConnect', connection })
-      setEdges((eds: Edge[]) => addEdge(connection, eds))
+      const type = EdgeType(connection.source ?? '', connection.target ?? '', nodes)
+      console.log('at: onConnect', { connection, type })
+      setEdges((eds: Edge[]) => addEdge({ ...connection, type }, eds))
     },
     [setEdges]
   )
@@ -145,6 +147,7 @@ function DataFlowView() {
           <ReactFlow
             nodeTypes={nodeTypes}
             nodes={nodes}
+            edgeTypes={edgeTypes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
