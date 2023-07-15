@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react'
-import { Node, Edge } from 'reactflow'
-import { Cog, Pencil, Copy, Trash2, Plus } from 'lucide-react'
+import { Cog, Copy, Trash2, Plus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -11,23 +10,14 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@radix-ui/react-menubar'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { useLocalStore } from '@/lib/store'
 import { GlobalContext } from '@/contexts'
 import { initialProject } from '@/constants'
+import { ProjectType } from './types'
 import { DataTable } from './data-table'
-
-export type ProjectType = {
-  id: number
-  name: string
-  description: string
-  nodes: Node[]
-  edges: Edge[]
-}
+import { EditDialog } from './edit'
 
 function ProjectsTable() {
   const projects = useLocalStore((state) => state.projects)
@@ -67,68 +57,6 @@ function ProjectsTable() {
       },
     },
   ]
-
-  function EditDialog({ id }: { id: number }) {
-    const [open, setOpen] = useState(false)
-		const project = projects.find((pj) => pj.id === id) as ProjectType
-    const [name, setName] = useState(project.name)
-    const [description, setDescription] = useState(project.description)
-
-		function onSubmit() {
-			const newProject = { ...project, name, description }
-			console.log('at: onSubmit', { newProject })
-			setCurrentProject(newProject)
-			storeProjects([newProject, ...projects.filter((pj) => pj.id !== project.id)])
-			setOpen(false)
-		}
-    return (
-      <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-        <DialogTrigger asChild>
-          <button>
-            <Pencil className="h-5 w-5 m-0.5" />
-          </button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Project</DialogTitle>
-            <DialogDescription>
-              Edit name and description of project.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div>
-              <Label>Name</Label>
-              <Input
-                id={`name_${id}`}
-                value={name}
-                onChange={(event) => {
-                  setName(event.target.value)
-                }}
-              />
-            </div>
-            <div>
-              <Label>Description</Label>
-              <Textarea
-                id={`desc_${id}`}
-                value={description}
-                onChange={(event) => {
-                  setDescription(event.target.value)
-                }}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={onSubmit}>
-              Submit
-            </Button>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    )
-  }
 
 	function handleDuplicate(id: number) {
 		console.log('at: handleDuplicate', { id })
