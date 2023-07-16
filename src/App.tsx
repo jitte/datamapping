@@ -1,27 +1,20 @@
 import { useState, useContext, useCallback, useRef, useEffect } from 'react'
-import ReactFlow, {
-  useReactFlow,
-  Node,
-  NodeChange, applyNodeChanges,
-  Edge,
-  EdgeChange, applyEdgeChanges, addEdge,
-  Connection,
-  MiniMap, Controls,
-  Background, BackgroundVariant,
-  ReactFlowProvider,
-} from 'reactflow'
 
+import ReactFlow, { useReactFlow, ReactFlowProvider } from 'reactflow'
+import { MiniMap, Controls, Background, BackgroundVariant } from 'reactflow'
+import { Node, NodeChange, applyNodeChanges } from 'reactflow'
+import { Edge, EdgeChange, applyEdgeChanges, addEdge, Connection } from 'reactflow'
 import 'reactflow/dist/style.css'
 import './App.css'
+import { useHotkeys } from 'react-hotkeys-hook'
 
-import { nodeTypes, edgeTypes } from './constants'
+import { nodeTypes, edgeTypes, initialProject, roleInfo } from './constants'
 import { GlobalContext, GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { useLocalStore } from './lib/store'
-import { initialProject } from './constants'
 import { MyMenubar } from './components/menu'
-import { roleInfo } from './constants'
 import { EdgeType } from './components/edges/utils'
+import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
 
 function DataFlowView() {
   // load projects from localStore
@@ -30,11 +23,8 @@ function DataFlowView() {
   const newNodeId = useLocalStore((state) => state.newNodeId)
 
   // current project from global context
-  const {
-    currentProject,
-    projectUpdated,
-    setProjectUpdated,
-  } = useContext(GlobalContext)
+  const { currentProject, projectUpdated, setProjectUpdated } =
+    useContext(GlobalContext)
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
@@ -44,7 +34,20 @@ function DataFlowView() {
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
 
-  //console.log('at: DataFlowView', { projects, currentProject, nodes, edges })
+  useHotkeys('ctrl+x', () => {
+    console.log('Ctrl+X pressed')
+    cutNodes(nodes, reactFlowInstance)
+  })
+
+  useHotkeys('ctrl+c', () => {
+    console.log('Ctrl+C pressed')
+    copyNodes(nodes)
+  })
+
+  useHotkeys('ctrl+v', () => {
+    console.log('Ctrl+V pressed')
+    pasteNodes(setNodes, newNodeId())
+  })
 
   // update nodes and edges after changing current project
   useEffect(() => {
@@ -89,7 +92,11 @@ function DataFlowView() {
   )
   const onConnect = useCallback(
     (connection: Connection) => {
-      const type = EdgeType(connection.source ?? '', connection.target ?? '', nodes)
+      const type = EdgeType(
+        connection.source ?? '',
+        connection.target ?? '',
+        nodes
+      )
       console.log('at: onConnect', { connection, type })
       setEdges((eds: Edge[]) => addEdge({ ...connection, type }, eds))
     },
@@ -174,8 +181,8 @@ function DataFlowView() {
 }
 
 export default function App() {
-	const projects  = useLocalStore((state) => state.projects)
-	const storeProjects = useLocalStore((state) => state.storeProjects)
+  const projects = useLocalStore((state) => state.projects)
+  const storeProjects = useLocalStore((state) => state.storeProjects)
 
   if (projects.length === 0) {
     storeProjects([initialProject(1)])
@@ -184,10 +191,14 @@ export default function App() {
   const [projectUpdated, setProjectUpdated] = useState(false)
 
   return (
-    <GlobalContextProvider value={{
-      currentProject, setCurrentProject,
-      projectUpdated, setProjectUpdated,
-    }} >
+    <GlobalContextProvider
+      value={{
+        currentProject,
+        setCurrentProject,
+        projectUpdated,
+        setProjectUpdated,
+      }}
+    >
       <ReactFlowProvider>
         <DataFlowView />
       </ReactFlowProvider>
