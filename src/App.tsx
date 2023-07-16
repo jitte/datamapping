@@ -46,7 +46,7 @@ function DataFlowView() {
 
   useHotkeys('ctrl+v', () => {
     console.log('Ctrl+V pressed')
-    pasteNodes(setNodes, newNodeId())
+    pasteNodes(nodes, setNodes, newNodeId())
   })
 
   // update nodes and edges after changing current project

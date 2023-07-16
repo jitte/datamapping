@@ -8,6 +8,7 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
+  MenubarShortcut,
 } from '@/components/ui/menubar'
 
 import { DataFlowContext } from '@/contexts/dataFlowContext'
@@ -56,7 +57,7 @@ export function EditMenu() {
   }
 
   const handlePaste = async () => {
-    pasteNodes(setNodes, newNodeId())
+    pasteNodes(nodes, setNodes, newNodeId())
   }
 
   return (
@@ -74,9 +75,18 @@ export function EditMenu() {
           </MenubarSubContent>
         </MenubarSub>
         <MenubarSeparator />
-        <MenubarItem onClick={handleCut}>Cut</MenubarItem>
-        <MenubarItem onClick={handleCopy}>Copy</MenubarItem>
-        <MenubarItem onClick={handlePaste}>Paste</MenubarItem>
+        <MenubarItem onClick={handleCut}>
+          Cut
+          <MenubarShortcut>^X</MenubarShortcut>
+        </MenubarItem>
+        <MenubarItem onClick={handleCopy}>
+          Copy
+          <MenubarShortcut>^C</MenubarShortcut>
+        </MenubarItem>
+        <MenubarItem onClick={handlePaste}>
+          Paste
+          <MenubarShortcut>^V</MenubarShortcut>
+        </MenubarItem>
       </MenubarContent>
     </MenubarMenu>
   )

@@ -7,7 +7,10 @@ const findNode = (nodes: Node[], id: string): Node => {
   return nodes.find((node: Node) => node.id === id) as Node
 }
 
-const cutNodes = (nodes: Node[], reactFlowInstance: ReactFlowInstance | null) => {
+const cutNodes = (
+  nodes: Node[],
+  reactFlowInstance: ReactFlowInstance | null
+) => {
   const selectedNodes = nodes.filter((node) => node.selected)
   const value = JSON.stringify(selectedNodes, null, '  ')
   writeClipboard(value)
@@ -21,6 +24,7 @@ const copyNodes = (nodes: Node[]) => {
 }
 
 const pasteNodes = async (
+  nodes: Node[],
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
   newNodeId: string
 ) => {
@@ -34,6 +38,9 @@ const pasteNodes = async (
   }
   if (!Array.isArray(newNodes)) return
 
+  nodes.map((node) => {
+    node.selected = false
+  })
   newNodes = newNodes.map<Node>((node: Node) => {
     if (node.position) {
       node.position.x = node.position.x + 12
