@@ -1,5 +1,5 @@
 import { useState, createContext, ReactNode } from 'react'
-import { ProjectType } from '@/projects'
+import { ProjectType } from '@/projects/types'
 
 // Context Types
 type GlobalContextType = {
