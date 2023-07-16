@@ -45,19 +45,24 @@ import { readClipboard, writeClipboard } from '@/lib/clipboard'
 */
 
 export function EditMenu() {
-  const { nodes, setNodes } = useContext(DataFlowContext)
+  const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)
   const newNodeId = useLocalStore((state) => state.newNodeId)
 
+  const handleCut = () => {
+    const selectedNodes = nodes.filter((node) => node.selected)
+    const value = JSON.stringify(selectedNodes, null, '  ')
+    writeClipboard(value)
+    reactFlowInstance?.deleteElements({ nodes: selectedNodes })
+  }
+
   const handleCopy = () => {
-    const node = nodes.filter((node) => node.selected)
-    const value = JSON.stringify(node, null, '  ')
+    const selectedNodes = nodes.filter((node) => node.selected)
+    const value = JSON.stringify(selectedNodes, null, '  ')
     writeClipboard(value)
   }
 
   const handlePaste = async () => {
     const value = await readClipboard()
-    console.log('at: EditMenu/handlePaste', { value })
-
     let newNodes: Node[]
     try {
       newNodes = JSON.parse(value)
@@ -66,7 +71,7 @@ export function EditMenu() {
       return
     }
     if (!Array.isArray(newNodes)) return
-    
+
     newNodes = newNodes.map<Node>((node: Node) => {
       if (node.position) {
         node.position.x = node.position.x + 12
@@ -95,7 +100,7 @@ export function EditMenu() {
           </MenubarSubContent>
         </MenubarSub>
         <MenubarSeparator />
-        <MenubarItem disabled>Cut</MenubarItem>
+        <MenubarItem onClick={handleCut}>Cut</MenubarItem>
         <MenubarItem onClick={handleCopy}>Copy</MenubarItem>
         <MenubarItem onClick={handlePaste}>Paste</MenubarItem>
       </MenubarContent>
