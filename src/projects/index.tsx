@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
 
-import { useLocalStore } from '@/lib/store'
+import { useLocalStore, newProjectId } from '@/lib/store'
 import { GlobalContext } from '@/contexts'
 import { initialProject } from '@/constants'
 import { ProjectType } from './types'
@@ -22,7 +22,6 @@ import { EditDialog } from './edit'
 function ProjectsTable() {
   const projects = useLocalStore((state) => state.projects)
   const storeProjects = useLocalStore((state) => state.storeProjects)
-	const newProjectId = useLocalStore((state) => state.newProjectId)
   const { currentProject, setCurrentProject } = useContext(GlobalContext)
 
   const columns: ColumnDef<ProjectType>[] = [
@@ -61,7 +60,7 @@ function ProjectsTable() {
 	function handleDuplicate(id: number) {
 		console.log('at: handleDuplicate', { id })
 		const oldProject = projects.find((pj) => pj.id === id) as ProjectType
-		const newId = newProjectId()
+		const newId = newProjectId(projects)
 		const newProject = {
 			id: newId,
 			name: `${oldProject.name} (${newId})`,
@@ -85,7 +84,7 @@ function ProjectsTable() {
   }
 
   function handleNew() {
-    const newProject = initialProject(newProjectId())
+    const newProject = initialProject(newProjectId(projects))
     setCurrentProject(newProject)
     storeProjects([newProject, ...projects])
   }
