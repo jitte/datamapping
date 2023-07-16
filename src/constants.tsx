@@ -2,12 +2,6 @@
  * Icons
  */
 import {
-  UsersIcon,
-  CogIcon,
-  CpuChipIcon,
-  DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline'
-import {
   LucideIcon,
   Users,
   Building,
@@ -134,46 +128,6 @@ export const nodeTypes: {
   piiController: GenericNode, // backward compatibility
   piiProcessor: GenericNode, // backward compatibility
   thirdParty: GenericNode, // backward compatibility
-}
-
-type nodeInfoType = {
-  title: string
-  icon: any
-	from: string
-	to: string
-}
-
-export const nodeInfo: { [key: string]: nodeInfoType } = {
-  genericNode: {
-    title: 'Generic Node',
-    icon: UsersIcon,
-    from: 'from-rose-600',
-    to: 'to-purple-600',
-  },
-  piiSubject: {
-    title: 'PII Subject',
-    icon: UsersIcon,
-    from: 'from-rose-600',
-    to: 'to-purple-600',
-  },
-  piiController: {
-    title: 'PII Controller',
-    icon: CogIcon,
-    from: 'from-orange-600',
-    to: 'to-yellow-600',
-  },
-  piiProcessor: {
-    title: 'PII Processor',
-    icon: CpuChipIcon,
-    from: 'from-lime-600',
-    to: 'to-teal-600',
-  },
-  thirdParty: {
-    title: 'Third Party',
-    icon: DocumentDuplicateIcon,
-    from: 'from-blue-600',
-    to: 'to-cyan-600',
-  },
 }
 
 /**
