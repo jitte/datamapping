@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import { Node } from 'reactflow'
 import {
   MenubarContent,
   MenubarItem,
@@ -13,7 +12,7 @@ import {
 
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { useLocalStore } from '@/lib/store'
-import { readClipboard, writeClipboard } from '@/lib/clipboard'
+import { cutNodes, copyNodes, pasteNodes } from '@/components/nodes/utils'
 
 /* node JSON sample
 {
@@ -49,40 +48,15 @@ export function EditMenu() {
   const newNodeId = useLocalStore((state) => state.newNodeId)
 
   const handleCut = () => {
-    const selectedNodes = nodes.filter((node) => node.selected)
-    const value = JSON.stringify(selectedNodes, null, '  ')
-    writeClipboard(value)
-    reactFlowInstance?.deleteElements({ nodes: selectedNodes })
+    cutNodes(nodes, reactFlowInstance)
   }
 
   const handleCopy = () => {
-    const selectedNodes = nodes.filter((node) => node.selected)
-    const value = JSON.stringify(selectedNodes, null, '  ')
-    writeClipboard(value)
+    copyNodes(nodes)
   }
 
   const handlePaste = async () => {
-    const value = await readClipboard()
-    let newNodes: Node[]
-    try {
-      newNodes = JSON.parse(value)
-    } catch (e) {
-      console.log('JSON.parse error', e)
-      return
-    }
-    if (!Array.isArray(newNodes)) return
-
-    newNodes = newNodes.map<Node>((node: Node) => {
-      if (node.position) {
-        node.position.x = node.position.x + 12
-        node.position.y = node.position.y + 12
-      } else {
-        node.position = { x: 0, y: 0 }
-      }
-      node.id = newNodeId()
-      return node
-    })
-    setNodes((nds: Node[]) => nds.concat(newNodes))
+    pasteNodes(setNodes, newNodeId())
   }
 
   return (
