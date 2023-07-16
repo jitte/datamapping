@@ -15,12 +15,12 @@ import { useLocalStore } from './lib/store'
 import { MyMenubar } from './components/menu'
 import { EdgeType } from './components/edges/utils'
 import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
+import { newNodeId, newNodeIdNumber } from './projects/utils'
 
 function DataFlowView() {
   // load projects from localStore
   const projects = useLocalStore((state) => state.projects)
   const storeProjects = useLocalStore((state) => state.storeProjects)
-  const newNodeId = useLocalStore((state) => state.newNodeId)
 
   // current project from global context
   const { currentProject, projectUpdated, setProjectUpdated } =
@@ -46,7 +46,7 @@ function DataFlowView() {
 
   useHotkeys('ctrl+v', () => {
     console.log('Ctrl+V pressed')
-    pasteNodes(nodes, setNodes, newNodeId())
+    pasteNodes(nodes, setNodes, newNodeIdNumber(projects))
   })
 
   // update nodes and edges after changing current project
@@ -123,7 +123,7 @@ function DataFlowView() {
         y: event.clientY - reactFlowBounds.top,
       })
       const newNode = {
-        id: newNodeId(),
+        id: newNodeId(projects),
         type: 'genericNode',
         position,
         data: { ...roleInfo[role].defaults, role },

@@ -15,7 +15,8 @@ import {
   CommandItem,
 } from '@/components/ui/command'
 
-import { useLocalStore, allNodes } from '@/lib/store'
+import { useLocalStore } from '@/lib/store'
+import { allNodes } from '@/projects/utils'
 import { GlobalContext } from '@/contexts'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 

@@ -14,6 +14,7 @@ import {
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { useLocalStore } from '@/lib/store'
 import { cutNodes, copyNodes, pasteNodes } from '@/components/nodes/utils'
+import { newNodeIdNumber } from '@/projects/utils'
 
 /* node JSON sample
 {
@@ -46,7 +47,7 @@ import { cutNodes, copyNodes, pasteNodes } from '@/components/nodes/utils'
 
 export function EditMenu() {
   const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)
-  const newNodeId = useLocalStore((state) => state.newNodeId)
+  const projects = useLocalStore((state) => state.projects)
 
   const handleCut = () => {
     cutNodes(nodes, reactFlowInstance)
@@ -57,7 +58,7 @@ export function EditMenu() {
   }
 
   const handlePaste = async () => {
-    pasteNodes(nodes, setNodes, newNodeId())
+    pasteNodes(nodes, setNodes, newNodeIdNumber(projects))
   }
 
   return (

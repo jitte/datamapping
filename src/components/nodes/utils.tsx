@@ -26,7 +26,7 @@ const copyNodes = (nodes: Node[]) => {
 const pasteNodes = async (
   nodes: Node[],
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
-  newNodeId: string
+  newNodeIdNumber: number
 ) => {
   const value = await readClipboard()
   let newNodes: Node[]
@@ -48,7 +48,8 @@ const pasteNodes = async (
     } else {
       node.position = { x: 0, y: 0 }
     }
-    node.id = newNodeId
+    node.id = `node_${newNodeIdNumber}`
+    newNodeIdNumber++
     return node
   })
   setNodes((nds: Node[]) => nds.concat(newNodes))

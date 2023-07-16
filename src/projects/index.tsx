@@ -12,7 +12,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
 
-import { useLocalStore, newProjectId } from '@/lib/store'
+import { useLocalStore } from '@/lib/store'
+import { newProjectId } from './utils'
 import { GlobalContext } from '@/contexts'
 import { initialProject } from '@/constants'
 import { ProjectType } from './types'
