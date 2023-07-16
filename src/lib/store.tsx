@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { ProjectType } from '@/projects'
+import { ProjectType } from '@/projects/types'
 import { Node, Edge } from 'reactflow'
 
 export type LocalStoreType = {
