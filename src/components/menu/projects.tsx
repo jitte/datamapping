@@ -5,14 +5,11 @@ import {
   MenubarMenu,
   MenubarRadioGroup,
   MenubarRadioItem,
-  MenubarSeparator,
-  MenubarSub,
   MenubarTrigger,
 } from '@/components/ui/menubar'
 import { Share2 } from 'lucide-react'
 
 import { useLocalStore } from '@/lib/store'
-import { ProjectsDialog } from '@/projects'
 
 export function ProjectMenu() {
   const { projects, currentProject, currentProjectId, storeCurrentProjectId } =
@@ -53,10 +50,6 @@ export function ProjectMenu() {
         </div>
       </MenubarTrigger>
       <MenubarContent>
-        <MenubarSub>
-          <ProjectsDialog />
-        </MenubarSub>
-        <MenubarSeparator />
         <ProjectList />
       </MenubarContent>
     </MenubarMenu>
