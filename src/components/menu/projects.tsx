@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { useReactFlow } from 'reactflow'
-import {
-  MenubarMenu,
-} from '@/components/ui/menubar'
+import { MenubarMenu } from '@/components/ui/menubar'
 import {
   Select,
   SelectContent,
@@ -38,7 +36,7 @@ export function ProjectMenu() {
           defaultValue={String(currentProjectId)}
           onValueChange={handleChange}
         >
-          <SelectTrigger className='h-8 focus:ring-0'>
+          <SelectTrigger className="h-8 focus:ring-0">
             <SelectValue>{currentProject().name}</SelectValue>
           </SelectTrigger>
           <SelectContent>
