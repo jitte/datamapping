@@ -8,7 +8,13 @@ import 'reactflow/dist/style.css'
 import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { nodeTypes, edgeTypes, initialProject, roleInfo } from './constants'
+import {
+  GRID_SIZE,
+  nodeTypes,
+  edgeTypes,
+  initialProject,
+  roleInfo,
+} from './constants'
 import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { useLocalStore } from './lib/store'
@@ -161,12 +167,12 @@ function DataFlowView() {
             }}
             fitView
             minZoom={0.2}
-            snapGrid={[12, 12]}
+            snapGrid={[GRID_SIZE, GRID_SIZE]}
             snapToGrid
           >
             <Controls />
             <MiniMap />
-            <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+            <Background variant={BackgroundVariant.Dots} gap={GRID_SIZE} size={1} />
           </ReactFlow>
         </div>
       </div>
