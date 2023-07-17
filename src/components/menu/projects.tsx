@@ -33,7 +33,7 @@ export function ProjectMenu() {
       <div className="flex flex-row items-center gap-2">
         <Share2 size={24} />
         <Select
-          defaultValue={String(currentProjectId)}
+          value={String(currentProjectId)}
           onValueChange={handleChange}
         >
           <SelectTrigger className="h-8 focus:ring-0">
