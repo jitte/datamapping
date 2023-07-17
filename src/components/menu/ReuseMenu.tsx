@@ -34,9 +34,12 @@ export function ReuseMenu() {
 
   function handleSelect(node: Node) {
     console.log('at: ReuseMenu', { node, nodes })
-    const newNode = { ...node }
-    newNode.id = newNodeId(projects)
-    newNode.data = { ...node.data }
+    const newNode: Node = {
+      id: newNodeId(projects),
+      type: node.type,
+      position: { ...node.position },
+      data: { ...node.data }
+    }
     setNodes((nds) => nds.concat(newNode))
     setOpen(false)
   }
