@@ -4,9 +4,6 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
   MenubarShortcut,
 } from '@/components/ui/menubar'
@@ -76,17 +73,6 @@ function EditMenu() {
         <MenubarItem onClick={handleUnSelect}>
           UnSelect All
         </MenubarItem>
-        <MenubarSeparator />
-        <MenubarSub>
-          <MenubarSubTrigger>Find</MenubarSubTrigger>
-          <MenubarSubContent>
-            <MenubarItem disabled>Search the web</MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem disabled>Find...</MenubarItem>
-            <MenubarItem disabled>Find Next</MenubarItem>
-            <MenubarItem disabled>Find Previous</MenubarItem>
-          </MenubarSubContent>
-        </MenubarSub>
       </MenubarContent>
     </MenubarMenu>
   )
