@@ -14,23 +14,19 @@ import {
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 
-import { GlobalContext } from '@/contexts'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
-
-import { NodeConfigContext, NodeDataType } from '../types'
-
+import { NodeConfigContext, NodeDataType } from '@/components/nodes/types'
+import { findNode } from '@/components/nodes/utils'
+import { EdgeType } from '@/components/edges/utils'
 import { RoleCompoment } from './role'
 import { CountryComponent } from './country'
 import { NameComponent } from './name'
 import { DescriptionComponent } from './description'
 import { IconComponent } from './icon'
-import { findNode } from '../utils'
-import { EdgeType } from '@/components/edges/utils'
 
 export function ConfigDialog({ data }: { data: NodeDataType }) {
   const [open, setOpen] = useState(false)
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
-  const { setProjectUpdated } = useContext(GlobalContext)
   const { nodes, setNodes, edges, setEdges, reactFlowInstance } =
     useContext(DataFlowContext)
   const nodeId = useNodeId() ?? ''
@@ -38,7 +34,6 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
   function handleDelete() {
     const node = findNode(nodes, nodeId)
     reactFlowInstance?.deleteElements({ nodes: [node] })
-    setProjectUpdated(true)
     setOpen(false)
   }
 
@@ -65,7 +60,6 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
     const currentNode = findNode(nodes, nodeId)
     updateNodes(currentNode)
     updateEdges()
-    setProjectUpdated(true)
     setOpen(false)
   }
 

@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 import ReactFlow, { useReactFlow, ReactFlowProvider } from 'reactflow'
 import { MiniMap, Controls, Background, BackgroundVariant } from 'reactflow'
@@ -9,7 +9,7 @@ import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { nodeTypes, edgeTypes, initialProject, roleInfo } from './constants'
-import { GlobalContext, GlobalContextProvider } from './contexts'
+import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { useLocalStore } from './lib/store'
 import { MyMenubar } from './components/menu'
@@ -26,10 +26,6 @@ function DataFlowView() {
     currentProjectId,
     currentProject,
   } = useLocalStore()
-
-  // current project from global context
-  const { projectUpdated, setProjectUpdated } =
-    useContext(GlobalContext)
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
@@ -70,15 +66,6 @@ function DataFlowView() {
     storeProjects(projects)
     console.log('at: useEffect(nodes/edges)', project)
   }, [nodes, edges, storeProjects])
-
-  // save project if project is updated
-  useEffect(() => {
-    if (projectUpdated) {
-      console.log('at: useEffect(projectUpated)', projects)
-      storeProjects(projects)
-      setProjectUpdated(false)
-    }
-  }, [projectUpdated, setProjectUpdated])
 
   // callbacks
   const onNodesChange = useCallback(
