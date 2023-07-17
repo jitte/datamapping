@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { useNodeId, Node } from 'reactflow'
-import { Cog } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -75,7 +75,7 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
       }}
     >
       <DialogTrigger>
-        <Cog className="w-5 h-5" />
+        <Pencil className="w-5 h-5 mx-1" />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
