@@ -14,7 +14,6 @@ export function GenericNode({
   type,
   selected,
 }: NodeParamType): JSX.Element {
-
   const [nodeData, setNodeData] = useState({ ...data })
   const role = data.role ?? 'Other'
   const info = roleInfo[role]
@@ -35,7 +34,7 @@ export function GenericNode({
   }
 
   function DescriptionComponent() {
-    return (data.showDescription && data.description) ? (
+    return data.showDescription && data.description ? (
       <div className="text-sm">{data.description}</div>
     ) : null
   }
@@ -49,8 +48,10 @@ export function GenericNode({
     >
       <div
         className={cn(
-          'flex flex-col w-60 bg-white border border-black rounded-lg',
-          selected ? 'border border-blue-500' : 'border dark:border-gray-700'
+          'flex flex-col w-60 bg-white border border-black rounded-lg drop-shadow-2xl',
+          selected
+            ? 'bg-gradient-to-br from-yellow-50 to-yellow-200 '
+            : 'border dark:border-gray-700'
         )}
       >
         <div

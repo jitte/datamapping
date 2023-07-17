@@ -36,7 +36,7 @@ export function FlowComponent({
   }, [position, updateNodeInternals])
 
   return (
-    <div ref={ref} className="flex py-1 m-1 bg-gray-50">
+    <div ref={ref} className="flex py-1 m-1 bg-gray-100/80">
       <div className="w-full text-center">{name}</div>
       <Handle
         id={targetId}
