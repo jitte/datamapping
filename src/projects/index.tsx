@@ -110,7 +110,6 @@ export function ProjectsDialog() {
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger className="w-full pl-2 pr-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
         <div className="flex flex-row items-center gap-2">
-          <Cog size={16} />
           Edit Projects...
         </div>
       </DialogTrigger>
