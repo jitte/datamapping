@@ -12,7 +12,7 @@ import {
   MenubarSeparator,
 } from '@/components/ui/menubar'
 import { Badge } from '@/components/ui/badge'
-import { Share2 } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
@@ -80,7 +80,7 @@ const FindMenu = () => {
       <MenubarSub key={`pj_${project.id}`}>
         {project.id === currentProjectId ? (
           <MenubarSubTrigger>
-            <Share2 size={16} className='mr-2'/>
+            <Check size={16} className='mr-2'/>
             {project.name}
           </MenubarSubTrigger>
         ) : (
