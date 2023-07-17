@@ -61,7 +61,7 @@ function DataFlowView() {
     const project = currentProject()
     setNodes(project.nodes)
     setEdges(project.edges)
-    console.log('at: useEffect(currentProjectId)', project)
+    //console.log('at: useEffect(currentProjectId)', project)
   }, [currentProject, currentProjectId, setNodes, setEdges])
 
   // save projects after changing nodes and edges
