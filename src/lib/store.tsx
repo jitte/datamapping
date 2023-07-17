@@ -3,11 +3,20 @@ import { persist } from 'zustand/middleware'
 import { ProjectType } from '@/projects/types'
 
 export type LocalStoreType = {
-  projects: ProjectType[]
+  projects: ProjectType[],
   storeProjects: (projects: ProjectType[]) => void
   currentProjectId: number
   storeCurrentProjectId: (id: number) => void
   currentProject: () => ProjectType
+  preference: PreferenceType
+  storePreference: (preference: PreferenceType) => void
+}
+
+export type PreferenceType = {
+  showOnlyNamedNode?: boolean
+}
+const initialPreference: PreferenceType = {
+  showOnlyNamedNode: true
 }
 
 const useLocalStore = create(
@@ -27,6 +36,10 @@ const useLocalStore = create(
           (project: ProjectType) => project.id === currentProjectId
         ) as ProjectType
       },
+      preference: initialPreference,
+      storePreference: (preference: PreferenceType) => {
+        set({ preference })
+      }
     }),
     { name: 'data mapping' }
   )
