@@ -10,42 +10,12 @@ import {
   MenubarTrigger,
   MenubarShortcut,
 } from '@/components/ui/menubar'
-
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { useLocalStore } from '@/lib/store'
 import { cutNodes, copyNodes, pasteNodes } from '@/components/nodes/utils'
 import { newNodeIdNumber } from '@/projects/utils'
 
-/* node JSON sample
-{
-  "id": "pj_1_node_2",
-  "type": "genericNode",
-  "position": {
-    "x": 456,
-    "y": 60
-  },
-  "data": {
-    "showName": true,
-    "showIcon": true,
-    "showDescription": false,
-    "hasContract": true,
-    "hasPiiFlow": true,
-    "hasNonPiiFlow": true,
-    "role": "PII Controller",
-    "country": "JP"
-  },
-  "width": 240,
-  "height": 286,
-  "selected": true,
-  "dragging": false,
-  "positionAbsolute": {
-    "x": 456,
-    "y": 60
-  }
-}
-*/
-
-export function EditMenu() {
+function EditMenu() {
   const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)
   const projects = useLocalStore((state) => state.projects)
 
@@ -65,17 +35,6 @@ export function EditMenu() {
     <MenubarMenu>
       <MenubarTrigger>Edit</MenubarTrigger>
       <MenubarContent>
-        <MenubarSub>
-          <MenubarSubTrigger>Find</MenubarSubTrigger>
-          <MenubarSubContent>
-            <MenubarItem disabled>Search the web</MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem disabled>Find...</MenubarItem>
-            <MenubarItem disabled>Find Next</MenubarItem>
-            <MenubarItem disabled>Find Previous</MenubarItem>
-          </MenubarSubContent>
-        </MenubarSub>
-        <MenubarSeparator />
         <MenubarItem onClick={handleCut}>
           Cut
           <MenubarShortcut>^X</MenubarShortcut>
@@ -88,7 +47,20 @@ export function EditMenu() {
           Paste
           <MenubarShortcut>^V</MenubarShortcut>
         </MenubarItem>
+        <MenubarSeparator />
+        <MenubarSub>
+          <MenubarSubTrigger>Find</MenubarSubTrigger>
+          <MenubarSubContent>
+            <MenubarItem disabled>Search the web</MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem disabled>Find...</MenubarItem>
+            <MenubarItem disabled>Find Next</MenubarItem>
+            <MenubarItem disabled>Find Previous</MenubarItem>
+          </MenubarSubContent>
+        </MenubarSub>
       </MenubarContent>
     </MenubarMenu>
   )
 }
+
+export { EditMenu }

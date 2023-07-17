@@ -8,8 +8,8 @@ export type NodeParamType = {
 }
 
 export type NodeDataType = {
-  entity_name?: string
-  country_name?: string
+  entity_name?: string // backward compatibility
+  country_name?: string // backward compatibility
   country?: string
   role?: string
   name?: string
@@ -23,6 +23,34 @@ export type NodeDataType = {
   hasNonPiiFlow?: boolean
 }
 
+/* node JSON sample
+{
+  "id": "pj_1_node_2",
+  "type": "genericNode",
+  "position": {
+    "x": 456,
+    "y": 60
+  },
+  "data": {
+    "showName": true,
+    "showIcon": true,
+    "showDescription": false,
+    "hasContract": true,
+    "hasPiiFlow": true,
+    "hasNonPiiFlow": true,
+    "role": "PII Controller",
+    "country": "JP"
+  },
+  "width": 240,
+  "height": 286,
+  "selected": true,
+  "dragging": false,
+  "positionAbsolute": {
+    "x": 456,
+    "y": 60
+  }
+}
+*/
 export type DataContextType = {
   nodeData: NodeDataType
   setNodeData: (data: NodeDataType) => void
