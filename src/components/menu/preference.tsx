@@ -5,7 +5,7 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar'
 import { Cog } from 'lucide-react'
-import { ProjectsDialog } from '@/projects'
+import { ProjectsDialog } from '@/components/projects'
 
 const PreferenceMenu = () => {
   return (

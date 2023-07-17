@@ -16,7 +16,7 @@ import {
   deleteNodes,
   selectNodes,
 } from '@/components/nodes/utils'
-import { newNodeIdNumber } from '@/projects/utils'
+import { newNodeIdNumber } from '@/components/projects/utils'
 
 function EditMenu() {
   const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)

@@ -17,7 +17,7 @@ import {
 
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
-import { newNodeId } from '@/projects/utils'
+import { newNodeId } from '@/components/projects/utils'
 
 export function ReuseMenu() {
   const { projects, currentProjectId } = useLocalStore()

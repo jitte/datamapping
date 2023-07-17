@@ -21,8 +21,8 @@ import { useLocalStore } from './lib/store'
 import { MyMenubar } from './components/menu'
 import { EdgeType } from './components/edges/utils'
 import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
-import { newNodeId, newNodeIdNumber } from './projects/utils'
-import { ProjectType } from './projects/types'
+import { newNodeId, newNodeIdNumber } from './components/projects/utils'
+import { ProjectType } from './components/projects/types'
 
 function DataFlowView() {
   // load projects from localStore

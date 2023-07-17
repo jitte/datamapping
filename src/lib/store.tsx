@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { ProjectType } from '@/projects/types'
+import { ProjectType } from '@/components/projects/types'
 
 export type LocalStoreType = {
   projects: ProjectType[],
