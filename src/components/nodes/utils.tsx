@@ -55,4 +55,23 @@ const pasteNodes = async (
   setNodes((nds: Node[]) => nds.concat(newNodes))
 }
 
-export { findNode, copyNodes, cutNodes, pasteNodes }
+const deleteNodes = (
+  nodes: Node[],
+  reactFlowInstance: ReactFlowInstance | null
+) => {
+  const selectedNodes = nodes.filter((node) => node.selected)
+  reactFlowInstance?.deleteElements({ nodes: selectedNodes })
+}
+
+const selectNodes = (
+  nodes: Node[],
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
+  selected: boolean
+) => {
+  nodes.map((node) => {
+    node.selected = selected
+  })
+  setNodes([...nodes])
+}
+
+export { findNode, copyNodes, cutNodes, pasteNodes, deleteNodes, selectNodes }

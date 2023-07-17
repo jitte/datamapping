@@ -12,7 +12,13 @@ import {
 } from '@/components/ui/menubar'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { useLocalStore } from '@/lib/store'
-import { cutNodes, copyNodes, pasteNodes } from '@/components/nodes/utils'
+import {
+  cutNodes,
+  copyNodes,
+  pasteNodes,
+  deleteNodes,
+  selectNodes,
+} from '@/components/nodes/utils'
 import { newNodeIdNumber } from '@/projects/utils'
 
 function EditMenu() {
@@ -31,6 +37,18 @@ function EditMenu() {
     pasteNodes(nodes, setNodes, newNodeIdNumber(projects))
   }
 
+  const handleDelete = () => {
+    deleteNodes(nodes, reactFlowInstance)
+  }
+
+  const handleSelect = () => {
+    selectNodes(nodes, setNodes, true)
+  }
+  
+  const handleUnSelect = () => {
+    selectNodes(nodes, setNodes, false)
+  }
+
   return (
     <MenubarMenu>
       <MenubarTrigger>Edit</MenubarTrigger>
@@ -46,6 +64,17 @@ function EditMenu() {
         <MenubarItem onClick={handlePaste}>
           Paste
           <MenubarShortcut>^V</MenubarShortcut>
+        </MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem onClick={handleDelete}>
+          Delete
+        </MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem onClick={handleSelect}>
+          Select All
+        </MenubarItem>
+        <MenubarItem onClick={handleUnSelect}>
+          UnSelect All
         </MenubarItem>
         <MenubarSeparator />
         <MenubarSub>

@@ -1,7 +1,7 @@
 import { Menubar } from '@/components/ui/menubar'
 
 import { FileMenu } from './FileMenu'
-import { EditMenu } from './EditMenu'
+import { EditMenu } from './edit'
 import { AlignMenu } from './align'
 import { ViewMenu } from './ViewMenu'
 import { ReuseMenu } from './ReuseMenu'
