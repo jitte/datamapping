@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { useReactFlow } from 'reactflow'
 import {
   MenubarContent,
@@ -12,30 +12,27 @@ import {
 import { Share2 } from 'lucide-react'
 
 import { useLocalStore } from '@/lib/store'
-import { GlobalContext } from '@/contexts'
 import { ProjectsDialog } from '@/projects'
 
 export function ProjectMenu() {
-  const projects = useLocalStore((state) => state.projects)
-  const { currentProject, setCurrentProject } = useContext(GlobalContext)
+  const { projects, currentProject, currentProjectId, storeCurrentProjectId } =
+    useLocalStore()
   const { fitView } = useReactFlow()
 
   useEffect(() => {
-    //console.log('at: ProjectMenu/useEffect')
     setTimeout(() => {
       fitView({ duration: 500 })
     }, 100)
-  }, [currentProject])
+  }, [currentProjectId])
 
   function handleChange(value: string) {
-    //console.log('at: ProjectMenu/handleChange')
-    const project = projects.find((project) => project.id === Number(value))
-    if (project) setCurrentProject(project)
+    console.log('at: ProjectMenu/handleChange', value)
+    storeCurrentProjectId(Number(value))
   }
   function ProjectList() {
     return (
       <MenubarRadioGroup
-        value={String(currentProject.id)}
+        value={String(currentProjectId)}
         onValueChange={(value) => handleChange(value)}
       >
         {projects.map((project) => (
@@ -52,7 +49,7 @@ export function ProjectMenu() {
       <MenubarTrigger>
         <div className="flex flex-row items-center gap-2">
           <Share2 />
-          {currentProject.name}
+          {currentProject().name}
         </div>
       </MenubarTrigger>
       <MenubarContent>

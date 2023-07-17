@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { Cog, Copy, Trash2, Plus } from 'lucide-react'
 import {
   Dialog,
@@ -14,16 +14,18 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import { useLocalStore } from '@/lib/store'
 import { newProjectId } from './utils'
-import { GlobalContext } from '@/contexts'
 import { initialProject } from '@/constants'
 import { ProjectType } from './types'
 import { DataTable } from './data-table'
 import { EditDialog } from './edit'
 
 function ProjectsTable() {
-  const projects = useLocalStore((state) => state.projects)
-  const storeProjects = useLocalStore((state) => state.storeProjects)
-  const { currentProject, setCurrentProject } = useContext(GlobalContext)
+  const {
+    projects,
+    storeProjects,
+    currentProjectId,
+    storeCurrentProjectId,
+  } = useLocalStore()
 
   const columns: ColumnDef<ProjectType>[] = [
     {
@@ -58,36 +60,38 @@ function ProjectsTable() {
     },
   ]
 
-	function handleDuplicate(id: number) {
-		console.log('at: handleDuplicate', { id })
-		const oldProject = projects.find((pj) => pj.id === id) as ProjectType
-		const newId = newProjectId(projects)
-		const newProject = {
-			id: newId,
-			name: `${oldProject.name} (${newId})`,
-			description: oldProject.description,
-			nodes: [...oldProject.nodes],
-			edges: [...oldProject.edges]
-		}
-		storeProjects([newProject, ...projects])
-	}
+  function handleDuplicate(id: number) {
+    console.log('at: ProjectTable/handleDuplicate', id)
+    const oldProject = projects.find((pj) => pj.id === id) as ProjectType
+    const newId = newProjectId(projects)
+    const newProject = {
+      id: newId,
+      name: `${oldProject.name} (${newId})`,
+      description: oldProject.description,
+      nodes: [...oldProject.nodes],
+      edges: [...oldProject.edges],
+    }
+    storeProjects([newProject, ...projects])
+    storeCurrentProjectId(newId)
+  }
 
   function handleDelete(id: number) {
-    console.log('at: handleDelete', { id, projects, currentProject })
+    console.log('at: ProjectTable/handleDelete', id)
     let newProjects = projects.filter((pj) => pj.id !== id)
-    if (id === currentProject.id) {
+    if (id === currentProjectId) {
       if (newProjects.length === 0) {
         newProjects = [initialProject(1)]
       }
-      setCurrentProject(newProjects[0])
+      storeCurrentProjectId(newProjects[0].id)
     }
     storeProjects(newProjects)
   }
 
   function handleNew() {
+    console.log('at: ProjectTable/handleNew')
     const newProject = initialProject(newProjectId(projects))
-    setCurrentProject(newProject)
     storeProjects([newProject, ...projects])
+    storeCurrentProjectId(newProject.id)
   }
 
   return (
@@ -106,7 +110,7 @@ export function ProjectsDialog() {
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger className="w-full pl-2 pr-2 py-1.5 text-left text-sm hover:bg-accent rounded-sm">
         <div className="flex flex-row items-center gap-2">
-          <Cog size={16}/>
+          <Cog size={16} />
           Edit Projects...
         </div>
       </DialogTrigger>

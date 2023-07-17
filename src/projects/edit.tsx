@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { Pencil } from 'lucide-react'
 import {
   Dialog,
@@ -15,22 +15,18 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@radix-ui/react-menubar'
 
 import { useLocalStore } from '@/lib/store'
-import { GlobalContext } from '@/contexts'
 import { ProjectType } from './types'
 
 export function EditDialog({ id }: { id: number }) {
-  const [open, setOpen] = useState(false)
-  const projects = useLocalStore((state) => state.projects)
+  const { projects, storeProjects } = useLocalStore()
   const project = projects.find((pj) => pj.id === id) as ProjectType
+  const [open, setOpen] = useState(false)
   const [name, setName] = useState(project.name)
   const [description, setDescription] = useState(project.description)
-  const { setCurrentProject } = useContext(GlobalContext)
-  const storeProjects = useLocalStore((state) => state.storeProjects)
 
   function onSubmit() {
     const newProject = { ...project, name, description }
     console.log('at: onSubmit', { newProject })
-    setCurrentProject(newProject)
     storeProjects([
       newProject,
       ...projects.filter((pj) => pj.id !== project.id),

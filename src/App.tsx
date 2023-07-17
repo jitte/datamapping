@@ -16,20 +16,25 @@ import { MyMenubar } from './components/menu'
 import { EdgeType } from './components/edges/utils'
 import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
 import { newNodeId, newNodeIdNumber } from './projects/utils'
+import { ProjectType } from './projects/types'
 
 function DataFlowView() {
   // load projects from localStore
-  const projects = useLocalStore((state) => state.projects)
-  const storeProjects = useLocalStore((state) => state.storeProjects)
+  const {
+    projects,
+    storeProjects,
+    currentProjectId,
+    currentProject,
+  } = useLocalStore()
 
   // current project from global context
-  const { currentProject, projectUpdated, setProjectUpdated } =
+  const { projectUpdated, setProjectUpdated } =
     useContext(GlobalContext)
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
-  const [nodes, setNodes] = useState(currentProject.nodes)
-  const [edges, setEdges] = useState(currentProject.edges)
+  const [nodes, setNodes] = useState(currentProject().nodes)
+  const [edges, setEdges] = useState(currentProject().edges)
 
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
@@ -51,23 +56,25 @@ function DataFlowView() {
 
   // update nodes and edges after changing current project
   useEffect(() => {
-    setNodes(currentProject.nodes)
-    setEdges(currentProject.edges)
-    console.log('at: useEffect(currentProject)', { currentProject, projects })
-  }, [currentProject, setNodes, setEdges])
+    const project = currentProject()
+    setNodes(project.nodes)
+    setEdges(project.edges)
+    console.log('at: useEffect(currentProjectId)', project)
+  }, [currentProject, currentProjectId, setNodes, setEdges])
 
   // save projects after changing nodes and edges
   useEffect(() => {
-    currentProject.nodes = nodes
-    currentProject.edges = edges
-    setProjectUpdated(true)
-    console.log('at: useEffect(nodes/edges)', { currentProject, projects })
+    const project = projects.find((pj) => pj.id === currentProjectId) as ProjectType
+    project.nodes = nodes
+    project.edges = edges
+    storeProjects(projects)
+    console.log('at: useEffect(nodes/edges)', project)
   }, [nodes, edges, storeProjects])
 
   // save project if project is updated
   useEffect(() => {
     if (projectUpdated) {
-      console.log('at: useEffect(projectUpated)', { currentProject, projects })
+      console.log('at: useEffect(projectUpated)', projects)
       storeProjects(projects)
       setProjectUpdated(false)
     }
@@ -132,7 +139,7 @@ function DataFlowView() {
 
       setNodes((nds: Node[]) => nds.concat(newNode))
     },
-    [reactFlowInstance]
+    [reactFlowInstance, projects, ref]
   )
 
   return (
@@ -181,20 +188,21 @@ function DataFlowView() {
 }
 
 export default function App() {
-  const projects = useLocalStore((state) => state.projects)
-  const storeProjects = useLocalStore((state) => state.storeProjects)
+  const { projects, storeProjects, currentProjectId, storeCurrentProjectId } =
+    useLocalStore()
+  const [projectUpdated, setProjectUpdated] = useState(false)
 
   if (projects.length === 0) {
     storeProjects([initialProject(1)])
+    storeCurrentProjectId(1)
   }
-  const [currentProject, setCurrentProject] = useState(projects[0])
-  const [projectUpdated, setProjectUpdated] = useState(false)
+  if (!currentProjectId) {
+    storeCurrentProjectId(projects[0].id)
+  }
 
   return (
     <GlobalContextProvider
       value={{
-        currentProject,
-        setCurrentProject,
         projectUpdated,
         setProjectUpdated,
       }}

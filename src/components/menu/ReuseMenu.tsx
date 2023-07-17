@@ -16,31 +16,31 @@ import {
 } from '@/components/ui/command'
 
 import { useLocalStore } from '@/lib/store'
-import { allNodes } from '@/projects/utils'
-import { GlobalContext } from '@/contexts'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { newNodeId } from '@/projects/utils'
 
 export function ReuseMenu() {
-  // imports from global context
-  const { currentProject } = useContext(GlobalContext)
-
-  // imports from dataflow context
+  const { projects, currentProjectId } = useLocalStore()
   const { nodes, setNodes } = useContext(DataFlowContext)
+  const [open, setOpen] = useState(false)
 
-  // all projects and nodes that has own entity name
-  const projects = useLocalStore((state) => state.projects)
-  const filteredNodes = allNodes(projects).filter(
-    (node) =>
-      (node.data.entity_name ?? '').length > 0 &&
-      !currentProject.nodes.find((nd) => nd.id === node.id)
-  )
+  let filteredNodes: Node[] = []
+  projects
+    .filter((pj) => pj.id !== currentProjectId)
+    .forEach((pj) => {
+      const namedNodes = pj.nodes.filter((node) => node.data.name)
+      filteredNodes.push(...namedNodes)
+    })
+
   function handleSelect(node: Node) {
     console.log('at: ReuseMenu', { node, nodes })
-    setNodes((nds) => nds.concat(node))
+    const newNode = { ...node }
+    newNode.id = newNodeId(projects)
+    newNode.data = { ...node.data }
+    setNodes((nds) => nds.concat(newNode))
     setOpen(false)
   }
 
-  const [open, setOpen] = useState(false)
   return (
     <MenubarMenu>
       <MenubarTrigger asChild>
@@ -61,7 +61,7 @@ export function ReuseMenu() {
           <CommandGroup>
             {filteredNodes.map((node) => (
               <CommandItem key={node.id} onSelect={() => handleSelect(node)}>
-                {node.data.entity_name}
+                {node.data.name}
               </CommandItem>
             ))}
           </CommandGroup>
