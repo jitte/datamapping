@@ -1,11 +1,11 @@
 import { Menubar } from '@/components/ui/menubar'
 
-import { FileMenu } from './FileMenu'
+import { FileMenu } from './file'
 import { EditMenu } from './edit'
 import { AlignMenu } from './align'
 import { ViewMenu } from './ViewMenu'
 import { ReuseMenu } from './ReuseMenu'
-import { ProjectMenu } from './ProjectMenu'
+import { ProjectMenu } from './projects'
 
 export function MyMenubar() {
   return (
