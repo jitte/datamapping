@@ -169,6 +169,7 @@ function DataFlowView() {
             minZoom={0.2}
             snapGrid={[GRID_SIZE, GRID_SIZE]}
             snapToGrid
+            multiSelectionKeyCode={['Meta', 'Control']}
           >
             <Controls />
             <MiniMap />
