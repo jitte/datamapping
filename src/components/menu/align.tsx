@@ -78,9 +78,11 @@ const alignMiddle = (
 ) => {
   const nds = selectedNodes(nodes)
   const minY = Math.min(...nds.map((node: Node) => node.position.y))
-  const maxY = Math.max(...nds.map((node: Node) => node.position.y))
+  const maxY = Math.max(
+    ...nds.map((node: Node) => node.position.y + (node.height ?? 0))
+  )
   nds.forEach((node: Node) => {
-    node.position.y = (minY + maxY) / 2
+    node.position.y = (minY + maxY - (node.height ?? 0)) / 2
   })
   setNode([...nodes])
 }
@@ -90,9 +92,11 @@ const alignBottom = (
   setNode: React.Dispatch<React.SetStateAction<Node[]>>
 ) => {
   const nds = selectedNodes(nodes)
-  const maxY = Math.max(...nds.map((node: Node) => node.position.y))
+  const maxY = Math.max(
+    ...nds.map((node: Node) => node.position.y + (node.height ?? 0))
+  )
   nds.forEach((node: Node) => {
-    node.position.y = maxY
+    node.position.y = maxY - (node.height ?? 0)
   })
   setNode([...nodes])
 }
@@ -105,11 +109,11 @@ const justifyHorizontal = (
   const len = nds.length
   if (len < 2) return
 
-  nds.sort((a: Node, b: Node) => a.position.x - b.position.x)
-  const minX = Math.min(...nds.map((node: Node) => node.position.x))
-  const maxX = Math.max(...nds.map((node: Node) => node.position.x))
+  nds.sort((a, b) => a.position.x - b.position.x)
+  const minX = Math.min(...nds.map((node) => node.position.x))
+  const maxX = Math.max(...nds.map((node) => node.position.x))
   const step = (maxX - minX) / (len - 1)
-  nds.forEach((node: Node, i: number) => {
+  nds.forEach((node, i: number) => {
     node.position.x = minX + step * i
   })
   setNode([...nodes])
@@ -123,12 +127,19 @@ const justifyVertical = (
   const len = nds.length
   if (len < 2) return
 
-  nds.sort((a: Node, b: Node) => a.position.y - b.position.y)
-  const minY = Math.min(...nds.map((node: Node) => node.position.y))
-  const maxY = Math.max(...nds.map((node: Node) => node.position.y))
-  const step = (maxY - minY) / (len - 1)
-  nds.forEach((node: Node, i: number) => {
-    node.position.y = minY + step * i
+  nds.sort((a, b) => a.position.y - b.position.y)
+  const minY = Math.min(...nds.map((node) => node.position.y))
+  const maxY = Math.max(
+    ...nds.map((node) => node.position.y + (node.height ?? 0))
+  )
+  const totalHeight = nds.reduce((sum, node) => {
+    return sum + (node.height ?? 0)
+  }, 0)
+  const step = (maxY - minY - totalHeight) / (len - 1)
+  let y = minY
+  nds.forEach((node) => {
+    node.position.y = y
+    y = y + (node.height ?? 0) + step
   })
   setNode([...nodes])
 }
