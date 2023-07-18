@@ -100,7 +100,7 @@ function DataFlowView() {
       console.log('at: onConnect', { connection, type })
       setEdges((eds: Edge[]) => addEdge({ ...connection, type }, eds))
     },
-    [setEdges]
+    [nodes, setEdges]
   )
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault()

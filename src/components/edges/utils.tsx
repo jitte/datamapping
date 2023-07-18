@@ -8,6 +8,7 @@ export function findEdge(edges: Edge[], id: string): Edge {
 export function EdgeType(source: string, target: string, nodes: Node[]) {
   const sourceNode = findNode(nodes, source)
   const targetNode = findNode(nodes, target)
+  //console.log('at: EdgeType', {source, target, nodes, sourceNode, targetNode})
   if (sourceNode === undefined || targetNode === undefined) return 'domestic' // default
 
   const sourceCountry = sourceNode.data.country ?? ''
