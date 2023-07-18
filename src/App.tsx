@@ -1,9 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-
-import ReactFlow, { useReactFlow, ReactFlowProvider } from 'reactflow'
+import ReactFlow, { useReactFlow, ReactFlowProvider, } from 'reactflow'
 import { MiniMap, Controls, Background, BackgroundVariant } from 'reactflow'
-import { Node, NodeChange, applyNodeChanges } from 'reactflow'
-import { Edge, EdgeChange, applyEdgeChanges, addEdge, Connection } from 'reactflow'
+import {
+  Node,
+  NodeChange,
+  applyNodeChanges,
+  Connection,
+  Edge,
+  EdgeChange,
+  applyEdgeChanges,
+  addEdge,
+  updateEdge,
+} from 'reactflow'
 import 'reactflow/dist/style.css'
 import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -90,6 +98,11 @@ function DataFlowView() {
     },
     [setEdges]
   )
+  const onEdgeUpdate = useCallback(
+    (oldEdge: Edge, newConnection: Connection) =>
+      setEdges((els) => updateEdge(oldEdge, newConnection, els)),
+    []
+  )
   const onConnect = useCallback(
     (connection: Connection) => {
       const type = EdgeType(
@@ -158,6 +171,7 @@ function DataFlowView() {
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onEdgeUpdate={onEdgeUpdate}
             onConnect={onConnect}
             onDrop={onDrop}
             onDragOver={onDragOver}
