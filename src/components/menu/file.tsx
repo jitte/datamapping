@@ -38,11 +38,11 @@ function DownloadMenu() {
     <MenubarSub>
       <MenubarSubTrigger>Download</MenubarSubTrigger>
       <MenubarSubContent>
-        <MenubarItem className="download-btn" onClick={() => onClick('svg')}>
-          SVG Image
-        </MenubarItem>
         <MenubarItem className="download-btn" onClick={() => onClick('png')}>
           PNG Image
+        </MenubarItem>
+        <MenubarItem className="download-btn" onClick={() => onClick('svg')}>
+          SVG Image
         </MenubarItem>
       </MenubarSubContent>
     </MenubarSub>
