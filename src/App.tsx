@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import ReactFlow, { useReactFlow, ReactFlowProvider, } from 'reactflow'
+import ReactFlow, { useReactFlow, ReactFlowProvider } from 'reactflow'
 import { MiniMap, Controls, Background, BackgroundVariant } from 'reactflow'
 import {
   Node,
@@ -31,15 +31,12 @@ import { EdgeType } from './components/edges/utils'
 import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
 import { newNodeId, newNodeIdNumber } from './components/projects/utils'
 import { ProjectType } from './components/projects/types'
+import { AutoLayout } from './lib/layout'
 
 function DataFlowView() {
-  // load projects from localStore
-  const {
-    projects,
-    storeProjects,
-    currentProjectId,
-    currentProject,
-  } = useLocalStore()
+  // project states
+  const { projects, storeProjects, currentProjectId, currentProject } =
+    useLocalStore()
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
@@ -48,6 +45,9 @@ function DataFlowView() {
 
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
+
+  //const [layout, /*setLayout*/] = useState(new AutoLayout())
+  const layout = new AutoLayout()
 
   useHotkeys('ctrl+x', () => {
     console.log('Ctrl+X pressed')
@@ -72,16 +72,49 @@ function DataFlowView() {
     //console.log('at: useEffect(currentProjectId)', project)
   }, [currentProject, currentProjectId, setNodes, setEdges])
 
-  // save projects after changing nodes and edges
+  // autolayout and save projects after changing nodes and edges
   useEffect(() => {
-    const project = projects.find((pj) => pj.id === currentProjectId) as ProjectType
-    project.nodes = nodes
-    project.edges = edges
-    storeProjects(projects)
-    console.log('at: useEffect(nodes/edges)', project)
+    layout.prepare(nodes, edges).simulate()
+
+    if (layout.stable()) {
+      // store projects
+      const project = projects.find(
+        (pj) => pj.id === currentProjectId
+      ) as ProjectType
+      project.nodes = nodes
+      project.edges = edges
+      storeProjects(projects)
+    } else {
+      layout.update()
+      setNodes([...nodes])
+    }
+    //console.log('at: useEffect(nodes/edges)', project)
   }, [nodes, edges, storeProjects])
 
   // callbacks
+  const onNodeDragStart = useCallback(
+    (event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
+      if (false) console.log('at: onNodeDragStart', event, nodeParam, nodesParam)
+      layout.pin(nodesParam)
+    },
+    []
+  )
+  const onNodeDrag = useCallback(
+    //(event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
+    //console.log('at: onNodeDrag', event, nodeParam, nodesParam)
+    () => {
+      layout.trigger() // set highest temperature
+    },
+    []
+  )
+  const onNodeDragStop = useCallback(
+    //(event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
+    //console.log('at: onNodeDragStop', event, nodeParam, nodesParam)
+    () => {
+      layout.pin([])
+    },
+    []
+  )
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
       //console.log('at: onNodesChange', { changes })
@@ -175,6 +208,9 @@ function DataFlowView() {
             onConnect={onConnect}
             onDrop={onDrop}
             onDragOver={onDragOver}
+            onNodeDragStart={onNodeDragStart}
+            onNodeDrag={onNodeDrag}
+            onNodeDragStop={onNodeDragStop}
             defaultEdgeOptions={{
               animated: true,
               style: { strokeWidth: 8 },
@@ -187,7 +223,11 @@ function DataFlowView() {
           >
             <Controls />
             <MiniMap />
-            <Background variant={BackgroundVariant.Dots} gap={GRID_SIZE} size={1} />
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={GRID_SIZE}
+              size={1}
+            />
           </ReactFlow>
         </div>
       </div>
