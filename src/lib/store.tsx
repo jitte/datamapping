@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { ProjectType } from '@/components/projects/types'
 
 export type LocalStoreType = {
-  projects: ProjectType[],
+  projects: ProjectType[]
   storeProjects: (projects: ProjectType[]) => void
   currentProjectId: number
   storeCurrentProjectId: (id: number) => void
@@ -13,10 +13,38 @@ export type LocalStoreType = {
 }
 
 export type PreferenceType = {
-  showOnlyNamedNode?: boolean
+  showOnlyNamedNode: boolean
+  enableAutoLayout: boolean
+  layoutParam: {
+    epsilon: number
+    decayRate: number
+    nodeRadius: number
+    clipSize: number
+    stressWeight: {
+      center: number
+      tension: number
+      collision: number
+      crossing: number
+      rotation: number
+    }
+  }
 }
 const initialPreference: PreferenceType = {
-  showOnlyNamedNode: true
+  showOnlyNamedNode: true,
+  enableAutoLayout: false,
+  layoutParam: {
+    epsilon: 0.1,
+    decayRate: 0.95,
+    nodeRadius: 150,
+    clipSize: 500,
+    stressWeight: {
+      center: 10,
+      tension: 10,
+      collision: 50,
+      crossing: 50,
+      rotation: 10,
+    },
+  },
 }
 
 const useLocalStore = create(
@@ -39,7 +67,7 @@ const useLocalStore = create(
       preference: initialPreference,
       storePreference: (preference: PreferenceType) => {
         set({ preference })
-      }
+      },
     }),
     { name: 'data mapping' }
   )

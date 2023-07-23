@@ -30,12 +30,11 @@ import { MyMenubar } from './components/menu'
 import { EdgeType } from './components/edges/utils'
 import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
 import { newNodeId, newNodeIdNumber } from './components/projects/utils'
-import { ProjectType } from './components/projects/types'
 import { AutoLayout } from './lib/layout'
 
 function DataFlowView() {
   // project states
-  const { projects, storeProjects, currentProjectId, currentProject } =
+  const { projects, storeProjects, currentProjectId, currentProject, preference } =
     useLocalStore()
 
   // reactflow states
@@ -74,22 +73,26 @@ function DataFlowView() {
 
   // autolayout and save projects after changing nodes and edges
   useEffect(() => {
-    layout.prepare(nodes, edges).simulate()
-
-    if (layout.stable()) {
-      // store projects
-      const project = projects.find(
-        (pj) => pj.id === currentProjectId
-      ) as ProjectType
+    const updateProject = () => {
+      const project = currentProject()
       project.nodes = nodes
       project.edges = edges
       storeProjects(projects)
+    }
+    if (preference.enableAutoLayout) {
+      layout.prepare(nodes, edges).simulate()
+
+      if (layout.stable()) {
+        updateProject()
+      } else {
+        layout.update()
+        setNodes([...nodes])
+      }
     } else {
-      layout.update()
-      setNodes([...nodes])
+      updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', project)
-  }, [nodes, edges, storeProjects])
+  }, [nodes, edges, preference])
 
   // callbacks
   const onNodeDragStart = useCallback(
