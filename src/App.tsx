@@ -178,7 +178,7 @@ function DataFlowView() {
         data: { ...roleInfo[role].defaults, role },
       }
       console.log('at: onDrop', { event, newNode })
-
+      layout.trigger()
       setNodes((nds: Node[]) => nds.concat(newNode))
     },
     [reactFlowInstance, projects, ref]
