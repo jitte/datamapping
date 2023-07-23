@@ -5,13 +5,16 @@ type vNodeType = {
   original: Node
   position: VectorType
   radius: number
-  sourceMap: mapType<Node>
-  targetMap: mapType<Node>
+  sourceMap: mapType<vEdgeType>
+  targetMap: mapType<vEdgeType>
   vector: Vector
 }
 type vEdgeType = {
+  original: Edge
   source: vNodeType
   target: vNodeType
+  sourcePosition: VectorType
+  targetPosition: VectorType
 }
 type mapType<T> = {
   [key: string]: T
@@ -24,10 +27,10 @@ const alParamNodeRadius = 150
 const alParamClipSize = 500
 const alParamStressWeight: mapType<number> = {
   center: 10,
-  tension: 10,
+  tension: 30,
   collision: 50,
   crossing: 50,
-  rotation: 10,
+  rotation: 30,
 }
 
 const stressCenter = (vnode: vNodeType, center: VectorType): Vector => {
@@ -37,15 +40,23 @@ const stressCenter = (vnode: vNodeType, center: VectorType): Vector => {
 }
 
 const stressTension = (vnode: vNodeType): Vector => {
-  const stress = (nodeMap: mapType<Node>): Vector => {
+  const stress = (nodeMap: mapType<vEdgeType>, negate: boolean): Vector => {
     const keys: string[] = Object.keys(nodeMap)
-    return Vector.sum(
+    const vector = Vector.sum(
       keys.map((key) =>
-        Vector.vector(vnode.position, nodeMap[key].position).normalize()
+        Vector.vector(
+          nodeMap[key].sourcePosition,
+          nodeMap[key].targetPosition
+        ).normalize()
       )
     )
+    if (negate) vector.negate()
+    return vector
   }
-  return Vector.sum([stress(vnode.sourceMap), stress(vnode.targetMap)])
+  return Vector.sum([
+    stress(vnode.sourceMap, false),
+    stress(vnode.targetMap, true),
+  ])
 }
 
 const stressGravity = (r: number, d: number): number => {
@@ -150,44 +161,41 @@ const stressCrossing = (
 }
 
 const stressRotation = (vnode: vNodeType): Vector => {
-  const stress = (nodeMap: mapType<Node>): Vector[] => {
+  const stress = (nodeMap: mapType<vEdgeType>, negate: boolean): Vector[] => {
     const keys: string[] = Object.keys(nodeMap)
     return keys.map((key) => {
       const vector = Vector.vector(
-        vnode.position,
-        nodeMap[key].position
+        nodeMap[key].sourcePosition,
+        nodeMap[key].targetPosition
       ).normalize()
+      if (negate) vector.negate()
       vector.x = 0
       return vector
     })
   }
-  return Vector.sum([...stress(vnode.sourceMap), ...stress(vnode.targetMap)])
+  return Vector.sum([
+    ...stress(vnode.sourceMap, false),
+    ...stress(vnode.targetMap, true),
+  ])
 }
 
 class AutoLayout {
   nodes: Node[] = []
   edges: Edge[] = []
+  nodeMap: mapType<Node> = {}
+  edgeMap: mapType<Edge> = {}
   vnodes: vNodeType[] = []
   vedges: vEdgeType[] = []
+  vnodeMap: mapType<vNodeType> = {}
+  vedgeMap: mapType<vEdgeType> = {}
   center: Vector = Vector.zero()
   simulated: number = 0
+
   static temperature: number = 0
   static pinnedNodes: mapType<boolean> = {}
 
   constructor() {
     //console.log('at: AutoLayout/constructor')
-  }
-
-  reset = (): AutoLayout => {
-    this.nodes = []
-    this.edges = []
-    this.vnodes = []
-    this.vedges = []
-    this.center = Vector.zero()
-    this.simulated = 0
-    AutoLayout.temperature = 0
-    AutoLayout.pinnedNodes = {}
-    return this
   }
 
   trigger = (): AutoLayout => {
@@ -199,29 +207,24 @@ class AutoLayout {
   prepare = (nodes: Node[], edges: Edge[]): AutoLayout => {
     this.nodes = nodes
     this.edges = edges
-    this.vnodes = this.prepareVnodes()
-    this.vedges = this.prepareVedges()
+    this.prepareVnodes()
+    this.prepareVedges()
+    this.prepareMaps()
     this.center = Vector.average(this.vnodes.map((vnode) => vnode.position))
     //console.log('at: AutoLayout/prepare', { nodes, edges, this: this })
     return this
   }
 
-  private prepareVnodes = (): vNodeType[] => {
+  private prepareVnodes = (): void => {
+    // nodeMap
     const nodeMap: mapType<Node> = {}
     this.nodes.forEach((node) => {
       nodeMap[node.id] = node
     })
+    this.nodeMap = nodeMap
+
+    // vnodes
     const vnodes: vNodeType[] = this.nodes.map((node) => {
-      const sourceMap: mapType<Node> = {}
-      const targetMap: mapType<Node> = {}
-      this.edges.forEach((edge) => {
-        if (node.id === edge.source) {
-          sourceMap[node.id] = nodeMap[edge.target]
-        }
-        if (node.id === edge.target) {
-          targetMap[node.id] = nodeMap[edge.source]
-        }
-      })
       return {
         original: node,
         position: {
@@ -229,23 +232,75 @@ class AutoLayout {
           y: node.position.y + (node.height ?? 0),
         },
         radius: alParamNodeRadius,
-        sourceMap: sourceMap,
-        targetMap: targetMap,
+        sourceMap: {},
+        targetMap: {},
         vector: Vector.zero(),
       }
     })
-    return vnodes
-  }
+    this.vnodes = vnodes
 
-  private prepareVedges = (): vEdgeType[] => {
+    // vnodeMap
     const vnodeMap: mapType<vNodeType> = {}
     this.vnodes.forEach((vnode) => {
       vnodeMap[vnode.original.id] = vnode
     })
-    const vedges: vEdgeType[] = this.edges.map((edge) => {
-      return { source: vnodeMap[edge.source], target: vnodeMap[edge.target] }
+    this.vnodeMap = vnodeMap
+  }
+
+  private prepareVedges = (): void => {
+    // edgeMap
+    const edgeMap: mapType<Edge> = {}
+    this.edges.forEach((edge)=>{
+      edgeMap[edge.id] = edge
     })
-    return vedges
+    this.edgeMap = edgeMap
+
+    // vedges
+    const vedges: vEdgeType[] = this.edges.map((edge) => {
+      const source = this.vnodeMap[edge.source]
+      const target = this.vnodeMap[edge.target]
+      const vedge: vEdgeType = {
+        original: edge,
+        source,
+        target,
+        sourcePosition: {
+          x: source.position.x + source.radius,
+          y: source.position.y,
+        },
+        targetPosition: {
+          x: target.position.x - target.radius,
+          y: target.position.y,
+        },
+      }
+      return vedge
+    })
+    this.vedges = vedges
+    // vedges
+    const vedgeMap: mapType<vEdgeType> = {}
+    this.vedges.forEach((vedge) => {
+      vedgeMap[vedge.original.id] = vedge
+    })
+    this.vedgeMap = vedgeMap
+  }
+
+  private prepareMaps = (): void => {
+    this.nodes.map((node) => {
+      const sourceMap: mapType<vEdgeType> = {}
+      const targetMap: mapType<vEdgeType> = {}
+      this.edges.forEach((edge) => {
+        if (node.id === edge.source) {
+          sourceMap[edge.id] = this.vedgeMap[edge.target]
+        }
+        if (node.id === edge.target) {
+          targetMap[edge.id] = this.vedgeMap[edge.source]
+        }
+      })
+      this.vnodeMap[node.id] = {
+        ...this.vnodeMap[node.id],
+        sourceMap,
+        targetMap,
+      }
+    })
   }
 
   simulate = (): AutoLayout => {
