@@ -250,7 +250,7 @@ class AutoLayout {
   private prepareVedges = (): void => {
     // edgeMap
     const edgeMap: mapType<Edge> = {}
-    this.edges.forEach((edge)=>{
+    this.edges.forEach((edge) => {
       edgeMap[edge.id] = edge
     })
     this.edgeMap = edgeMap
@@ -284,22 +284,19 @@ class AutoLayout {
   }
 
   private prepareMaps = (): void => {
-    this.nodes.map((node) => {
+    this.vnodes.map((vnode) => {
       const sourceMap: mapType<vEdgeType> = {}
       const targetMap: mapType<vEdgeType> = {}
       this.edges.forEach((edge) => {
-        if (node.id === edge.source) {
-          sourceMap[edge.id] = this.vedgeMap[edge.target]
+        if (vnode.original.id === edge.source) {
+          sourceMap[edge.target] = this.vedgeMap[edge.id]
         }
-        if (node.id === edge.target) {
-          targetMap[edge.id] = this.vedgeMap[edge.source]
+        if (vnode.original.id === edge.target) {
+          targetMap[edge.source] = this.vedgeMap[edge.id]
         }
       })
-      this.vnodeMap[node.id] = {
-        ...this.vnodeMap[node.id],
-        sourceMap,
-        targetMap,
-      }
+      vnode.sourceMap = sourceMap
+      vnode.targetMap = targetMap
     })
   }
 
@@ -364,14 +361,14 @@ class AutoLayout {
   stable = (): boolean => {
     const epsilon =
       (this.simulated * AutoLayout.temperature) / alParamTemperature
-    /*
-    console.log('at: AutoLayout/stable', {
-      epsilon,
-      temperature: AutoLayout.temperature,
-      stable: epsilon < alParamEpsilon,
-      this: this,
-    })
-    */
+    if (false) {
+      console.log('at: AutoLayout/stable', {
+        epsilon,
+        temperature: AutoLayout.temperature,
+        stable: epsilon < alParamEpsilon,
+        this: this,
+      })
+    }
     return epsilon < alParamEpsilon
   }
 }
