@@ -30,10 +30,6 @@ const alParamStressWeight: mapType<number> = {
   rotation: 10,
 }
 
-const centerPosition = (vnodes: vNodeType[]): Vector => {
-  return Vector.average(vnodes.map((vnode) => vnode.position))
-}
-
 const stressCenter = (vnode: vNodeType, center: VectorType): Vector => {
   const vector = Vector.vector(vnode.position, center).normalize()
   //console.log('at: stressCenter', {vnode, center, vector})
@@ -205,8 +201,7 @@ class AutoLayout {
     this.edges = edges
     this.vnodes = this.prepareVnodes()
     this.vedges = this.prepareVedges()
-    this.center = centerPosition(this.vnodes)
-
+    this.center = Vector.average(this.vnodes.map((vnode) => vnode.position))
     //console.log('at: AutoLayout/prepare', { nodes, edges, this: this })
     return this
   }
