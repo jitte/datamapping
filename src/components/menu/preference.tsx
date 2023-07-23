@@ -1,7 +1,7 @@
 import {
   MenubarContent,
   MenubarMenu,
-  MenubarItem,
+  MenubarSub,
   MenubarTrigger,
   MenubarSeparator,
   MenubarCheckboxItem,
@@ -26,9 +26,9 @@ const PreferenceMenu = () => {
         <Cog size={16} />
       </MenubarTrigger>
       <MenubarContent>
-        <MenubarItem asChild>
+        <MenubarSub >
           <ProjectsDialog />
-        </MenubarItem>
+        </MenubarSub>
         <MenubarSeparator />
         <MenubarCheckboxItem
           onCheckedChange={handleEnableAutoLayout}
