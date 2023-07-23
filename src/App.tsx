@@ -92,7 +92,7 @@ function DataFlowView() {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', project)
-  }, [nodes, edges, preference])
+  }, [nodes, edges, preference, layout])
 
   // callbacks
   const onNodeDragStart = useCallback(
