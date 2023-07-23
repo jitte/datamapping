@@ -34,8 +34,13 @@ import { AutoLayout } from './lib/layout'
 
 function DataFlowView() {
   // project states
-  const { projects, storeProjects, currentProjectId, currentProject, preference } =
-    useLocalStore()
+  const {
+    projects,
+    storeProjects,
+    currentProjectId,
+    currentProject,
+    preference,
+  } = useLocalStore()
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
@@ -97,10 +102,11 @@ function DataFlowView() {
   // callbacks
   const onNodeDragStart = useCallback(
     (event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
-      if (false) console.log('at: onNodeDragStart', event, nodeParam, nodesParam)
+      if (false)
+        console.log('at: onNodeDragStart', event, nodeParam, nodesParam)
       layout.pin(nodesParam)
     },
-    []
+    [layout]
   )
   const onNodeDrag = useCallback(
     //(event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
@@ -108,7 +114,7 @@ function DataFlowView() {
     () => {
       layout.trigger() // set highest temperature
     },
-    []
+    [layout]
   )
   const onNodeDragStop = useCallback(
     //(event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
@@ -116,7 +122,7 @@ function DataFlowView() {
     () => {
       layout.pin([])
     },
-    []
+    [layout]
   )
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
@@ -181,7 +187,7 @@ function DataFlowView() {
       layout.trigger()
       setNodes((nds: Node[]) => nds.concat(newNode))
     },
-    [reactFlowInstance, projects, ref]
+    [reactFlowInstance, ref, projects, layout]
   )
 
   return (
