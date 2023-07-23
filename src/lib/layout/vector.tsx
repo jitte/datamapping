@@ -38,9 +38,13 @@ class Vector {
   normalize = (unit: number = 1): Vector => {
     if (this.x === 0 && this.y === 0) return this
 
-    const r = this.r()
-    this.x = (this.x * unit) / r
-    this.y = (this.y * unit) / r
+    this.multiple(unit / this.r())
+    return this
+  }
+
+  multiple = (unit: number): Vector => {
+    this.x = this.x * unit
+    this.y = this.y * unit
     return this
   }
 
@@ -79,11 +83,5 @@ class Vector {
 }
 
 const distance = Vector.distance
-
-/*const distance = (pos1: VectorType, pos2: VectorType): number => {
-  const dx: number = pos1.x - pos2.x
-  const dy: number = pos1.y - pos2.y
-  return Math.sqrt(dx * dx + dy * dy)
-}*/
 
 export { Vector, distance }
