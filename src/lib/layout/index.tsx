@@ -27,8 +27,8 @@ const alParamNodeRadius = 200
 const alParamClipSize = 500
 const alParamStressWeight: mapType<number> = {
   center: 10,
-  tension: 30,
-  collision: 100,
+  tension: 10,
+  collision: 30,
   crossing: 0,
   rotation: 0,
 }
@@ -332,7 +332,10 @@ class AutoLayout {
           return Vector.zero()
       }
     }
-    return Vector.sum(keys.map((key) => stress(key)))
+    const vectors: Vector[] = keys.map((key) =>
+      stress(key).multiple(weight[key])
+    )
+    return Vector.sum(vectors)
   }
 
   update = (): AutoLayout => {
