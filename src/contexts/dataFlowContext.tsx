@@ -1,5 +1,6 @@
 import { createContext, ReactNode } from 'react'
 import { Node, Edge, ReactFlowInstance } from 'reactflow'
+import { AutoLayout } from '@/lib/layout'
 
 type DataFlowContextType = {
   reactFlowInstance: ReactFlowInstance | null
@@ -8,6 +9,8 @@ type DataFlowContextType = {
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>
   edges: Edge[]
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>
+  layout: AutoLayout | null,
+  setLayout: React.Dispatch<React.SetStateAction<AutoLayout>>
 }
 
 export const DataFlowContext = createContext<DataFlowContextType>({
@@ -17,6 +20,8 @@ export const DataFlowContext = createContext<DataFlowContextType>({
   setNodes: () => {},
   edges: [],
   setEdges: () => {},
+  layout: null,
+  setLayout: () => {}
 })
 
 export function DataFlowContextProvider({

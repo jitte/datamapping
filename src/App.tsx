@@ -42,11 +42,11 @@ function DataFlowView() {
   const [nodes, setNodes] = useState(currentProject().nodes)
   const [edges, setEdges] = useState(currentProject().edges)
 
+  // layout state
+  const [layout, setLayout] = useState(new AutoLayout())
+
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
-
-  //const [layout, /*setLayout*/] = useState(new AutoLayout())
-  const layout = new AutoLayout()
 
   useHotkeys('ctrl+x', () => {
     console.log('Ctrl+X pressed')
@@ -193,6 +193,8 @@ function DataFlowView() {
         setNodes,
         edges,
         setEdges,
+        layout,
+        setLayout,
       }}
     >
       <div className="flex flex-col">
