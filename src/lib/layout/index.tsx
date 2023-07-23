@@ -23,14 +23,14 @@ type mapType<T> = {
 const alParamEpsilon = 0.1
 const alParamTemperature = 100
 const alParamDecayRate = 0.95
-const alParamNodeRadius = 150
+const alParamNodeRadius = 200
 const alParamClipSize = 500
 const alParamStressWeight: mapType<number> = {
   center: 10,
   tension: 30,
-  collision: 50,
-  crossing: 50,
-  rotation: 30,
+  collision: 100,
+  crossing: 0,
+  rotation: 0,
 }
 
 const stressCenter = (vnode: vNodeType, center: VectorType): Vector => {
