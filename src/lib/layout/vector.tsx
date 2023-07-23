@@ -72,12 +72,18 @@ class Vector {
       ? Vector.zero()
       : new Vector({ x: vec.x / len, y: vec.y / len })
   }
+
+  static distance = (pos1: VectorType, pos2: VectorType): number => {
+    return Vector.vector(pos1, pos2).r()
+  }
 }
 
-const distance = (pos1: VectorType, pos2: VectorType): number => {
+const distance = Vector.distance
+
+/*const distance = (pos1: VectorType, pos2: VectorType): number => {
   const dx: number = pos1.x - pos2.x
   const dy: number = pos1.y - pos2.y
   return Math.sqrt(dx * dx + dy * dy)
-}
+}*/
 
 export { Vector, distance }
