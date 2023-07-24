@@ -35,6 +35,14 @@ class Vector {
     return Math.asin(this.y / this.r())
   }
 
+  rotate = (dTheta: number): Vector => {
+    const newTheta = this.theta() + dTheta
+    const r = this.r()
+    this.x = r * Math.cos(newTheta)
+    this.y = r * Math.sin(newTheta)
+    return this
+  }
+
   normalize = (unit: number = 1): Vector => {
     if (this.x === 0 && this.y === 0) return this
 
