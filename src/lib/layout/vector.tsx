@@ -32,7 +32,13 @@ class Vector {
   }
 
   theta = (): number => {
-    return Math.asin(this.y / this.r())
+    if (this.y > 0) {
+      // 0 < theta < PI
+      return Math.acos(this.x / this.r())
+    } else {
+      // -PI <= theta <= 0
+      return -Math.acos(this.x / this.r())
+    }
   }
 
   rotate = (dTheta: number): Vector => {
