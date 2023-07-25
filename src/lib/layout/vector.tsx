@@ -91,6 +91,8 @@ class Vector {
       : new Vector({ x: vec.x / len, y: vec.y / len })
   }
 
+  static center = Vector.average
+
   static distance = (pos1: VectorType, pos2: VectorType): number => {
     return Vector.vector(pos1, pos2).r()
   }
