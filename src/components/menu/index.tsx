@@ -9,6 +9,7 @@ import {
 import { Flame } from 'lucide-react'
 
 import { FileMenu } from './file'
+import { InsertMenu } from './insert'
 import { EditMenu } from './edit'
 import { AlignMenu } from './align'
 import { FindMenu } from './find'
@@ -60,6 +61,7 @@ export function MyMenubar() {
   return (
     <Menubar className="bg-white/50">
       <FileMenu />
+      <InsertMenu />
       <EditMenu />
       <AlignMenu />
       <FindMenu />

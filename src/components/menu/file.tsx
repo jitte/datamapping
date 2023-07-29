@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useReactFlow, getRectOfNodes } from 'reactflow'
-import { Grip } from 'lucide-react'
 import {
   MenubarContent,
   MenubarItem,
@@ -24,7 +23,6 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { useLocalStore } from '@/lib/store'
-import { roleInfo, roleList } from '@/constants'
 import { downloadImage } from '@/lib/image'
 
 function DownloadMenu() {
@@ -120,44 +118,10 @@ function ExportProjects() {
 }
 
 export function FileMenu() {
-  const items = roleList
-
-  function EntityItems() {
-    const onDragStart = (event: React.DragEvent, role: string) => {
-      event.dataTransfer.setData('application/reactflow', role)
-      event.dataTransfer.effectAllowed = 'move'
-    }
-    return items.map((item) => {
-      const Icon = roleInfo[item].icon
-      return (
-        <MenubarItem
-          key={item}
-          draggable
-          onDragStart={(event) => onDragStart(event, item)}
-        >
-          <div className="flex flex-row items-center w-full gap-2">
-            <Icon size={16} />
-            {item}
-            <div className="grow" />
-            <Grip size={10} />
-          </div>
-        </MenubarItem>
-      )
-    })
-  }
   return (
     <MenubarMenu>
       <MenubarTrigger>File</MenubarTrigger>
       <MenubarContent>
-        <MenubarSub>
-          <MenubarSubTrigger>New Entity</MenubarSubTrigger>
-          <MenubarSubContent>
-            <div className="text-xs">Drag item to create item</div>
-            <MenubarSeparator />
-            <EntityItems />
-          </MenubarSubContent>
-        </MenubarSub>
-        <MenubarSeparator />
         <DownloadMenu />
         <MenubarSeparator />
         <MenubarItem disabled>Import...</MenubarItem>
