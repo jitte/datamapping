@@ -96,6 +96,25 @@ class Vector {
   static distance = (pos1: VectorType, pos2: VectorType): number => {
     return Vector.vector(pos1, pos2).r()
   }
+
+  static perpendicular = (
+    source: VectorType,
+    target: VectorType,
+    center: VectorType
+  ): Vector => {
+    const dx: number = target.x - source.x
+    const dy: number = target.y - source.x
+    if (dx === 0 && dy === 0) return Vector.zero()
+
+    const dx2 = dx * dx
+    const dy2 = dy * dy
+    const dxdy = dx * dy
+    const x =
+      (dxdy * (center.y - source.y) - dy2 * (center.x - source.x)) / (dx2 + dy2)
+    const y =
+      (dxdy * (center.x - source.x) - dx2 * (center.y - source.y)) / (dx2 + dy2)
+    return new Vector({ x, y })
+  }
 }
 
 const distance = Vector.distance
