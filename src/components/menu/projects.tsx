@@ -8,9 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Share2 } from 'lucide-react'
 
 import { useLocalStore } from '@/lib/store'
+import { ProjectsDialog } from '@/components/projects'
 
 export function ProjectMenu() {
   const { projects, currentProject, currentProjectId, storeCurrentProjectId } =
@@ -31,11 +31,8 @@ export function ProjectMenu() {
   return (
     <MenubarMenu>
       <div className="flex flex-row items-center gap-2">
-        <Share2 size={24} />
-        <Select
-          value={String(currentProjectId)}
-          onValueChange={handleChange}
-        >
+        <ProjectsDialog />
+        <Select value={String(currentProjectId)} onValueChange={handleChange}>
           <SelectTrigger className="h-8 focus:ring-0">
             <SelectValue>{currentProject().name}</SelectValue>
           </SelectTrigger>
