@@ -109,7 +109,7 @@ export function ProjectsDialog() {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>
-        <Pencil size={20} className='ml-2' />
+        <Pencil size={20} />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
