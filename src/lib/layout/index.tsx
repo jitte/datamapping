@@ -1,7 +1,7 @@
 import { Node, Edge, ReactFlowInstance, Viewport } from 'reactflow'
 import { Vector, VectorType, XY, distance } from './vector'
 
-type vNodeType = {
+export type vNodeType = {
   original: Node
   position: VectorType
   width: number
@@ -65,12 +65,14 @@ class AutoLayout {
     const x = window.innerWidth / 2
     const y = window.innerHeight / 2
     AutoLayout.center = this.reactflowInstance.project({ x, y })
-    console.log(
-      window.innerWidth,
-      window.innerHeight,
-      viewport,
-      AutoLayout.center
-    )
+    if (false) {
+      console.log(
+        window.innerWidth,
+        window.innerHeight,
+        viewport,
+        AutoLayout.center
+      )
+    }
     return this
   }
 
