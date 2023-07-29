@@ -1,4 +1,4 @@
-import { Node, Edge } from 'reactflow'
+import { Node, Edge, ReactFlowInstance } from 'reactflow'
 import { Vector, VectorType, XY, distance } from './vector'
 
 type vNodeType = {
@@ -49,19 +49,20 @@ class AutoLayout {
 
   static temperature: number = 0
   static pinnedNodes: mapType<boolean> = {}
-  static center: Vector = Vector.zero()
+  static center: VectorType = Vector.zero()
 
-  constructor() {
+  constructor(public reactflowInstance: ReactFlowInstance) {
     //console.log('at: AutoLayout/constructor')
   }
 
   trigger = (): AutoLayout => {
     AutoLayout.temperature = alParamTemperature
-    //console.log('at: AutoLayout/trigger', AutoLayout.temperature)
-    if (!this.vnodes || this.vnodes.length === 0) return this
-    AutoLayout.center = Vector.center(
-      this.vnodes.map((vnode) => vnode.position)
-    )
+    
+    //const viewport: Viewport = this.reactflowInstance.getViewport()
+    const x = window.innerWidth / 2
+    const y = window.innerHeight / 2
+    AutoLayout.center = this.reactflowInstance.project({x, y})
+    //console.log(window.innerWidth, window.innerHeight, viewport, AutoLayout.center)
     return this
   }
 

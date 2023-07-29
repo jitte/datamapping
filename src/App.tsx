@@ -48,7 +48,7 @@ function DataFlowView() {
   const [edges, setEdges] = useState(currentProject().edges)
 
   // layout state
-  const [layout, setLayout] = useState(new AutoLayout())
+  const [layout, setLayout] = useState(new AutoLayout(reactFlowInstance))
 
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)

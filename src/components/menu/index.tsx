@@ -14,12 +14,14 @@ import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { AutoLayout } from '@/lib/layout'
 
 export function MyMenubar() {
-  const { setLayout } = useContext(DataFlowContext)
+  const { setLayout, reactFlowInstance } = useContext(DataFlowContext)
 
   const handleTemperature = () => {
-    const layout = new AutoLayout()
-    layout.trigger()
-    setLayout(layout)
+    if (reactFlowInstance) {
+      const layout = new AutoLayout(reactFlowInstance)
+      layout.trigger()
+      setLayout(layout)
+    }
   }
   return (
     <Menubar className="bg-white/50">
