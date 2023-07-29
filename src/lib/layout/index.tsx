@@ -294,9 +294,9 @@ class AutoLayout {
       return Vector.vector(vnode.position, AutoLayout.center).normalize()
     } else {
       return Vector.vector(vnode.position, {
-        x: vnode.rank * alParamOrbitRadius * 2,
+        x: vnode.rank * alParamOrbitRadius,
         y: vnode.position.y,
-      }).normalize()
+      })
     }
   }
 
@@ -312,7 +312,7 @@ class AutoLayout {
       const orbit: number = alParamOrbitRadius
       if (d < orbit) {
         // push each other
-        vector.normalize(d / orbit - 2)
+        vector.normalize((d - orbit) / 2)
       } else {
         // pull each other
         vector.normalize(2 - (orbit * orbit) / (d * d))
@@ -341,7 +341,7 @@ class AutoLayout {
       if (dm === ds || dm === dt) return Vector.zero()
       if (dp > alParamOrbitRadius) return Vector.zero()
 
-      const unit = 1 - dp / alParamOrbitRadius
+      const unit = -10 //(dp - alParamOrbitRadius) / 5
       return vector.normalize(unit)
     }
     const vectors: Vector[] = this.vedges.map((ve) => stress(ve))
