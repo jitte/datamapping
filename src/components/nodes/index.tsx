@@ -1,12 +1,20 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { cn } from '@/lib/utils'
 
-import { FlowComponent } from './flow'
-
 import { roleInfo } from '@/constants'
-import { CountryFlag } from './config/country'
-import { ConfigDialog } from './config'
 import { NodeParamType, NodeConfigContext } from './types'
+import { FlowComponent } from './flow'
+import { ConfigDialog } from './config'
+import { CountryFlag } from './config/country'
+
+import { useLocalStore } from '@/lib/store'
+import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { vNodeType } from '@/lib/layout'
 
 export function GenericNode({
   id,
@@ -14,6 +22,9 @@ export function GenericNode({
   type,
   selected,
 }: NodeParamType): JSX.Element {
+  const { layout } = useContext(DataFlowContext)
+  const { preference } = useLocalStore()
+
   const [nodeData, setNodeData] = useState({ ...data })
   const role = data.role ?? 'Other'
   const info = roleInfo[role]
@@ -36,6 +47,46 @@ export function GenericNode({
   function DescriptionComponent() {
     return data.showDescription && data.description ? (
       <div className="text-sm">{data.description}</div>
+    ) : null
+  }
+
+  const DebugInfo = () => {
+    const vnode: vNodeType | undefined = layout?.vnodes.find((vn) => vn.original.id === id)
+    if (!vnode) return null
+    const posX: string = vnode.original.position.x.toFixed(2)
+    const posY: string = vnode.original.position.y.toFixed(2)
+    const vposX: string = vnode.position.x.toFixed(2)
+    const vposY: string = vnode.position.y.toFixed(2)
+    const keys = Object.keys(vnode.evaluate)
+
+    return preference.showDebugInfo ? (
+      <HoverCardContent>
+        <div className="text-xs text-left">
+          <h2>Node Information</h2>
+          <ul className="ml-2 text-gray-500">
+            <li>id: {id}</li>
+            <li>position: ({`${posX}, ${posY}`})</li>
+            <li>width: {vnode.width}</li>
+            <li>height: {vnode.height}</li>
+          </ul>
+          <h2>Auto Layout</h2>
+          <ul className="ml-2 text-gray-500">
+            <li>position: ({`${vposX}, ${vposY}`})</li>
+            <li>rank: {vnode.rank}</li>
+            <li>
+              evaluate:
+              <ul className='ml-2'>
+                {keys.map((key) => {
+                  const vector = vnode.evaluate[key]
+                  const x = vector.x.toFixed(2)
+                  const y = vector.y.toFixed(2)
+                  return <li key={key}>{`${key}: ${x}, ${y}`}</li>
+                })}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </HoverCardContent>
     ) : null
   }
 
@@ -67,7 +118,12 @@ export function GenericNode({
         >
           <CountryFlag countryCode={data.country} />
           <div hidden>{type}</div>
-          <div className="text-lg">{role}</div>
+          <HoverCard>
+            <HoverCardTrigger>
+              <div className="text-lg">{role}</div>
+            </HoverCardTrigger>
+            <DebugInfo />
+          </HoverCard>
           <ConfigDialog data={data} />
         </div>
         <div className="w-full pb-2">
