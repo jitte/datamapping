@@ -1,4 +1,4 @@
-import { Node, Edge, ReactFlowInstance } from 'reactflow'
+import { Node, Edge, ReactFlowInstance, Viewport } from 'reactflow'
 import { Vector, VectorType, XY, distance } from './vector'
 
 type vNodeType = {
@@ -11,6 +11,9 @@ type vNodeType = {
   targetMap: mapType<vEdgeType>
   evaluate: mapType<Vector>
   vector: Vector
+  rank: number
+  indegree: number
+  outdegree: number
 }
 type vEdgeType = {
   original: Edge
@@ -57,12 +60,17 @@ class AutoLayout {
 
   trigger = (): AutoLayout => {
     AutoLayout.temperature = alParamTemperature
-    
-    //const viewport: Viewport = this.reactflowInstance.getViewport()
+
+    const viewport: Viewport = this.reactflowInstance.getViewport()
     const x = window.innerWidth / 2
     const y = window.innerHeight / 2
-    AutoLayout.center = this.reactflowInstance.project({x, y})
-    //console.log(window.innerWidth, window.innerHeight, viewport, AutoLayout.center)
+    AutoLayout.center = this.reactflowInstance.project({ x, y })
+    console.log(
+      window.innerWidth,
+      window.innerHeight,
+      viewport,
+      AutoLayout.center
+    )
     return this
   }
 
@@ -73,6 +81,7 @@ class AutoLayout {
     this.prepareVedges()
     this.prepareMaps()
     this.prepareWidthHeight()
+    this.prepareRank()
     //console.log('at: AutoLayout/prepare', { nodes, edges, this: this })
     return this
   }
@@ -101,6 +110,9 @@ class AutoLayout {
         targetMap: {},
         evaluate: {},
         vector: Vector.zero(),
+        indegree: 0,
+        outdegree: 0,
+        rank: 0,
       }
     })
     this.vnodes = vnodes
@@ -162,7 +174,9 @@ class AutoLayout {
         }
       })
       vnode.sourceMap = sourceMap
+      vnode.outdegree = Object.keys(sourceMap).length
       vnode.targetMap = targetMap
+      vnode.indegree = Object.keys(targetMap).length
     })
   }
 
@@ -171,6 +185,25 @@ class AutoLayout {
     const yValues = this.vnodes.map((vnode) => vnode.position.y)
     this.layoutWidth = Math.max(...xValues) - Math.min(...xValues)
     this.layoutHeight = Math.max(...yValues) - Math.min(...yValues)
+  }
+
+  private prepareRank = (): void => {
+    // exclude vnode without edge
+    let vnodes = this.vnodes.filter((vn) => vn.indegree + vn.outdegree > 0)
+    let currentRank = 1
+    while (true) {
+      const zeroDegree = vnodes.filter((vn) => vn.indegree === 0)
+      if (zeroDegree.length === 0) break
+      vnodes = vnodes.filter((vn) => vn.indegree > 0)
+
+      zeroDegree.forEach((vn) => {
+        vn.rank = currentRank
+        const keys = Object.keys(vn.sourceMap)
+        keys.forEach((key) => vn.sourceMap[key].target.indegree--)
+      })
+      currentRank++
+    }
+    //console.log(this.vnodes)
   }
 
   private getWidthHeight = (node: Node): { width: number; height: number } => {
@@ -255,15 +288,13 @@ class AutoLayout {
   }
 
   private stressCenter = (vnode: vNodeType): Vector => {
-    const orphan: boolean = !this.edges.find(
-      (edge) =>
-        edge.source === vnode.original.id || edge.target === vnode.original.id
-    )
-
-    if (orphan) {
+    if (vnode.rank === 0) {
       return Vector.vector(vnode.position, AutoLayout.center).normalize()
     } else {
-      return Vector.zero()
+      return Vector.vector(vnode.position, {
+        x: vnode.rank * alParamOrbitRadius * 2,
+        y: vnode.position.y,
+      }).normalize()
     }
   }
 
