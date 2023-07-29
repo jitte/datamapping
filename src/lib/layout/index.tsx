@@ -27,58 +27,11 @@ const alParamEpsilon = 0.1
 const alParamTemperature = 100
 const alParamDecayRate = 0.95
 const alParamOrbitRadius = 480
-//const alParamClipSize = 500
 const alParamStressWeight: mapType<number> = {
   center: 1,
-  //tension: 0,
-  collision: 3,
+  collision: 1,
   crossing: 1,
   rotation: 1,
-}
-
-/*
-const stressTension = (vnode: vNodeType): Vector => {
-  const stress = (nodeMap: mapType<vEdgeType>, negate: boolean): Vector => {
-    const keys: string[] = Object.keys(nodeMap)
-    const vector = Vector.sum(
-      keys.map((key) =>
-        Vector.vector(
-          nodeMap[key].sourcePosition,
-          nodeMap[key].targetPosition
-        ).normalize()
-      )
-    )
-    if (negate) vector.negate()
-    return vector
-  }
-  return Vector.sum([
-    stress(vnode.sourceMap, false),
-    stress(vnode.targetMap, true),
-  ])
-}
-
-const stressGravity = (r: number, d: number): number => {
-  // inner radius: linear decrease
-  //   d = 0 : 2
-  //   d = r : 1
-  // outer radius: decrease by 1/d^2
-  //   d = 2r : 1/4
-  //   d = 3r : 1/9
-  return d < r ? 2 - d / r : (r * r) / (d * d)
-}
-*/
-
-const perpendicular = <T extends VectorType>(
-  source: T,
-  target: T,
-  center: T
-): number => {
-  const dx: number = target.x - source.x
-  const dy: number = target.y - source.x
-  const a: number = -dy
-  const b: number = dx
-  const c: number = source.x * dy - source.y * dx
-  return (a * center.x + b * center.y + c) / Math.sqrt(a * a + b * b)
 }
 
 class AutoLayout {
@@ -90,13 +43,13 @@ class AutoLayout {
   vedges: vEdgeType[] = []
   vnodeMap: mapType<vNodeType> = {}
   vedgeMap: mapType<vEdgeType> = {}
-  center: Vector = Vector.zero()
   layoutWidth: number = 0
   layoutHeight: number = 0
   simulated: number = 0
 
   static temperature: number = 0
   static pinnedNodes: mapType<boolean> = {}
+  static center: Vector = Vector.zero()
 
   constructor() {
     //console.log('at: AutoLayout/constructor')
@@ -105,6 +58,10 @@ class AutoLayout {
   trigger = (): AutoLayout => {
     AutoLayout.temperature = alParamTemperature
     //console.log('at: AutoLayout/trigger', AutoLayout.temperature)
+    if (!this.vnodes || this.vnodes.length === 0) return this
+    AutoLayout.center = Vector.center(
+      this.vnodes.map((vnode) => vnode.position)
+    )
     return this
   }
 
@@ -114,7 +71,6 @@ class AutoLayout {
     this.prepareVnodes()
     this.prepareVedges()
     this.prepareMaps()
-    this.center = Vector.center(this.vnodes.map((vnode) => vnode.position))
     this.prepareWidthHeight()
     //console.log('at: AutoLayout/prepare', { nodes, edges, this: this })
     return this
@@ -242,10 +198,6 @@ class AutoLayout {
       switch (name) {
         case 'center':
           return this.stressCenter(vnode)
-        /*
-        case 'tension':
-          return stressTension(vnode)
-          */
         case 'collision':
           return this.stressCollision(vnode)
         case 'crossing':
@@ -308,7 +260,7 @@ class AutoLayout {
     )
 
     if (orphan) {
-      return Vector.vector(vnode.position, this.center).normalize()
+      return Vector.vector(vnode.position, AutoLayout.center).normalize()
     } else {
       return Vector.zero()
     }
@@ -342,23 +294,21 @@ class AutoLayout {
   private stressCrossing = (vnode: vNodeType): Vector => {
     const np = vnode.position
     const stress = (vedge: vEdgeType): Vector => {
-      let vector: Vector = Vector.zero()
-      if (vnode === vedge.source || vnode === vedge.target) return vector
+      if (vnode === vedge.source || vnode === vedge.target) return Vector.zero()
 
       const sp: XY = vedge.source.position
       const tp: XY = vedge.target.position
+      const vector: Vector = Vector.perpendicular(sp, tp, np)
+
       const ds: number = distance(np, sp)
       const dt: number = distance(np, tp)
-      const dp: number = perpendicular(sp, tp, np)
-      const dm: number = Math.min(ds, dt, Math.abs(dp))
-      if (dm === ds || dm === dt) return vector
+      const dp: number = vector.r()
+      const dm: number = Math.min(ds, dt, dp)
+      if (dm === ds || dm === dt) return Vector.zero()
+      if (dp > alParamOrbitRadius) return Vector.zero()
 
-      vector = new Vector({
-        x: sp.y - tp.y,
-        y: tp.x - sp.x,
-      })
-      if (dp < 0) vector.negate()
-      return vector.normalize()
+      const unit = 1 - dp / alParamOrbitRadius
+      return vector.normalize(unit)
     }
     const vectors: Vector[] = this.vedges.map((ve) => stress(ve))
     return Vector.sum(vectors)
