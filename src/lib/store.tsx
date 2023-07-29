@@ -28,6 +28,7 @@ export type PreferenceType = {
       rotation: number
     }
   }
+  showDebugInfo: boolean
 }
 const initialPreference: PreferenceType = {
   showOnlyNamedNode: true,
@@ -45,6 +46,7 @@ const initialPreference: PreferenceType = {
       rotation: 10,
     },
   },
+  showDebugInfo: false,
 }
 
 const useLocalStore = create(
