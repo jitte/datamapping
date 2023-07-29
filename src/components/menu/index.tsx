@@ -39,7 +39,7 @@ export function MyMenubar() {
     const centerY = AutoLayout.center.y.toFixed(2)
 
     return preference.showDebugInfo ? (
-      <HoverCardContent>
+      <HoverCardContent className='bg-white/90'>
         <div className="text-xs text-left">
           <h2>Reactflow Instance</h2>
           <ul className='ml-2 text-gray-500'>
