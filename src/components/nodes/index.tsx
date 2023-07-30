@@ -58,6 +58,8 @@ export function GenericNode({
     const vposX: string = vnode.position.x.toFixed(2)
     const vposY: string = vnode.position.y.toFixed(2)
     const keys = Object.keys(vnode.evaluate)
+    const vectorX: string = vnode.vector.x.toFixed(2)
+    const vectorY: string = vnode.vector.y.toFixed(2)
 
     return preference.showDebugInfo ? (
       <HoverCardContent className='bg-white/90'>
@@ -69,7 +71,7 @@ export function GenericNode({
             <li>width: {vnode.width}</li>
             <li>height: {vnode.height}</li>
           </ul>
-          <h2>Auto Layout</h2>
+          <h2 className='mt-2'>Auto Layout</h2>
           <ul className="ml-2 text-gray-500">
             <li>position: ({`${vposX}, ${vposY}`})</li>
             <li>rank: {vnode.rank}</li>
@@ -84,6 +86,7 @@ export function GenericNode({
                 })}
               </ul>
             </li>
+            <li>vector: ({`${vectorX}, ${vectorY}`})</li>
           </ul>
         </div>
       </HoverCardContent>
