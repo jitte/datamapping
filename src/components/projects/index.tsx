@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Copy, Trash2, Plus, Pencil } from 'lucide-react'
 import {
   Dialog,
@@ -19,13 +19,13 @@ import { ProjectType } from './types'
 import { DataTable } from './data-table'
 import { EditDialog } from './edit'
 
-function ProjectsTable() {
-  const {
-    projects,
-    storeProjects,
-    currentProjectId,
-    storeCurrentProjectId,
-  } = useLocalStore()
+const ProjectsTable = ({
+  setOpen,
+}: {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const { projects, storeProjects, currentProjectId, storeCurrentProjectId } =
+    useLocalStore()
 
   const columns: ColumnDef<ProjectType>[] = [
     {
@@ -35,6 +35,17 @@ function ProjectsTable() {
     {
       header: 'Name',
       accessorKey: 'name',
+      cell: ({ row }) => {
+        return (
+          <Button
+            variant="link"
+            className="p-0 text-left"
+            onClick={() => handleClickProject(row.original.id)}
+          >
+            {row.original.name}
+          </Button>
+        )
+      },
     },
     {
       header: 'Description',
@@ -60,6 +71,11 @@ function ProjectsTable() {
     },
   ]
 
+  const handleClickProject = (id: number) => {
+    storeCurrentProjectId(id)
+    setOpen(false)
+  }
+
   function handleDuplicate(id: number) {
     console.log('at: ProjectTable/handleDuplicate', id)
     const oldProject = projects.find((pj) => pj.id === id) as ProjectType
@@ -70,7 +86,7 @@ function ProjectsTable() {
       description: oldProject.description,
       nodes: [...oldProject.nodes],
       edges: [...oldProject.edges],
-      autoLayout: oldProject.autoLayout
+      autoLayout: oldProject.autoLayout,
     }
     storeProjects([newProject, ...projects])
     storeCurrentProjectId(newId)
@@ -119,7 +135,7 @@ export function ProjectsDialog() {
             Add, edit, duplicate or delete projects.
           </DialogDescription>
         </DialogHeader>
-        <ProjectsTable />
+        <ProjectsTable setOpen={setOpen} />
         <DialogFooter>
           <Button type="submit" onClick={() => setOpen(false)}>
             Done
