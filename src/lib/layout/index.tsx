@@ -49,10 +49,12 @@ class AutoLayout {
   layoutWidth: number = 0
   layoutHeight: number = 0
   simulated: number = 0
+  weights: string[] = []
 
   static temperature: number = 0
   static pinnedNodes: mapType<boolean> = {}
   static center: VectorType = Vector.zero()
+  static weightMap: mapType<number> = alParamStressWeight
 
   constructor(public reactflowInstance: ReactFlowInstance) {
     //console.log('at: AutoLayout/constructor')
@@ -79,6 +81,10 @@ class AutoLayout {
   prepare = (nodes: Node[], edges: Edge[]): AutoLayout => {
     this.nodes = nodes
     this.edges = edges
+    this.weights =
+      Object.keys(AutoLayout.weightMap).filter(
+        (key) => AutoLayout.weightMap[key]
+      ) ?? []
     this.prepareVnodes()
     this.prepareVedges()
     this.prepareMaps()
@@ -99,6 +105,10 @@ class AutoLayout {
     // vnodes
     const vnodes: vNodeType[] = this.nodes.map((node) => {
       const { width, height } = this.getWidthHeight(node)
+
+      const evaluate: mapType<Vector> = {}
+      this.weights.forEach((key) => (evaluate[key] = Vector.zero()))
+
       return {
         original: node,
         position: {
@@ -110,7 +120,7 @@ class AutoLayout {
         radius: Math.max(width, height) / 2,
         sourceMap: {},
         targetMap: {},
-        evaluate: {},
+        evaluate: evaluate,
         vector: Vector.zero(),
         indegree: 0,
         outdegree: 0,
@@ -215,8 +225,16 @@ class AutoLayout {
   }
 
   simulate = (): AutoLayout => {
+    this.evaluate()
     const arr: Vector[] = this.vnodes.map((vnode) => {
-      const vector = this.evaluate(vnode)
+      const vector = Vector.sum(
+        this.weights.map(
+          (stress) => vnode.evaluate[stress]
+          //new Vector(vnode.evaluate[stress]).multiple(
+          //AutoLayout.weightMap[stress]
+          //)
+        )
+      )
       vnode.vector = vector
       return vector
     })
@@ -226,30 +244,25 @@ class AutoLayout {
     return this
   }
 
-  private evaluate = (vnode: vNodeType): Vector => {
-    const weight: mapType<number> = alParamStressWeight
-    const keys: string[] =
-      Object.keys(weight).filter((key) => weight[key]) ?? []
-    const stress = (name: string): Vector => {
-      switch (name) {
-        case 'center':
-          return this.stressCenter(vnode)
-        case 'collision':
-          return this.stressCollision(vnode)
-        case 'crossing':
-          return this.stressCrossing(vnode)
-        case 'rotation':
-          return this.stressRotation(vnode)
-        default:
-          return Vector.zero()
-      }
-    }
-    const vectors: Vector[] = keys.map((key) => {
-      const vector = stress(key).multiple(weight[key])
-      vnode.evaluate[key] = vector
-      return vector
+  private evaluate = (): void => {
+    this.vnodes.forEach((vnode) => {
+      this.weights.forEach((stress) => {
+        switch (stress) {
+          case 'center':
+            this.stressCenter(vnode)
+            return
+          case 'collision':
+            this.stressCollision(vnode)
+            return
+          case 'crossing':
+            this.stressCrossing(vnode)
+            return
+          case 'rotation':
+            this.stressRotation(vnode)
+            return
+        }
+      })
     })
-    return Vector.sum(vectors)
   }
 
   update = (): AutoLayout => {
@@ -289,22 +302,30 @@ class AutoLayout {
     return epsilon < alParamEpsilon
   }
 
-  private stressCenter = (vnode: vNodeType): Vector => {
+  private stressCenter = (vnode: vNodeType): void => {
+    const stress: string = 'center'
     if (vnode.rank === 0) {
-      return Vector.vector(vnode.position, AutoLayout.center).normalize()
+      vnode.evaluate[stress].add(
+        Vector.vector(vnode.position, AutoLayout.center).normalize(
+          AutoLayout.weightMap[stress]
+        )
+      )
     } else {
-      return Vector.vector(vnode.position, {
-        x: vnode.rank * alParamOrbitRadius,
-        y: vnode.position.y,
-      })
+      vnode.evaluate[stress].add(
+        Vector.vector(vnode.position, {
+          x: vnode.rank * alParamOrbitRadius,
+          y: vnode.position.y,
+        })
+      )
     }
   }
 
-  private stressCollision = (vnode: vNodeType): Vector => {
+  private stressCollision = (vnode: vNodeType): void => {
+    const stress: string = 'collision'
     const len: number = (this.vnodes ?? []).length
-    if (len < 2) return Vector.zero()
+    if (len < 2) return
 
-    const stress = (vn1: vNodeType, vn2: vNodeType): Vector => {
+    const collision = (vn1: vNodeType, vn2: vNodeType): Vector => {
       if (vn1 === vn2) return Vector.zero()
 
       const vector: Vector = Vector.vector(vn1.position, vn2.position)
@@ -315,20 +336,23 @@ class AutoLayout {
         vector.normalize((d - orbit) / 2)
       } else {
         // pull each other
-        vector.normalize(2 - (orbit * orbit) / (d * d))
+        vector.normalize(
+          (1 - Math.pow(orbit / d, 3)) * AutoLayout.weightMap[stress]
+        )
       }
       return vector
     }
-
-    const vectors = this.vnodes.map((vn) => stress(vnode, vn), 0)
+    this.vnodes.forEach((vn) =>
+      vnode.evaluate[stress].add(collision(vnode, vn))
+    )
     //console.log('at: stressCollision', { vnode, vectors })
-    return Vector.sum(vectors)
   }
 
-  private stressCrossing = (vnode: vNodeType): Vector => {
+  private stressCrossing = (vnode: vNodeType): void => {
+    const stress: string = 'crossing'
     const np = vnode.position
-    const stress = (vedge: vEdgeType): Vector => {
-      if (vnode === vedge.source || vnode === vedge.target) return Vector.zero()
+    const crossing = (vedge: vEdgeType): void => {
+      if (vnode === vedge.source || vnode === vedge.target) return
 
       const sp: XY = vedge.source.position
       const tp: XY = vedge.target.position
@@ -338,20 +362,31 @@ class AutoLayout {
       const dt: number = distance(np, tp)
       const dp: number = vector.r()
       const dm: number = Math.min(ds, dt, dp)
-      if (dm === ds || dm === dt) return Vector.zero()
-      if (dp > alParamOrbitRadius) return Vector.zero()
+      if (dm === ds || dm === dt) return
+      if (dp > alParamOrbitRadius) return
 
-      const unit = -10 //(dp - alParamOrbitRadius) / 5
-      return vector.normalize(unit)
+      const unit = (dp - alParamOrbitRadius) * 0.5
+      vector.normalize(unit)
+      vnode.evaluate[stress].add(vector)
+
+      const edgeVector = new Vector(vector).multiple(-0.5)
+
+      const pushback = (vn: vNodeType) => {
+        vn.evaluate[stress].add(edgeVector)
+      }
+      pushback(vedge.source)
+      pushback(vedge.target)
     }
-    const vectors: Vector[] = this.vedges.map((ve) => stress(ve))
-    return Vector.sum(vectors)
+    this.vedges.forEach((ve) => crossing(ve))
   }
 
-  private stressRotation = (vnode: vNodeType): Vector => {
-    const stress = (nodeMap: mapType<vEdgeType>, negate: boolean): Vector[] => {
+  private stressRotation = (vnode: vNodeType): void => {
+    const stress: string = 'rotation'
+
+    const rotation = (nodeMap: mapType<vEdgeType>, negate: boolean): void => {
       const keys: string[] = Object.keys(nodeMap)
-      const vectors: Vector[] = keys.map((key) => {
+      //const vectors: Vector[] =
+      keys.map((key) => {
         // raw vector
         const vector = Vector.vector(
           nodeMap[key].sourcePosition,
@@ -363,18 +398,16 @@ class AutoLayout {
         if (theta < 0) rotate = -rotate
         if (negate) rotate = -rotate
         vector.rotate(rotate)
-        // stable near horizontal theta
+        
         const newTheta = Math.abs(vector.theta())
-        const unit = newTheta < 1 ? newTheta : newTheta * newTheta
+        const unit =
+          alParamOrbitRadius * (newTheta / Math.PI / 4) * AutoLayout.weightMap[stress]
         vector.normalize(unit)
-        return vector
+        vnode.evaluate[stress].add(vector)
       })
-      return vectors
     }
-    return Vector.sum([
-      ...stress(vnode.sourceMap, false),
-      ...stress(vnode.targetMap, true),
-    ])
+    rotation(vnode.sourceMap, false)
+    rotation(vnode.targetMap, true)
   }
 }
 
