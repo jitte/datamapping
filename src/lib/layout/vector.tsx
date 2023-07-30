@@ -103,7 +103,7 @@ class Vector {
     center: VectorType
   ): Vector => {
     const dx: number = target.x - source.x
-    const dy: number = target.y - source.x
+    const dy: number = target.y - source.y
     if (dx === 0 && dy === 0) return Vector.zero()
 
     const dx2 = dx * dx
