@@ -115,6 +115,21 @@ class Vector {
       (dxdy * (center.x - source.x) - dx2 * (center.y - source.y)) / (dx2 + dy2)
     return new Vector({ x, y })
   }
+
+  static crossing = (
+    source: VectorType,
+    target: VectorType,
+    center: VectorType
+  ): boolean => {
+    const dx: number = target.x - source.x
+    const dy: number = target.y - source.y
+    if (dx === 0 && dy === 0) return true
+
+    const equation = (pos: VectorType) => {
+      return dx * (pos.x - center.x) + dy * (pos.y - center.y)
+    }
+    return equation(source) * equation(target) <= 0
+  }
 }
 
 const distance = Vector.distance
