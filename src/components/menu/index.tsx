@@ -47,7 +47,7 @@ export function MyMenubar() {
             <li>viewport: ({`${vpx}, ${vpy}, ${vpz}`})</li>
             <li></li>
           </ul>
-          <h2>Auto Layout</h2>
+          <h2 className='mt-2'>Auto Layout</h2>
           <ul className="ml-2 text-gray-500">
             <li>center: ({`${centerX}, ${centerY}`})</li>
             <li>layoutWidth: {layout?.layoutWidth.toFixed(2)}</li>
