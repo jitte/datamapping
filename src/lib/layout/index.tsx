@@ -1,5 +1,5 @@
 import { Node, Edge, ReactFlowInstance, Viewport } from 'reactflow'
-import { Vector, VectorType, XY, distance } from './vector'
+import { Vector, VectorType } from './vector'
 
 export type vNodeType = {
   original: Node
@@ -155,11 +155,11 @@ class AutoLayout {
         target,
         sourcePosition: {
           x: source.position.x + source.width / 2,
-          y: source.position.y + source.height / 2,
+          y: source.position.y, // + source.height / 2,
         },
         targetPosition: {
           x: target.position.x - target.width / 2,
-          y: target.position.y + source.height / 2,
+          y: target.position.y, // + source.height / 2,
         },
       }
       return vedge
@@ -315,7 +315,7 @@ class AutoLayout {
         Vector.vector(vnode.position, {
           x: vnode.rank * alParamOrbitRadius,
           y: vnode.position.y,
-        })
+        }).multiple(0.5)
       )
     }
   }
@@ -354,28 +354,25 @@ class AutoLayout {
     const crossing = (vedge: vEdgeType): void => {
       if (vnode === vedge.source || vnode === vedge.target) return
 
-      const sp: XY = vedge.source.position
-      const tp: XY = vedge.target.position
-      const vector: Vector = Vector.perpendicular(sp, tp, np)
+      const sp: VectorType = {...vedge.sourcePosition}
+      const tp: VectorType = {...vedge.targetPosition}
+      if (!Vector.crossing(sp, tp, np)) return
 
-      const ds: number = distance(np, sp)
-      const dt: number = distance(np, tp)
+      const vector: Vector = Vector.perpendicular(sp, tp, np)
       const dp: number = vector.r()
-      const dm: number = Math.min(ds, dt, dp)
-      if (dm === ds || dm === dt) return
       if (dp > alParamOrbitRadius) return
 
-      const unit = (dp - alParamOrbitRadius) * 0.5
+      const unit = (dp - alParamOrbitRadius) * 0.2
       vector.normalize(unit)
       vnode.evaluate[stress].add(vector)
-
+      /*
       const edgeVector = new Vector(vector).multiple(-0.5)
-
       const pushback = (vn: vNodeType) => {
         vn.evaluate[stress].add(edgeVector)
       }
       pushback(vedge.source)
       pushback(vedge.target)
+      */
     }
     this.vedges.forEach((ve) => crossing(ve))
   }
@@ -398,10 +395,11 @@ class AutoLayout {
         if (theta < 0) rotate = -rotate
         if (negate) rotate = -rotate
         vector.rotate(rotate)
-        
+
         const newTheta = Math.abs(vector.theta())
         const unit =
-          alParamOrbitRadius * (newTheta / Math.PI / 4) * AutoLayout.weightMap[stress]
+          (newTheta < 1 ? newTheta : newTheta * newTheta) *
+          AutoLayout.weightMap[stress]
         vector.normalize(unit)
         vnode.evaluate[stress].add(vector)
       })
