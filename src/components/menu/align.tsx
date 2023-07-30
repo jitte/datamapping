@@ -6,6 +6,7 @@ import {
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
+  MenubarCheckboxItem,
 } from '@/components/ui/menubar'
 import {
   AlignStartVertical,
@@ -18,6 +19,7 @@ import {
   AlignVerticalSpaceBetween,
 } from 'lucide-react'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { useLocalStore } from '@/lib/store'
 
 const selectedNodes = (nodes: Node[]) => {
   return nodes.filter((node: Node) => node.selected)
@@ -146,6 +148,18 @@ const justifyVertical = (
 
 const AlignMenu = () => {
   const { nodes, setNodes } = useContext(DataFlowContext)
+  const {
+    projects,
+    storeProjects,
+    currentProject,
+  } = useLocalStore()
+
+  const handleAutoLayout = (flag: boolean) => {
+    const project = currentProject()
+    project.autoLayout = flag
+    storeProjects(projects)
+  }
+
   return (
     <MenubarMenu>
       <MenubarTrigger>Align</MenubarTrigger>
@@ -184,6 +198,13 @@ const AlignMenu = () => {
           <AlignVerticalSpaceBetween size={16} className="mr-2" />
           Justify Vertical
         </MenubarItem>
+        <MenubarSeparator />
+        <MenubarCheckboxItem
+          onCheckedChange={handleAutoLayout}
+          checked={currentProject().autoLayout}
+        >
+          Auto Layout
+        </MenubarCheckboxItem>
       </MenubarContent>
     </MenubarMenu>
   )

@@ -204,5 +204,6 @@ export function initialProject(id: number) {
         targetHandle: 'target_contract_flow',
       },
     ],
+    autoLayout: false,
   }
 }

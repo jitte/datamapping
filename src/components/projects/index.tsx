@@ -70,6 +70,7 @@ function ProjectsTable() {
       description: oldProject.description,
       nodes: [...oldProject.nodes],
       edges: [...oldProject.edges],
+      autoLayout: oldProject.autoLayout
     }
     storeProjects([newProject, ...projects])
     storeCurrentProjectId(newId)

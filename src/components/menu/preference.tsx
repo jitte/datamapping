@@ -10,13 +10,6 @@ import { useLocalStore } from '@/lib/store'
 const PreferenceMenu = () => {
   const { preference, storePreference } = useLocalStore()
 
-  const handleEnableAutoLayout = (flag: boolean) => {
-    storePreference({
-      ...preference,
-      enableAutoLayout: flag,
-    })
-  }
-
   const handleShowDebugInfo = (flag: boolean) => {
     storePreference({
       ...preference,
@@ -30,12 +23,6 @@ const PreferenceMenu = () => {
         <Cog size={16} />
       </MenubarTrigger>
       <MenubarContent>
-        <MenubarCheckboxItem
-          onCheckedChange={handleEnableAutoLayout}
-          checked={preference.enableAutoLayout}
-        >
-          Enable Auto Layout
-        </MenubarCheckboxItem>
         <MenubarCheckboxItem
           onCheckedChange={handleShowDebugInfo}
           checked={preference.showDebugInfo}

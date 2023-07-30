@@ -39,13 +39,13 @@ function DataFlowView() {
     storeProjects,
     currentProjectId,
     currentProject,
-    preference,
   } = useLocalStore()
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
-  const [nodes, setNodes] = useState(currentProject().nodes)
-  const [edges, setEdges] = useState(currentProject().edges)
+  const [project, setProject] = useState(currentProject())
+  const [nodes, setNodes] = useState(project.nodes)
+  const [edges, setEdges] = useState(project.edges)
 
   // layout state
   const [layout, setLayout] = useState(new AutoLayout(reactFlowInstance))
@@ -70,21 +70,23 @@ function DataFlowView() {
 
   // update nodes and edges after changing current project
   useEffect(() => {
-    const project = currentProject()
-    setNodes(project.nodes)
-    setEdges(project.edges)
-    //console.log('at: useEffect(currentProjectId)', project)
-  }, [currentProject, currentProjectId, setNodes, setEdges])
+    const project = projects.find((pj) => pj.id === currentProjectId)
+    if (project) {
+      setProject(project)
+      setNodes(project.nodes)
+      setEdges(project.edges)
+    }
+    //console.log('at: useEffect(currentProjectId)', currentProjectId, project)
+  }, [currentProjectId, setNodes, setEdges])
 
   // autolayout and save projects after changing nodes and edges
   useEffect(() => {
     const updateProject = () => {
-      const project = currentProject()
       project.nodes = nodes
       project.edges = edges
-      storeProjects(projects)
+      storeProjects([...projects.filter((pj) => pj.id !== project.id), project])
     }
-    if (preference.enableAutoLayout) {
+    if (project.autoLayout) {
       layout.prepare(nodes, edges).simulate()
 
       if (layout.stable()) {
@@ -96,8 +98,8 @@ function DataFlowView() {
     } else {
       updateProject()
     }
-    //console.log('at: useEffect(nodes/edges)', project)
-  }, [nodes, edges, preference, layout])
+    //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
+  }, [nodes, edges, project, layout])
 
   // callbacks
   const onNodeDragStart = useCallback(

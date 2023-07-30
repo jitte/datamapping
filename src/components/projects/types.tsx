@@ -6,4 +6,5 @@ export type ProjectType = {
   description: string
   nodes: Node[]
   edges: Edge[]
+  autoLayout: boolean
 }
