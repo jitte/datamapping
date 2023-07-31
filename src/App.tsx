@@ -1,7 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import ReactFlow, { useReactFlow, ReactFlowProvider } from 'reactflow'
-import { MiniMap, Controls, Background, BackgroundVariant } from 'reactflow'
-import {
+import ReactFlow, {
+  useReactFlow,
+  ReactFlowProvider,
+  useViewport,
+  MiniMap,
+  Controls,
+  Background,
+  BackgroundVariant,
   Node,
   NodeChange,
   applyNodeChanges,
@@ -16,29 +21,25 @@ import 'reactflow/dist/style.css'
 import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import {
-  GRID_SIZE,
-  nodeTypes,
-  edgeTypes,
-  initialProject,
-} from './constants'
+import { useLocalStore } from './lib/store'
 import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
-import { useLocalStore } from './lib/store'
 import { MyMenubar } from './components/menu'
+import {
+  cutNodes,
+  copyNodes,
+  pasteNodes,
+  addNode,
+} from './components/nodes/utils'
 import { EdgeType } from './components/edges/utils'
-import { cutNodes, copyNodes, pasteNodes, addNode } from './components/nodes/utils'
 import { newNodeIdNumber } from './components/projects/utils'
 import { AutoLayout } from './lib/layout'
+import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './constants'
 
 function DataFlowView() {
   // project states
-  const {
-    projects,
-    storeProjects,
-    currentProjectId,
-    currentProject,
-  } = useLocalStore()
+  const { projects, storeProjects, currentProjectId, currentProject } =
+    useLocalStore()
 
   // reactflow states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
@@ -48,6 +49,12 @@ function DataFlowView() {
 
   // layout state
   const [layout, setLayout] = useState(new AutoLayout(reactFlowInstance))
+
+  const { x: vpX, y: vpY, zoom: vpZ } = useViewport()
+
+  useEffect(() => {
+    //console.log(vpX, vpY, vpZ)
+  }, [vpX, vpY, vpZ])
 
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
