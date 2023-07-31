@@ -409,4 +409,4 @@ class AutoLayout {
   }
 }
 
-export { AutoLayout }
+export { AutoLayout, alParamTemperature }

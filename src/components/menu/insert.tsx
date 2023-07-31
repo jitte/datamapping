@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { XYPosition } from 'reactflow'
 import {
   MenubarContent,
   MenubarItem,
@@ -13,10 +14,11 @@ import { addNode } from '../nodes/utils'
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { newNodeIdNumber } from '../projects/utils'
+import { AutoLayout, alParamTemperature } from '@/lib/layout'
 
 const InsertMenu = () => {
   const { projects } = useLocalStore()
-  const { setNodes } = useContext(DataFlowContext)
+  const { setNodes, reactFlowInstance } = useContext(DataFlowContext)
   const items = roleList
 
   function EntityItems() {
@@ -26,11 +28,15 @@ const InsertMenu = () => {
     }
 
     const handleClick = (role: string) => {
-      const position = {
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
+      let position: XYPosition = {
+        x: Math.random() * 400 + 100,
+        y: Math.random() * 400 + 100,
+      }
+      if (reactFlowInstance) {
+        position = reactFlowInstance.project(position)
       }
       addNode(newNodeIdNumber(projects), position, role, setNodes)
+      AutoLayout.temperature = alParamTemperature
     }
 
     return items.map((item) => {
