@@ -37,18 +37,17 @@ import { AutoLayout } from './lib/layout'
 import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './constants'
 
 function DataFlowView() {
-  // project states
+  // localstore states
   const { projects, storeProjects, currentProjectId, currentProject } =
     useLocalStore()
 
-  // reactflow states
+  // react states
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
   const [project, setProject] = useState(currentProject())
   const [nodes, setNodes] = useState(project.nodes)
   const [edges, setEdges] = useState(project.edges)
-
-  // layout state
   const [layout, setLayout] = useState(new AutoLayout(reactFlowInstance))
+  const [offset, setOffset] = useState({ x: 12, y: 12 })
 
   const { x: vpX, y: vpY, zoom: vpZ } = useViewport()
 
@@ -62,17 +61,19 @@ function DataFlowView() {
   useHotkeys('ctrl+x', () => {
     console.log('Ctrl+X pressed')
     cutNodes(nodes, reactFlowInstance)
-  })
+  }, [nodes, reactFlowInstance])
 
   useHotkeys('ctrl+c', () => {
     console.log('Ctrl+C pressed')
     copyNodes(nodes)
-  })
+    setOffset({ x: 12, y: 12 })
+  }, [nodes])
 
   useHotkeys('ctrl+v', () => {
     console.log('Ctrl+V pressed')
-    pasteNodes(nodes, setNodes, newNodeIdNumber(projects))
-  })
+    pasteNodes(nodes, setNodes, newNodeIdNumber(projects), offset)
+    setOffset({ x: offset.x + 12, y: offset.y + 12 })
+  },[nodes, offset, projects])
 
   // update nodes and edges after changing current project
   useEffect(() => {
