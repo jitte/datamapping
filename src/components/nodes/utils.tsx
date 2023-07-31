@@ -86,6 +86,7 @@ const addNode = (
     type: 'genericNode',
     position,
     data: { ...roleInfo[role].defaults, role },
+    selected: true
   }
   setNodes((nds: Node[]) => nds.concat(newNode))
 }
