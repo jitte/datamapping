@@ -84,7 +84,8 @@ function DataFlowView() {
     const updateProject = () => {
       project.nodes = nodes
       project.edges = edges
-      storeProjects([...projects.filter((pj) => pj.id !== project.id), project])
+      setProject(project)
+      storeProjects(projects)
     }
     if (project.autoLayout) {
       layout.prepare(nodes, edges).simulate()
@@ -99,7 +100,7 @@ function DataFlowView() {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
-  }, [nodes, edges, project, layout])
+  }, [nodes, edges, layout])
 
   // callbacks
   const onNodeDragStart = useCallback(
