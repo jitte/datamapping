@@ -27,7 +27,8 @@ const copyNodes = (nodes: Node[]) => {
 const pasteNodes = async (
   nodes: Node[],
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
-  newNodeIdNumber: number
+  newNodeIdNumber: number,
+  offset: XYPosition = { x: 0, y: 0 }
 ) => {
   const value = await readClipboard()
   let newNodes: Node[]
@@ -44,8 +45,8 @@ const pasteNodes = async (
   })
   newNodes = newNodes.map<Node>((node: Node) => {
     if (node.position) {
-      node.position.x = node.position.x + 12
-      node.position.y = node.position.y + 12
+      node.position.x = node.position.x + offset.x
+      node.position.y = node.position.y + offset.y
     } else {
       node.position = { x: 0, y: 0 }
     }
