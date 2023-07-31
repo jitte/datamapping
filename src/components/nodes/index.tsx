@@ -3,7 +3,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
+} from '@/components/ui/hover-card'
 import { cn } from '@/lib/utils'
 
 import { roleInfo } from '@/constants'
@@ -51,43 +51,75 @@ export function GenericNode({
   }
 
   const DebugInfo = () => {
-    const vnode: vNodeType | undefined = layout?.vnodes.find((vn) => vn.original.id === id)
-    if (!vnode) return null
-    const posX: string = vnode.original.position.x.toFixed(2)
-    const posY: string = vnode.original.position.y.toFixed(2)
-    const vposX: string = vnode.position.x.toFixed(2)
-    const vposY: string = vnode.position.y.toFixed(2)
-    const keys = Object.keys(vnode.evaluate)
-    const vectorX: string = vnode.vector.x.toFixed(2)
-    const vectorY: string = vnode.vector.y.toFixed(2)
+    const vnode: vNodeType | undefined = layout?.vnodes.find(
+      (vn) => vn.original.id === id
+    )
+
+    const NodeInfo = () => {
+      if (vnode) {
+        const posX: string = vnode.original.position.x.toFixed(2)
+        const posY: string = vnode.original.position.y.toFixed(2)
+        return (
+          <>
+            <h2>Node Information</h2>
+            <ul className="ml-2 text-gray-500">
+              <li>id: {id}</li>
+              <li>position: ({`${posX}, ${posY}`})</li>
+              <li>width: {vnode.width}</li>
+              <li>height: {vnode.height}</li>
+            </ul>
+          </>
+        )
+      } else {
+        return (
+          <>
+            <h2>Node Information</h2>
+            <ul className="ml-2 text-gray-500">
+              <li>id: {id}</li>
+            </ul>
+          </>
+        )
+      }
+    }
+
+    const LayoutInfo = () => {
+      if (vnode) {
+        const vposX: string = vnode.position.x.toFixed(2)
+        const vposY: string = vnode.position.y.toFixed(2)
+        const keys = Object.keys(vnode.evaluate)
+        const vectorX: string = vnode.vector.x.toFixed(2)
+        const vectorY: string = vnode.vector.y.toFixed(2)
+        return (
+          <>
+            <h2 className="mt-2">Auto Layout</h2>
+            <ul className="ml-2 text-gray-500">
+              <li>position: ({`${vposX}, ${vposY}`})</li>
+              <li>rank: {vnode.rank}</li>
+              <li>
+                evaluate:
+                <ul className="ml-2">
+                  {keys.map((key) => {
+                    const vector = vnode.evaluate[key]
+                    const x = vector.x.toFixed(2)
+                    const y = vector.y.toFixed(2)
+                    return <li key={key}>{`${key}: ${x}, ${y}`}</li>
+                  })}
+                </ul>
+              </li>
+              <li>vector: ({`${vectorX}, ${vectorY}`})</li>
+            </ul>
+          </>
+        )
+      } else {
+        return null
+      }
+    }
 
     return preference.showDebugInfo ? (
-      <HoverCardContent className='bg-white/90'>
+      <HoverCardContent className="bg-white/90">
         <div className="text-xs text-left">
-          <h2>Node Information</h2>
-          <ul className="ml-2 text-gray-500">
-            <li>id: {id}</li>
-            <li>position: ({`${posX}, ${posY}`})</li>
-            <li>width: {vnode.width}</li>
-            <li>height: {vnode.height}</li>
-          </ul>
-          <h2 className='mt-2'>Auto Layout</h2>
-          <ul className="ml-2 text-gray-500">
-            <li>position: ({`${vposX}, ${vposY}`})</li>
-            <li>rank: {vnode.rank}</li>
-            <li>
-              evaluate:
-              <ul className='ml-2'>
-                {keys.map((key) => {
-                  const vector = vnode.evaluate[key]
-                  const x = vector.x.toFixed(2)
-                  const y = vector.y.toFixed(2)
-                  return <li key={key}>{`${key}: ${x}, ${y}`}</li>
-                })}
-              </ul>
-            </li>
-            <li>vector: ({`${vectorX}, ${vectorY}`})</li>
-          </ul>
+          <NodeInfo />
+          <LayoutInfo />
         </div>
       </HoverCardContent>
     ) : null
