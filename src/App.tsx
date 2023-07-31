@@ -21,14 +21,13 @@ import {
   nodeTypes,
   edgeTypes,
   initialProject,
-  roleInfo,
 } from './constants'
 import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { useLocalStore } from './lib/store'
 import { MyMenubar } from './components/menu'
 import { EdgeType } from './components/edges/utils'
-import { cutNodes, copyNodes, pasteNodes } from './components/nodes/utils'
+import { cutNodes, copyNodes, pasteNodes, addNode } from './components/nodes/utils'
 import { newNodeId, newNodeIdNumber } from './components/projects/utils'
 import { AutoLayout } from './lib/layout'
 
@@ -175,20 +174,14 @@ function DataFlowView() {
       if (typeof role === 'undefined' || !role) {
         return
       }
-
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       })
-      const newNode = {
-        id: newNodeId(projects),
-        type: 'genericNode',
-        position,
-        data: { ...roleInfo[role].defaults, role },
-      }
-      console.log('at: onDrop', { event, newNode })
+      const id = newNodeId(projects)
+      addNode(id, position, role, setNodes)
+      console.log('at: onDrop', { event, id, role, position })
       layout.trigger()
-      setNodes((nds: Node[]) => nds.concat(newNode))
     },
     [reactFlowInstance, ref, projects, layout]
   )

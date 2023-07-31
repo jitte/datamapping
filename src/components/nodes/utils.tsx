@@ -1,7 +1,8 @@
 import React from 'react'
-import { Node, ReactFlowInstance } from 'reactflow'
+import { Node, ReactFlowInstance, XYPosition } from 'reactflow'
 
 import { writeClipboard, readClipboard } from '@/lib/clipboard'
+import { roleInfo } from '@/constants'
 
 const findNode = (nodes: Node[], id: string): Node => {
   return nodes.find((node: Node) => node.id === id) as Node
@@ -74,4 +75,19 @@ const selectNodes = (
   setNodes([...nodes])
 }
 
-export { findNode, copyNodes, cutNodes, pasteNodes, deleteNodes, selectNodes }
+const addNode = (
+  newNodeId: string,
+  position: XYPosition,
+  role: string,
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
+) => {
+  const newNode: Node = {
+    id: newNodeId,
+    type: 'genericNode',
+    position,
+    data: { ...roleInfo[role].defaults, role },
+  }
+  setNodes((nds: Node[]) => nds.concat(newNode))
+}
+
+export { findNode, copyNodes, cutNodes, pasteNodes, deleteNodes, selectNodes, addNode }

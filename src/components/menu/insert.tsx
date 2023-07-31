@@ -1,5 +1,4 @@
-import React from 'react'
-import { Grip } from 'lucide-react'
+import React, { useContext } from 'react'
 import {
   MenubarContent,
   MenubarItem,
@@ -7,9 +6,17 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import { Grip } from 'lucide-react'
+
 import { roleInfo, roleList } from '@/constants'
+import { addNode } from '../nodes/utils'
+import { useLocalStore } from '@/lib/store'
+import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { newNodeId } from '../projects/utils'
 
 const InsertMenu = () => {
+  const { projects } = useLocalStore()
+  const { setNodes } = useContext(DataFlowContext)
   const items = roleList
 
   function EntityItems() {
@@ -17,6 +24,15 @@ const InsertMenu = () => {
       event.dataTransfer.setData('application/reactflow', role)
       event.dataTransfer.effectAllowed = 'move'
     }
+
+    const handleClick = (role: string) => {
+      const position = {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+      }
+      addNode(newNodeId(projects), position, role, setNodes)
+    }
+
     return items.map((item) => {
       const Icon = roleInfo[item].icon
       return (
@@ -24,6 +40,7 @@ const InsertMenu = () => {
           key={item}
           draggable
           onDragStart={(event) => onDragStart(event, item)}
+          onClick={() => handleClick(item)}
         >
           <div className="flex flex-row items-center w-full gap-2">
             <Icon size={16} />
