@@ -12,7 +12,7 @@ import { roleInfo, roleList } from '@/constants'
 import { addNode } from '../nodes/utils'
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
-import { newNodeId } from '../projects/utils'
+import { newNodeIdNumber } from '../projects/utils'
 
 const InsertMenu = () => {
   const { projects } = useLocalStore()
@@ -30,7 +30,7 @@ const InsertMenu = () => {
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
       }
-      addNode(newNodeId(projects), position, role, setNodes)
+      addNode(newNodeIdNumber(projects), position, role, setNodes)
     }
 
     return items.map((item) => {
