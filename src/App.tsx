@@ -28,7 +28,7 @@ import { useLocalStore } from './lib/store'
 import { MyMenubar } from './components/menu'
 import { EdgeType } from './components/edges/utils'
 import { cutNodes, copyNodes, pasteNodes, addNode } from './components/nodes/utils'
-import { newNodeId, newNodeIdNumber } from './components/projects/utils'
+import { newNodeIdNumber } from './components/projects/utils'
 import { AutoLayout } from './lib/layout'
 
 function DataFlowView() {
@@ -178,7 +178,7 @@ function DataFlowView() {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       })
-      const id = newNodeId(projects)
+      const id = newNodeIdNumber(projects)
       addNode(id, position, role, setNodes)
       console.log('at: onDrop', { event, id, role, position })
       layout.trigger()

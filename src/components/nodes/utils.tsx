@@ -76,13 +76,13 @@ const selectNodes = (
 }
 
 const addNode = (
-  newNodeId: string,
+  newNodeIdNumber: number,
   position: XYPosition,
   role: string,
-  setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>
 ) => {
   const newNode: Node = {
-    id: newNodeId,
+    id: `node_${newNodeIdNumber}`,
     type: 'genericNode',
     position,
     data: { ...roleInfo[role].defaults, role },
