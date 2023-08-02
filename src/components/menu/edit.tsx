@@ -8,7 +8,6 @@ import {
   MenubarShortcut,
 } from '@/components/ui/menubar'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
-import { useLocalStore } from '@/lib/store'
 import {
   cutNodes,
   copyNodes,
@@ -16,11 +15,9 @@ import {
   deleteNodes,
   selectNodes,
 } from '@/components/nodes/utils'
-import { newNodeIdNumber } from '@/components/projects/utils'
 
 function EditMenu() {
-  const { nodes, setNodes, reactFlowInstance } = useContext(DataFlowContext)
-  const projects = useLocalStore((state) => state.projects)
+  const { nodes, setNodes, reactFlowInstance, incrementNodeId } = useContext(DataFlowContext)
 
   const handleCut = () => {
     cutNodes(nodes, reactFlowInstance)
@@ -31,7 +28,7 @@ function EditMenu() {
   }
 
   const handlePaste = async () => {
-    pasteNodes(nodes, setNodes, newNodeIdNumber(projects))
+    pasteNodes(nodes, setNodes, incrementNodeId())
   }
 
   const handleDelete = () => {

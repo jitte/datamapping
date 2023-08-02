@@ -36,6 +36,10 @@ const newNodeId = (projects: ProjectType[]): string => {
 }
 
 const newNodeIdNumber = (projects: ProjectType[]): number => {
+  return 1 + maxNodeId(projects)
+}
+
+const maxNodeId = (projects: ProjectType[]): number => {
   const nodeIds = projects
     .map((project: ProjectType) => (project.nodes ?? []).map((node) => node.id))
     .reduce((acc, ele) => acc.concat(ele))
@@ -44,7 +48,7 @@ const newNodeIdNumber = (projects: ProjectType[]): number => {
     const id = Number(nodeId.replace('node_', ''))
     return Number.isNaN(id) ? 0 : id
   })
-  return 1 + Math.max(0, ...ids)
+  return Math.max(0, ...ids)
 }
 
-export { allNodes, allEdges, newProjectId, newNodeId, newNodeIdNumber }
+export { allNodes, allEdges, newProjectId, newNodeId, newNodeIdNumber, maxNodeId }

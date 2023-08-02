@@ -27,7 +27,7 @@ const copyNodes = (nodes: Node[]) => {
 const pasteNodes = async (
   nodes: Node[],
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
-  newNodeIdNumber: number,
+  id: number,
   offset: XYPosition = { x: 0, y: 0 }
 ) => {
   const value = await readClipboard()
@@ -50,8 +50,8 @@ const pasteNodes = async (
     } else {
       node.position = { x: 0, y: 0 }
     }
-    node.id = `node_${newNodeIdNumber}`
-    newNodeIdNumber++
+    node.id = `node_${id}`
+    id++
     return node
   })
   setNodes((nds: Node[]) => nds.concat(newNodes))
@@ -77,13 +77,13 @@ const selectNodes = (
 }
 
 const addNode = (
-  newNodeIdNumber: number,
+  id: number,
   position: XYPosition,
   role: string,
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>
 ) => {
   const newNode: Node = {
-    id: `node_${newNodeIdNumber}`,
+    id: `node_${id}`,
     type: 'genericNode',
     position,
     data: { ...roleInfo[role].defaults, role },

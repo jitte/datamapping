@@ -11,14 +11,12 @@ import { Grip } from 'lucide-react'
 
 import { roleInfo, roleList } from '@/constants'
 import { addNode } from '../nodes/utils'
-import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
-import { newNodeIdNumber } from '../projects/utils'
 import { AutoLayout, alParamTemperature } from '@/lib/layout'
 
 const InsertMenu = () => {
-  const { projects } = useLocalStore()
-  const { setNodes, reactFlowInstance } = useContext(DataFlowContext)
+  const { setNodes, reactFlowInstance, incrementNodeId } =
+    useContext(DataFlowContext)
   const items = roleList
 
   function EntityItems() {
@@ -35,7 +33,7 @@ const InsertMenu = () => {
       if (reactFlowInstance) {
         position = reactFlowInstance.project(position)
       }
-      addNode(newNodeIdNumber(projects), position, role, setNodes)
+      addNode(incrementNodeId(), position, role, setNodes)
       AutoLayout.temperature = alParamTemperature
     }
 

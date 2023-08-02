@@ -32,20 +32,21 @@ import {
   addNode,
 } from './components/nodes/utils'
 import { EdgeType } from './components/edges/utils'
-import { newNodeIdNumber } from './components/projects/utils'
+import { maxNodeId } from './components/projects/utils'
 import { AutoLayout } from './lib/layout'
 import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './constants'
 
 function DataFlowView() {
-  // localstore states
+  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
+  
+  // local store
   const { projects, storeProjects, currentProjectId, currentProject } =
     useLocalStore()
 
-  // react states
-  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
-  const [project, setProject] = useState(currentProject())
+  const project = currentProject()
   const [nodes, setNodes] = useState(project.nodes)
   const [edges, setEdges] = useState(project.edges)
+
   const [layout, setLayout] = useState(new AutoLayout(reactFlowInstance))
   const [offset, setOffset] = useState({ x: 12, y: 12 })
 
@@ -57,57 +58,75 @@ function DataFlowView() {
 
   // creating ref
   const ref: React.MutableRefObject<any> = useRef(null)
+  const nodeIdRef: React.MutableRefObject<number> = useRef(maxNodeId(projects))
+  const incrementNodeId = (): number => {
+    nodeIdRef.current++
+    return nodeIdRef.current
+  }
 
-  useHotkeys('ctrl+x', () => {
-    console.log('Ctrl+X pressed')
-    cutNodes(nodes, reactFlowInstance)
-  }, [nodes, reactFlowInstance])
+  useHotkeys(
+    'ctrl+x',
+    () => {
+      console.log('Ctrl+X pressed')
+      cutNodes(nodes, reactFlowInstance)
+    },
+    [nodes, reactFlowInstance]
+  )
 
-  useHotkeys('ctrl+c', () => {
-    console.log('Ctrl+C pressed')
-    copyNodes(nodes)
-    setOffset({ x: 12, y: 12 })
-  }, [nodes])
+  useHotkeys(
+    'ctrl+c',
+    () => {
+      console.log('Ctrl+C pressed')
+      copyNodes(nodes)
+      setOffset({ x: 12, y: 12 })
+    },
+    [nodes, setOffset]
+  )
 
-  useHotkeys('ctrl+v', () => {
-    console.log('Ctrl+V pressed')
-    pasteNodes(nodes, setNodes, newNodeIdNumber(projects), offset)
-    setOffset({ x: offset.x + 12, y: offset.y + 12 })
-  },[nodes, offset, projects])
+  useHotkeys(
+    'ctrl+v',
+    () => {
+      console.log('Ctrl+V pressed')
+      if (layout.stable()) {
+        pasteNodes(nodes, setNodes, incrementNodeId(), offset)
+        setOffset((offset) => ({ x: offset.x + 12, y: offset.y + 12 }))
+      }
+    },
+    [nodes, offset, setNodes, setOffset]
+  )
 
   // update nodes and edges after changing current project
   useEffect(() => {
     const project = projects.find((pj) => pj.id === currentProjectId)
     if (project) {
-      setProject(project)
-      setNodes(project.nodes)
-      setEdges(project.edges)
+      setNodes([...project.nodes])
+      setEdges([...project.edges])
     }
-    //console.log('at: useEffect(currentProjectId)', currentProjectId, project)
+    //console.log('at: useEffect(currentProjectId)', currentProjectId)
   }, [currentProjectId, setNodes, setEdges])
 
   // autolayout and save projects after changing nodes and edges
   useEffect(() => {
+    const project = projects.find((pj) => pj.id === currentProjectId)
+    if (!project) return
     const updateProject = () => {
       project.nodes = nodes
       project.edges = edges
-      setProject(project)
       storeProjects(projects)
     }
     if (project.autoLayout) {
       layout.prepare(nodes, edges).simulate()
-
-      if (layout.stable()) {
-        updateProject()
-      } else {
+      if (!layout.stable()) {
         layout.update()
         setNodes([...nodes])
+      } else {
+        updateProject()
       }
     } else {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
-  }, [nodes, edges, layout])
+  }, [nodes, edges, layout, project.autoLayout, setNodes])
 
   // callbacks
   const onNodeDragStart = useCallback(
@@ -186,7 +205,7 @@ function DataFlowView() {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       })
-      const id = newNodeIdNumber(projects)
+      const id = incrementNodeId()
       addNode(id, position, role, setNodes)
       console.log('at: onDrop', { event, id, role, position })
       layout.trigger()
@@ -205,6 +224,7 @@ function DataFlowView() {
         setEdges,
         layout,
         setLayout,
+        incrementNodeId,
       }}
     >
       <div className="flex flex-col">
