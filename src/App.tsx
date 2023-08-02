@@ -57,7 +57,7 @@ function DataFlowView() {
   }, [vpX, vpY, vpZ])
 
   // creating ref
-  const ref: React.MutableRefObject<any> = useRef(null)
+  const domRef: React.MutableRefObject<any> = useRef(null)
   const nodeIdRef: React.MutableRefObject<number> = useRef(maxNodeId(projects))
   const incrementNodeId = (): number => {
     nodeIdRef.current++
@@ -194,7 +194,7 @@ function DataFlowView() {
     (event: React.DragEvent) => {
       event.preventDefault()
 
-      const reactFlowBounds = ref.current.getBoundingClientRect()
+      const reactFlowBounds = domRef.current.getBoundingClientRect()
       const role = event.dataTransfer.getData('application/reactflow')
 
       // check if the dropped element is valid
@@ -210,7 +210,7 @@ function DataFlowView() {
       console.log('at: onDrop', { event, id, role, position })
       layout.trigger()
     },
-    [reactFlowInstance, ref, projects, layout]
+    [reactFlowInstance, domRef, projects, layout]
   )
 
   return (
@@ -231,7 +231,7 @@ function DataFlowView() {
         <div className="z-10">
           <MyMenubar />
         </div>
-        <div className="fixed w-screen h-screen" ref={ref}>
+        <div className="fixed w-screen h-screen" ref={domRef}>
           <ReactFlow
             nodeTypes={nodeTypes}
             nodes={nodes}
