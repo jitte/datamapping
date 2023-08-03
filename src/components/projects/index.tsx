@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Copy, Trash2, Plus, Pencil } from 'lucide-react'
 import {
   Dialog,
@@ -13,7 +13,8 @@ import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { useLocalStore } from '@/lib/store'
-import { newProjectId } from './utils'
+import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { duplicateProject, newProjectId } from './utils'
 import { initialProject } from '@/constants'
 import { ProjectType } from './types'
 import { DataTable } from './data-table'
@@ -26,6 +27,7 @@ const ProjectsTable = ({
 }) => {
   const { projects, storeProjects, currentProjectId, storeCurrentProjectId } =
     useLocalStore()
+  const { incrementNodeId } = useContext(DataFlowContext)
 
   const columns: ColumnDef<ProjectType>[] = [
     {
@@ -76,20 +78,15 @@ const ProjectsTable = ({
     setOpen(false)
   }
 
-  function handleDuplicate(id: number) {
+  const handleDuplicate = (id: number) => {
     console.log('at: ProjectTable/handleDuplicate', id)
-    const oldProject = projects.find((pj) => pj.id === id) as ProjectType
-    const newId = newProjectId(projects)
-    const newProject = {
-      id: newId,
-      name: `${oldProject.name} (${newId})`,
-      description: oldProject.description,
-      nodes: [...oldProject.nodes],
-      edges: [...oldProject.edges],
-      autoLayout: oldProject.autoLayout,
+    const oldProject = projects.find((pj) => pj.id === id)
+    if (oldProject) {
+      const newId = newProjectId(projects)
+      const newProject = duplicateProject(newId, oldProject, incrementNodeId)
+      storeProjects([newProject, ...projects])
+      storeCurrentProjectId(newId)
     }
-    storeProjects([newProject, ...projects])
-    storeCurrentProjectId(newId)
   }
 
   function handleDelete(id: number) {

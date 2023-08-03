@@ -51,4 +51,40 @@ const maxNodeId = (projects: ProjectType[]): number => {
   return Math.max(0, ...ids)
 }
 
-export { allNodes, allEdges, newProjectId, newNodeId, newNodeIdNumber, maxNodeId }
+const duplicateProject = (
+  id: number,
+  oldProject: ProjectType,
+  incrementNodeId: () => number
+): ProjectType => {
+  const nodes: Node[] = oldProject.nodes.map((node) => ({...node}))
+  const edges: Edge[] = oldProject.edges.map((edge) => ({...edge}))
+  let nodeMap: { [key: string]: string } = {}
+
+  nodes.forEach((node) => {
+    const newId = `node_${incrementNodeId()}`
+    nodeMap[node.id] = newId
+    node.id = newId
+  })
+  edges.forEach((edge) => {
+    edge.source = nodeMap[edge.source]
+    edge.target = nodeMap[edge.target]
+  })
+  const newProject = {
+    ...oldProject,
+    id,
+    name: `${oldProject.name} (${id})`,
+    nodes,
+    edges,
+  }
+  return newProject
+}
+
+export {
+  allNodes,
+  allEdges,
+  newProjectId,
+  newNodeId,
+  newNodeIdNumber,
+  maxNodeId,
+  duplicateProject,
+}
