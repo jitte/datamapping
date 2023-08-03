@@ -26,9 +26,8 @@ export function MyMenubar() {
 
   const handleTemperature = () => {
     if (reactFlowInstance) {
-      const layout = new AutoLayout(reactFlowInstance)
-      layout.trigger()
-      setLayout(layout)
+      setLayout(new AutoLayout(reactFlowInstance))
+      layout()?.trigger()
     }
   }
   const DebugInfo = () => {
@@ -50,8 +49,8 @@ export function MyMenubar() {
           <h2 className='mt-2'>Auto Layout</h2>
           <ul className="ml-2 text-gray-500">
             <li>center: ({`${centerX}, ${centerY}`})</li>
-            <li>layoutWidth: {layout?.layoutWidth.toFixed(2)}</li>
-            <li>layoutHeight: {layout?.layoutHeight.toFixed(2)}</li>
+            <li>layoutWidth: {layout()?.layoutWidth.toFixed(2)}</li>
+            <li>layoutHeight: {layout()?.layoutHeight.toFixed(2)}</li>
           </ul>
         </div>
       </HoverCardContent>

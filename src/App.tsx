@@ -37,33 +37,50 @@ import { AutoLayout } from './lib/layout'
 import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './constants'
 
 function DataFlowView() {
-  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
-  
   // local store
   const { projects, storeProjects, currentProjectId, currentProject } =
     useLocalStore()
 
+  // creating state and accessor
+  const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
   const project = currentProject()
   const [nodes, setNodes] = useState(project.nodes)
   const [edges, setEdges] = useState(project.edges)
-
-  const [layout, setLayout] = useState(new AutoLayout(reactFlowInstance))
   const [offset, setOffset] = useState({ x: 12, y: 12 })
 
+  // receive viewport update
   const { x: vpX, y: vpY, zoom: vpZ } = useViewport()
-
   useEffect(() => {
-    //console.log(vpX, vpY, vpZ)
+    // do nothing
   }, [vpX, vpY, vpZ])
 
-  // creating ref
+  // creating ref and accessor
   const domRef: React.MutableRefObject<any> = useRef(null)
   const nodeIdRef: React.MutableRefObject<number> = useRef(maxNodeId(projects))
   const incrementNodeId = (): number => {
     nodeIdRef.current++
     return nodeIdRef.current
   }
+  const layoutRef: React.MutableRefObject<AutoLayout> = useRef(
+    new AutoLayout(reactFlowInstance)
+  )
+  const layout = (): AutoLayout => {
+    return layoutRef.current
+  }
+  const setLayout = (layout: AutoLayout) => {
+    layoutRef.current = layout
+  }
+  const timerRef: React.MutableRefObject<NodeJS.Timeout | null> = useRef(null)
+  const setTimerRef = (callback: () => void, ms: number): void => {
+    if (timerRef.current) clearTimerRef()
+    timerRef.current = setTimeout(callback, ms)
+  }
+  const clearTimerRef = () => {
+    clearTimeout(timerRef.current as NodeJS.Timeout)
+    timerRef.current = null
+  }
 
+  // hotkeys
   useHotkeys(
     'ctrl+x',
     () => {
@@ -72,7 +89,6 @@ function DataFlowView() {
     },
     [nodes, reactFlowInstance]
   )
-
   useHotkeys(
     'ctrl+c',
     () => {
@@ -82,17 +98,16 @@ function DataFlowView() {
     },
     [nodes, setOffset]
   )
-
   useHotkeys(
     'ctrl+v',
     () => {
       console.log('Ctrl+V pressed')
-      if (layout.stable()) {
+      //if (layout().stable()) {
         pasteNodes(nodes, setNodes, incrementNodeId(), offset)
         setOffset((offset) => ({ x: offset.x + 12, y: offset.y + 12 }))
-      }
+      //}
     },
-    [nodes, offset, setNodes, setOffset]
+    [nodes, setNodes, offset, setOffset]
   )
 
   // update nodes and edges after changing current project
@@ -110,15 +125,20 @@ function DataFlowView() {
     const project = projects.find((pj) => pj.id === currentProjectId)
     if (!project) return
     const updateProject = () => {
-      project.nodes = nodes
-      project.edges = edges
-      storeProjects(projects)
+      setTimerRef(() => {
+        project.nodes = nodes
+        project.edges = edges
+        storeProjects(projects)
+        console.log('projects saved', new Date())
+      }, 1000)
     }
     if (project.autoLayout) {
-      layout.prepare(nodes, edges).simulate()
-      if (!layout.stable()) {
-        layout.update()
-        setNodes([...nodes])
+      layout().prepare(nodes, edges).simulate()
+      if (!layout().stable()) {
+        layout().update()
+        setTimerRef(() => {
+          setNodes([...nodes])
+        }, 1000 / 30)
       } else {
         updateProject()
       }
@@ -126,32 +146,32 @@ function DataFlowView() {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
-  }, [nodes, edges, layout, project.autoLayout, setNodes])
+  }, [nodes, edges, layoutRef, project.autoLayout, setNodes])
 
   // callbacks
   const onNodeDragStart = useCallback(
     (event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
       if (false)
         console.log('at: onNodeDragStart', event, nodeParam, nodesParam)
-      layout.pin(nodesParam)
+      layout().pin(nodesParam)
     },
-    [layout]
+    []
   )
   const onNodeDrag = useCallback(
     //(event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
     //console.log('at: onNodeDrag', event, nodeParam, nodesParam)
     () => {
-      layout.trigger() // set highest temperature
+      layout().trigger() // set highest temperature
     },
-    [layout]
+    []
   )
   const onNodeDragStop = useCallback(
     //(event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
     //console.log('at: onNodeDragStop', event, nodeParam, nodesParam)
     () => {
-      layout.pin([])
+      layout().pin([])
     },
-    [layout]
+    []
   )
   const onNodesChange = useCallback(
     (changes: NodeChange[]): void => {
@@ -208,9 +228,9 @@ function DataFlowView() {
       const id = incrementNodeId()
       addNode(id, position, role, setNodes)
       console.log('at: onDrop', { event, id, role, position })
-      layout.trigger()
+      layout().trigger()
     },
-    [reactFlowInstance, domRef, projects, layout]
+    [reactFlowInstance, domRef, projects]
   )
 
   return (

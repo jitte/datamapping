@@ -9,8 +9,8 @@ type DataFlowContextType = {
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>
   edges: Edge[]
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>
-  layout: AutoLayout | null,
-  setLayout: React.Dispatch<React.SetStateAction<AutoLayout>>
+  layout: ()=> AutoLayout | null
+  setLayout: (layout: AutoLayout) => void
   incrementNodeId: () => number
 }
 
@@ -21,7 +21,7 @@ export const DataFlowContext = createContext<DataFlowContextType>({
   setNodes: () => {},
   edges: [],
   setEdges: () => {},
-  layout: null,
+  layout: () => null,
   setLayout: () => {},
   incrementNodeId: () => 0,
 })

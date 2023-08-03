@@ -51,7 +51,7 @@ export function GenericNode({
   }
 
   const DebugInfo = () => {
-    const vnode: vNodeType | undefined = layout?.vnodes.find(
+    const vnode: vNodeType | undefined = layout()?.vnodes.find(
       (vn) => vn.original.id === id
     )
 
