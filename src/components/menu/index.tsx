@@ -5,7 +5,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
+} from '@/components/ui/hover-card'
 import { Flame } from 'lucide-react'
 
 import { FileMenu } from './file'
@@ -21,13 +21,15 @@ import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { AutoLayout } from '@/lib/layout'
 
 export function MyMenubar() {
-  const { layout, setLayout, reactFlowInstance } = useContext(DataFlowContext)
+  const { nodes, setNodes, layout, setLayout, reactFlowInstance } =
+    useContext(DataFlowContext)
   const { preference } = useLocalStore()
 
   const handleTemperature = () => {
     if (reactFlowInstance) {
       setLayout(new AutoLayout(reactFlowInstance))
       layout()?.trigger()
+      setNodes([...nodes])
     }
   }
   const DebugInfo = () => {
@@ -39,14 +41,14 @@ export function MyMenubar() {
     const centerY = AutoLayout.center.y.toFixed(2)
 
     return preference.showDebugInfo ? (
-      <HoverCardContent className='bg-white/90'>
+      <HoverCardContent className="bg-white/90">
         <div className="text-xs text-left">
           <h2>Reactflow Instance</h2>
-          <ul className='ml-2 text-gray-500'>
+          <ul className="ml-2 text-gray-500">
             <li>viewport: ({`${vpx}, ${vpy}, ${vpz}`})</li>
             <li></li>
           </ul>
-          <h2 className='mt-2'>Auto Layout</h2>
+          <h2 className="mt-2">Auto Layout</h2>
           <ul className="ml-2 text-gray-500">
             <li>center: ({`${centerX}, ${centerY}`})</li>
             <li>layoutWidth: {layout()?.layoutWidth.toFixed(2)}</li>

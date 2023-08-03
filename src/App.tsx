@@ -103,8 +103,8 @@ function DataFlowView() {
     () => {
       console.log('Ctrl+V pressed')
       //if (layout().stable()) {
-        pasteNodes(nodes, setNodes, incrementNodeId(), offset)
-        setOffset((offset) => ({ x: offset.x + 12, y: offset.y + 12 }))
+      pasteNodes(nodes, setNodes, incrementNodeId(), offset)
+      setOffset((offset) => ({ x: offset.x + 12, y: offset.y + 12 }))
       //}
     },
     [nodes, setNodes, offset, setOffset]
@@ -146,7 +146,7 @@ function DataFlowView() {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
-  }, [nodes, edges, layoutRef, project.autoLayout, setNodes])
+  }, [nodes, edges, project.autoLayout, setNodes])
 
   // callbacks
   const onNodeDragStart = useCallback(
