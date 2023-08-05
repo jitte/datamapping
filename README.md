@@ -21,10 +21,12 @@ npm install
 
 # Usage
 
+1. Start server
 ```bash
 npm run dev
 ```
-
+2. Open http://localhost:5173/ from your browser
+   
 # License
 
 [MIT licensed](https://github.com/jitte/datamapping/blob/main/LICENSE)
