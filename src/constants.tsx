@@ -114,7 +114,6 @@ export const roleInfo: { [key: string]: roleInfoType<LucideIcon> } = {
     defaults: { ...defaultsForEntity },
   },
 }
-export const roleList = Object.keys(roleInfo)
 
 /**
  * Nodes

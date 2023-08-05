@@ -8,23 +8,24 @@ import {
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { NodeConfigContext } from '../types'
-import { roleList } from '@/constants'
+import { roleInfo } from '@/constants'
 
 export function RoleCompoment() {
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
-  const role = nodeData.role ?? ''
+  const roles = Object.keys(roleInfo)
+  const currentRole = nodeData.role ?? ''
   function handleChange(role: string) {
     setNodeData({ ...nodeData, role })
   }
   return (
     <div className="flex flex-col gap-2">
       <Label>Role</Label>
-      <Select defaultValue={role} onValueChange={handleChange}>
+      <Select defaultValue={currentRole} onValueChange={handleChange}>
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {roleList.map((role) => (
+          {roles.map((role) => (
             <SelectItem key={role} value={role}>
               {role}
             </SelectItem>

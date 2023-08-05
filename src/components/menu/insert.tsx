@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/menubar'
 import { Grip } from 'lucide-react'
 
-import { roleInfo, roleList } from '@/constants'
+import { roleInfo } from '@/constants'
 import { addNode } from '../nodes/utils'
 import { DataFlowContext } from '@/contexts/dataFlowContext'
 import { AutoLayout, alParamTemperature } from '@/lib/layout'
@@ -17,7 +17,7 @@ import { AutoLayout, alParamTemperature } from '@/lib/layout'
 const InsertMenu = () => {
   const { setNodes, reactFlowInstance, incrementNodeId } =
     useContext(DataFlowContext)
-  const items = roleList
+  const roles = Object.keys(roleInfo)
 
   function EntityItems() {
     const onDragStart = (event: React.DragEvent, role: string) => {
@@ -37,18 +37,18 @@ const InsertMenu = () => {
       AutoLayout.temperature = alParamTemperature
     }
 
-    return items.map((item) => {
-      const Icon = roleInfo[item].icon
+    return roles.map((role) => {
+      const Icon = roleInfo[role].icon
       return (
         <MenubarItem
-          key={item}
+          key={role}
           draggable
-          onDragStart={(event) => onDragStart(event, item)}
-          onClick={() => handleClick(item)}
+          onDragStart={(event) => onDragStart(event, role)}
+          onClick={() => handleClick(role)}
         >
           <div className="flex flex-row items-center w-full gap-2">
             <Icon size={16} />
-            {item}
+            {role}
             <div className="grow" />
             <Grip size={10} />
           </div>
@@ -60,7 +60,7 @@ const InsertMenu = () => {
     <MenubarMenu>
       <MenubarTrigger>Insert</MenubarTrigger>
       <MenubarContent>
-        <div className="text-xs">Drag item to create item</div>
+        <div className="text-xs">Drag item to create node</div>
         <MenubarSeparator />
         <EntityItems />
       </MenubarContent>
