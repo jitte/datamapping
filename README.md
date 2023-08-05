@@ -13,11 +13,15 @@ A flow diagram editor to describe cross border data transfer.
 
 # Installation
 
-`git clone https://github.com/jitte/datamapping/`
+```bash
+git clone https://github.com/jitte/datamapping/
+```
 
 # Usage
 
-`npm run dev`
+```bash
+npm run dev
+```
 
 # License
 
