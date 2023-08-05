@@ -1,7 +1,7 @@
 # React Flow Data Mapping
 
 A flow diagram editor to describe cross border data transfer.
-![screenshot](https://github.com/jitte/datamapping/assets/982984/2f25b8ab-61c0-4fe4-8358-d51b0608911a)
+![screenshot](https://github.com/jitte/datamapping/assets/982984/7838dfef-ebb8-4f45-9716-13dea4412812)
 
 # Key Features
 
@@ -13,7 +13,7 @@ A flow diagram editor to describe cross border data transfer.
 
 # Demonstration
 
-![movie](https://github.com/jitte/datamapping/assets/982984/9c45577f-605c-42d2-8e64-fda5e7772f1b)   
+![movie](https://github.com/jitte/datamapping/assets/982984/c359a87a-f275-4c40-8a11-9104f74e3eff)
 
 # Installation
 
