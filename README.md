@@ -25,4 +25,4 @@ npm run dev
 
 # License
 
-MIT licenced.
+[MIT licensed](https:/github.com/jitte/datamapping/LICENSE)
