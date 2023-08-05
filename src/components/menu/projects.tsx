@@ -31,7 +31,6 @@ export function ProjectMenu() {
   return (
     <MenubarMenu>
       <div className="flex flex-row items-center gap-2">
-        <ProjectsDialog />
         <Select value={String(currentProjectId)} onValueChange={handleChange}>
           <SelectTrigger className="h-8 focus:ring-0">
             <SelectValue>{currentProject().name}</SelectValue>
@@ -44,6 +43,7 @@ export function ProjectMenu() {
             ))}
           </SelectContent>
         </Select>
+        <ProjectsDialog />
       </div>
     </MenubarMenu>
   )
