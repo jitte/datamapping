@@ -39,7 +39,7 @@ const FindMenu = () => {
 
   const handleClick = (project: ProjectType, node: Node) => {
     //node.selected = true
-    project.nodes.map((nd: Node) => nd.selected = nd.id === node.id)
+    project.nodes.map((nd: Node) => (nd.selected = nd.id === node.id))
     if (project.id !== currentProjectId) {
       storeProjects([...projects])
       storeCurrentProjectId(project.id)
@@ -50,7 +50,7 @@ const FindMenu = () => {
 
   const NodeMenubarItem = ({ node }: { node: Node }) => {
     return (
-      <div className='flex flex-row items-center gap-1'>
+      <div className="flex flex-row items-center gap-1">
         <CountryFlag countryCode={node.data.country} />
         <Badge variant="outline">{node.data.role}</Badge>
         {node.data.name}
@@ -59,17 +59,22 @@ const FindMenu = () => {
   }
 
   const NodeMenubarItems = ({ project }: { project: ProjectType }) => {
+    const nodes = project.nodes.filter(
+      (node) => !preference.showOnlyNamedNode || node.data.name
+    )
     return (
       <MenubarSubContent>
-        {project.nodes.map((node: Node) =>
-          preference.showOnlyNamedNode && !node.data.name ? null : (
+        {nodes.length > 0 ? (
+          nodes.map((node) => (
             <MenubarItem
               key={`pj_${project.id}_${node.id}`}
               onClick={() => handleClick(project, node)}
             >
               <NodeMenubarItem node={node} />
             </MenubarItem>
-          )
+          ))
+        ) : (
+          <div className='px-2 text-sm'>Nothing to show</div>
         )}
       </MenubarSubContent>
     )
@@ -80,7 +85,7 @@ const FindMenu = () => {
       <MenubarSub key={`pj_${project.id}`}>
         {project.id === currentProjectId ? (
           <MenubarSubTrigger>
-            <Check size={16} className='mr-2'/>
+            <Check size={16} className="mr-2" />
             {project.name}
           </MenubarSubTrigger>
         ) : (
