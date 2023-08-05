@@ -17,7 +17,7 @@ import { Switch } from '@/components/ui/switch'
 import { DataFlowContext } from '@/lib/contexts'
 import { NodeConfigContext, NodeDataType } from '@/components/nodes/types'
 import { findNode } from '@/components/nodes/utils'
-import { EdgeType } from '@/components/edges/utils'
+import { edgeType } from '@/components/nodes/utils'
 import { RoleCompoment } from './role'
 import { CountryComponent } from './country'
 import { NameComponent } from './name'
@@ -48,7 +48,7 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
   function updateEdges() {
     console.log('at ConfigDialog/updateEdges', { edges })
     for (let edge of edges) {
-      edge.type = EdgeType(edge.source, edge.target, nodes)
+      edge.type = edgeType(edge.source, edge.target, nodes)
       console.log(`${edge.source} and ${edge.target} is ${edge.type}`)
     }
     console.log('at ConfigDialog/updateEdges', { edges })

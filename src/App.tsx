@@ -30,7 +30,7 @@ import {
   pasteNodes,
   addNode,
 } from './components/nodes/utils'
-import { EdgeType } from './components/edges/utils'
+import { edgeType } from './components/nodes/utils'
 import { maxNodeId } from './components/projects/utils'
 import { AutoLayout } from './lib/layout'
 import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './lib/constants'
@@ -206,7 +206,7 @@ function DataFlowView() {
   )
   const onConnect = useCallback(
     (connection: Connection) => {
-      const type = EdgeType(
+      const type = edgeType(
         connection.source ?? '',
         connection.target ?? '',
         nodes

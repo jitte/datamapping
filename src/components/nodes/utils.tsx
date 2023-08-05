@@ -1,11 +1,15 @@
 import React from 'react'
-import { Node, ReactFlowInstance, XYPosition } from 'reactflow'
+import { Node, Edge, ReactFlowInstance, XYPosition } from 'reactflow'
 
 import { writeClipboard, readClipboard } from '@/lib/clipboard'
 import { roleInfo } from '@/lib/constants'
 
 const findNode = (nodes: Node[], id: string): Node => {
   return nodes.find((node: Node) => node.id === id) as Node
+}
+
+const findEdge = (edges: Edge[], id: string): Edge => {
+  return edges.find((edge: Edge) => edge.id === id) as Edge
 }
 
 const cutNodes = (
@@ -87,9 +91,32 @@ const addNode = (
     type: 'genericNode',
     position,
     data: { ...roleInfo[role].defaults, role },
-    selected: true
+    selected: true,
   }
   setNodes((nds: Node[]) => nds.concat(newNode))
 }
 
-export { findNode, copyNodes, cutNodes, pasteNodes, deleteNodes, selectNodes, addNode }
+const edgeType = (source: string, target: string, nodes: Node[]) => {
+  const sourceNode = findNode(nodes, source)
+  const targetNode = findNode(nodes, target)
+  //console.log('at: edgeType', {source, target, nodes, sourceNode, targetNode})
+  if (sourceNode === undefined || targetNode === undefined) return 'domestic' // default
+
+  const sourceCountry = sourceNode.data.country ?? ''
+  const targetCountry = targetNode.data.country ?? ''
+  if (sourceCountry === '' || targetCountry === '') return 'domestic' // default
+
+  return sourceCountry === targetCountry ? 'domestic' : 'crossborder'
+}
+
+export {
+  findNode,
+  findEdge,
+  copyNodes,
+  cutNodes,
+  pasteNodes,
+  deleteNodes,
+  selectNodes,
+  addNode,
+  edgeType,
+}
