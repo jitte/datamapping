@@ -22,7 +22,6 @@ import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { useLocalStore } from './lib/store'
-import { GlobalContextProvider } from './contexts'
 import { DataFlowContextProvider } from './contexts/dataFlowContext'
 import { MyMenubar } from './components/menu'
 import {
@@ -38,8 +37,21 @@ import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './constants'
 
 function DataFlowView() {
   // local store
-  const { projects, storeProjects, currentProjectId, currentProject } =
-    useLocalStore()
+  const {
+    projects,
+    storeProjects,
+    currentProjectId,
+    storeCurrentProjectId,
+    currentProject,
+  } = useLocalStore()
+
+  if (projects.length === 0) {
+    storeProjects([initialProject(1)])
+    storeCurrentProjectId(1)
+  }
+  if (!currentProjectId) {
+    storeCurrentProjectId(projects[0].id)
+  }
 
   // creating state and accessor
   const [reactFlowInstance, setReactFlowInstance] = useState(useReactFlow())
@@ -50,9 +62,7 @@ function DataFlowView() {
 
   // receive viewport update
   const { x: vpX, y: vpY, zoom: vpZ } = useViewport()
-  useEffect(() => {
-    // do nothing
-  }, [vpX, vpY, vpZ])
+  useEffect(() => {}, [vpX, vpY, vpZ]) // somehow need this to get update
 
   // creating ref and accessor
   const domRef: React.MutableRefObject<any> = useRef(null)
@@ -118,7 +128,7 @@ function DataFlowView() {
       setEdges([...project.edges])
     }
     //console.log('at: useEffect(currentProjectId)', currentProjectId)
-  }, [currentProjectId, setNodes, setEdges])
+  }, [projects, currentProjectId, setNodes, setEdges])
 
   // autolayout and save projects after changing nodes and edges
   useEffect(() => {
@@ -146,7 +156,7 @@ function DataFlowView() {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
-  }, [nodes, edges, project.autoLayout, setNodes])
+  }, [projects, nodes, edges, setNodes])
 
   // callbacks
   const onNodeDragStart = useCallback(
@@ -291,28 +301,9 @@ function DataFlowView() {
 }
 
 export default function App() {
-  const { projects, storeProjects, currentProjectId, storeCurrentProjectId } =
-    useLocalStore()
-  const [projectUpdated, setProjectUpdated] = useState(false)
-
-  if (projects.length === 0) {
-    storeProjects([initialProject(1)])
-    storeCurrentProjectId(1)
-  }
-  if (!currentProjectId) {
-    storeCurrentProjectId(projects[0].id)
-  }
-
   return (
-    <GlobalContextProvider
-      value={{
-        projectUpdated,
-        setProjectUpdated,
-      }}
-    >
-      <ReactFlowProvider>
-        <DataFlowView />
-      </ReactFlowProvider>
-    </GlobalContextProvider>
+    <ReactFlowProvider>
+      <DataFlowView />
+    </ReactFlowProvider>
   )
 }
