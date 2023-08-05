@@ -17,7 +17,7 @@ import { ProjectMenu } from './projects'
 import { PreferenceMenu } from './preference'
 
 import { useLocalStore } from '@/lib/store'
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import { AutoLayout } from '@/lib/layout'
 
 export function MyMenubar() {

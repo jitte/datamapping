@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { Check } from 'lucide-react'
 
 import { useLocalStore } from '@/lib/store'
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import { ProjectType } from '@/components/projects/types'
 import { CountryFlag } from '../nodes/config/country'
 

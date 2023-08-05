@@ -7,7 +7,7 @@ import {
   MenubarTrigger,
   MenubarShortcut,
 } from '@/components/ui/menubar'
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import {
   cutNodes,
   copyNodes,

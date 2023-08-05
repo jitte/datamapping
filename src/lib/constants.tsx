@@ -118,8 +118,8 @@ export const roleInfo: { [key: string]: roleInfoType<LucideIcon> } = {
 /**
  * Nodes
  */
-import { GenericNode } from './components/nodes'
-import { NodeParamType } from './components/nodes/types';
+import { GenericNode } from '../components/nodes'
+import { NodeParamType } from '../components/nodes/types';
 
 export const nodeTypes: {
   [key: string]: (param: NodeParamType) => JSX.Element
@@ -134,7 +134,7 @@ export const nodeTypes: {
 /**
  * Edges
  */
-import { DomesticEdge, CrossBorderEdge } from './components/edges'
+import { DomesticEdge, CrossBorderEdge } from '../components/edges'
 
 export const edgeTypes = {
   domestic: DomesticEdge,

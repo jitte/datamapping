@@ -18,7 +18,7 @@ import {
   AlignHorizontalSpaceBetween,
   AlignVerticalSpaceBetween,
 } from 'lucide-react'
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import { useLocalStore } from '@/lib/store'
 
 const selectedNodes = (nodes: Node[]) => {

@@ -22,7 +22,7 @@ import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { useLocalStore } from './lib/store'
-import { DataFlowContextProvider } from './contexts/dataFlowContext'
+import { DataFlowContextProvider } from './lib/contexts'
 import { MyMenubar } from './components/menu'
 import {
   cutNodes,
@@ -33,7 +33,7 @@ import {
 import { EdgeType } from './components/edges/utils'
 import { maxNodeId } from './components/projects/utils'
 import { AutoLayout } from './lib/layout'
-import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './constants'
+import { GRID_SIZE, nodeTypes, edgeTypes, initialProject } from './lib/constants'
 
 function DataFlowView() {
   // local store

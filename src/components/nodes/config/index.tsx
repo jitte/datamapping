@@ -14,7 +14,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import { NodeConfigContext, NodeDataType } from '@/components/nodes/types'
 import { findNode } from '@/components/nodes/utils'
 import { EdgeType } from '@/components/edges/utils'

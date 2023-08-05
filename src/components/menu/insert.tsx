@@ -9,9 +9,9 @@ import {
 } from '@/components/ui/menubar'
 import { Grip } from 'lucide-react'
 
-import { roleInfo } from '@/constants'
+import { roleInfo } from '@/lib/constants'
 import { addNode } from '../nodes/utils'
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import { AutoLayout, alParamTemperature } from '@/lib/layout'
 
 const InsertMenu = () => {

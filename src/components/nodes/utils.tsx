@@ -2,7 +2,7 @@ import React from 'react'
 import { Node, ReactFlowInstance, XYPosition } from 'reactflow'
 
 import { writeClipboard, readClipboard } from '@/lib/clipboard'
-import { roleInfo } from '@/constants'
+import { roleInfo } from '@/lib/constants'
 
 const findNode = (nodes: Node[], id: string): Node => {
   return nodes.find((node: Node) => node.id === id) as Node

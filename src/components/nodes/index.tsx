@@ -6,14 +6,14 @@ import {
 } from '@/components/ui/hover-card'
 import { cn } from '@/lib/utils'
 
-import { roleInfo } from '@/constants'
+import { roleInfo } from '@/lib/constants'
 import { NodeParamType, NodeConfigContext } from './types'
 import { FlowComponent } from './flow'
 import { ConfigDialog } from './config'
 import { CountryFlag } from './config/country'
 
 import { useLocalStore } from '@/lib/store'
-import { DataFlowContext } from '@/contexts/dataFlowContext'
+import { DataFlowContext } from '@/lib/contexts'
 import { vNodeType } from '@/lib/layout'
 
 export function GenericNode({
