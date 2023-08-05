@@ -14,7 +14,6 @@ export type LocalStoreType = {
 
 export type PreferenceType = {
   showOnlyNamedNode: boolean
-  enableAutoLayout: boolean
   layoutParam: {
     epsilon: number
     decayRate: number
@@ -32,7 +31,6 @@ export type PreferenceType = {
 }
 const initialPreference: PreferenceType = {
   showOnlyNamedNode: true,
-  enableAutoLayout: false,
   layoutParam: {
     epsilon: 0.1,
     decayRate: 0.95,
