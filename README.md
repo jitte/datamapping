@@ -15,6 +15,8 @@ A flow diagram editor to describe cross border data transfer.
 
 ```bash
 git clone https://github.com/jitte/datamapping/
+cd datamapping
+npm install
 ```
 
 # Usage
