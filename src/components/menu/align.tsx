@@ -157,7 +157,7 @@ const AlignMenu = () => {
   const handleAutoLayout = (flag: boolean) => {
     const project = currentProject()
     project.autoLayout = flag
-    storeProjects(projects)
+    storeProjects([...projects])
   }
 
   return (
