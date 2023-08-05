@@ -5,7 +5,7 @@ A flow diagram editor to describe cross border data transfer.
 
 # Key Features
 
-- With [reactflow](https://github.com/wbkd/react-flow/), describe project flow as nodes and edges
+- With [reactflow](https://github.com/wbkd/react-flow/), describe your project data flow as nodes and edges
 - Automatically color edges that represent cross border data transfer
 - Copy and Paste nodes
 - Auto layout nodes or manualy align nodes
