@@ -38,8 +38,10 @@ const FlagAndCountry = ({
 
 const CountryComponent = () => {
   const { preference } = useLocalStore()
-  const countryList = [...preference.selectedCountries]
-  countryList.push('')
+  let countryList: string[] = ['']
+  if (preference.selectedCountries) {
+    countryList = [...preference.selectedCountries, '']
+  }
 
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
   const country = nodeData.country ?? ''
