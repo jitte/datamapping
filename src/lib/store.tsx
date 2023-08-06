@@ -14,6 +14,7 @@ export type LocalStoreType = {
 
 export type PreferenceType = {
   showOnlyNamedNode: boolean
+  selectedCountries: string[]
   layoutParam: {
     epsilon: number
     decayRate: number
@@ -31,6 +32,7 @@ export type PreferenceType = {
 }
 const initialPreference: PreferenceType = {
   showOnlyNamedNode: true,
+  selectedCountries: ['JP', 'US', 'EU'],
   layoutParam: {
     epsilon: 0.1,
     decayRate: 0.95,
