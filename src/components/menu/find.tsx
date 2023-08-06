@@ -17,7 +17,7 @@ import { Check } from 'lucide-react'
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/lib/contexts'
 import { ProjectType } from '@/components/projects/types'
-import { CountryFlag } from '../nodes/config/country'
+import { CountryFlag } from '../countries'
 
 const FindMenu = () => {
   const {

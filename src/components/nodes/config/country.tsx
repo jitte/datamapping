@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Check, ChevronsUpDown, Globe } from 'lucide-react'
+import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   Command,
@@ -15,50 +15,17 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { ReactCountryFlag } from 'react-country-flag'
-import { countries } from 'countries-list'
+
+import { useLocalStore } from '@/lib/store'
 import { NodeConfigContext } from '../types'
+import { CountryFlag, countries } from '@/components/countries'
 
-export const countryInfo: { [key: string]: { name: string; emoji: string } } = {
-  EU: { name: 'European Union', emoji: String.fromCodePoint(0x1f1ea, 0x1f1fa) },
-  ...countries,
-}
-
-//export const countryList = Object.keys(countryInfo).sort()
-export const countryList = [
-  'JP',
-  'US',
-  'EU',
-  'GB',
-  'SG',
-  'IN',
-  'BR',
-  'CN',
-  'KR',
-  'TW',
-  'HK',
-  '',
-]
-
-export function CountryFlag({
+const FlagAndCountry = ({
   countryCode,
 }: {
   countryCode: string | undefined
-}) {
-  return countryCode ? (
-    <ReactCountryFlag
-      svg
-      countryCode={countryCode}
-      className="border-2"
-      style={{ width: '32px', height: '24px' }}
-    />
-  ) : (
-    <Globe className="w-5 h-5 mx-[6px]" />
-  )
-}
-
-function FlagAndCountry({ countryCode }: { countryCode: string | undefined }) {
-  const data = countryInfo[countryCode ?? '']
+}) => {
+  const data = countries[countryCode ?? '']
   const flag = <CountryFlag countryCode={countryCode} />
 
   return (
@@ -69,12 +36,16 @@ function FlagAndCountry({ countryCode }: { countryCode: string | undefined }) {
   )
 }
 
-export function CountryComponent() {
+const CountryComponent = () => {
+  const { preference } = useLocalStore()
+  const countryList = [...preference.selectedCountries]
+  countryList.push('')
+
   const { nodeData, setNodeData } = useContext(NodeConfigContext)
   const country = nodeData.country ?? ''
   const [open, setOpen] = useState(false)
 
-  function handleSelect(country: string) {
+  const handleSelect = (country: string) => {
     setNodeData({ ...nodeData, country })
     setOpen(false)
   }
@@ -115,3 +86,5 @@ export function CountryComponent() {
     </div>
   )
 }
+
+export { CountryComponent }

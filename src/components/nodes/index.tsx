@@ -10,7 +10,7 @@ import { roleInfo } from '@/lib/constants'
 import { NodeParamType, NodeConfigContext } from './types'
 import { FlowComponent } from './flow'
 import { ConfigDialog } from './config'
-import { CountryFlag } from './config/country'
+import { CountryFlag } from '../countries'
 
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/lib/contexts'

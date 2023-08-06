@@ -3,9 +3,11 @@ import {
   MenubarMenu,
   MenubarTrigger,
   MenubarCheckboxItem,
+  MenubarSeparator,
 } from '@/components/ui/menubar'
 import { Cog } from 'lucide-react'
 import { useLocalStore } from '@/lib/store'
+import { CountryDialog } from '@/components/countries'
 
 const PreferenceMenu = () => {
   const { preference, storePreference } = useLocalStore()
@@ -23,6 +25,8 @@ const PreferenceMenu = () => {
         <Cog size={16} />
       </MenubarTrigger>
       <MenubarContent>
+        <CountryDialog />
+        <MenubarSeparator />
         <MenubarCheckboxItem
           onCheckedChange={handleShowDebugInfo}
           checked={preference.showDebugInfo}
