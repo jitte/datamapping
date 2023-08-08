@@ -13,7 +13,7 @@ A flow diagram editor to describe cross border data transfer.
 
 # Demonstration
 
-![movie](https://github.com/jitte/datamapping/assets/982984/c359a87a-f275-4c40-8a11-9104f74e3eff)
+![movie](https://github.com/jitte/datamapping/assets/982984/e2e07aae-4819-4e4a-813a-15b81d7ab518)
 
 # Installation
 
