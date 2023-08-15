@@ -113,7 +113,7 @@ function DataFlowView() {
     () => {
       console.log('Ctrl+V pressed')
       //if (layout().stable()) {
-      pasteNodes(nodes, setNodes, incrementNodeId(), offset)
+      pasteNodes(nodes, setNodes, incrementNodeId, offset)
       setOffset((offset) => ({ x: offset.x + 12, y: offset.y + 12 }))
       //}
     },

@@ -28,7 +28,7 @@ function EditMenu() {
   }
 
   const handlePaste = async () => {
-    pasteNodes(nodes, setNodes, incrementNodeId())
+    pasteNodes(nodes, setNodes, incrementNodeId)
   }
 
   const handleDelete = () => {
