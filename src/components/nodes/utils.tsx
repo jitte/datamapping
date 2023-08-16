@@ -12,52 +12,87 @@ const findEdge = (edges: Edge[], id: string): Edge => {
   return edges.find((edge: Edge) => edge.id === id) as Edge
 }
 
+const selectedNodesAndEdges = (nodes: Node[], edges: Edge[]) => {
+  const selectedNodes = nodes.filter((node) => node.selected)
+  const selectedEdges = edges.filter((edge) => {
+    const source = findNode(selectedNodes, edge.source)
+    const target = findNode(selectedNodes, edge.target)
+    return source && target
+  })
+  return { selectedNodes, selectedEdges }
+}
+
 const cutNodes = (
   nodes: Node[],
+  edges: Edge[],
   reactFlowInstance: ReactFlowInstance | null
 ) => {
-  const selectedNodes = nodes.filter((node) => node.selected)
-  const value = JSON.stringify(selectedNodes, null, '  ')
+  const { selectedNodes, selectedEdges } = selectedNodesAndEdges(nodes, edges)
+  const value = JSON.stringify(
+    { nodes: selectedNodes, edges: selectedEdges },
+    null,
+    '  '
+  )
   writeClipboard(value)
   reactFlowInstance?.deleteElements({ nodes: selectedNodes })
 }
 
-const copyNodes = (nodes: Node[]) => {
-  const selectedNodes = nodes.filter((node) => node.selected)
-  const value = JSON.stringify(selectedNodes, null, '  ')
+const copyNodes = (nodes: Node[], edges: Edge[]) => {
+  const { selectedNodes, selectedEdges } = selectedNodesAndEdges(nodes, edges)
+  const value = JSON.stringify(
+    { nodes: selectedNodes, edges: selectedEdges },
+    null,
+    '  '
+  )
   writeClipboard(value)
 }
 
 const pasteNodes = async (
-  nodes: Node[],
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>,
   incrementNodeId: () => number,
   offset: XYPosition = { x: 0, y: 0 }
 ) => {
   const value = await readClipboard()
   let newNodes: Node[]
+  let newEdges: Edge[]
   try {
-    newNodes = JSON.parse(value)
+    const result = JSON.parse(value)
+    newNodes = result.nodes
+    newEdges = result.edges
   } catch (e) {
     console.log('JSON.parse error', e)
     return
   }
   if (!Array.isArray(newNodes)) return
 
-  nodes.map((node) => {
-    node.selected = false
-  })
-  newNodes = newNodes.map<Node>((node: Node) => {
-    if (node.position) {
-      node.position.x = node.position.x + offset.x
-      node.position.y = node.position.y + offset.y
-    } else {
-      node.position = { x: 0, y: 0 }
+  setNodes((nodes) => {
+    for (const node of nodes) {
+      node.selected = false
     }
-    node.id = `node_${incrementNodeId()}`
-    return node
+    const nodeMap: { [key: string]: string } = {}
+    newNodes = newNodes.map<Node>((node: Node) => {
+      if (node.position) {
+        node.position.x = node.position.x + offset.x
+        node.position.y = node.position.y + offset.y
+      } else {
+        node.position = { x: 0, y: 0 }
+      }
+      const oldId = node.id
+      node.id = `node_${incrementNodeId()}`
+      nodeMap[oldId] = node.id
+      return node
+    })
+    setEdges((edges: Edge[]) => {
+      for (const edge of newEdges) {
+        edge.source = nodeMap[edge.source]
+        edge.target = nodeMap[edge.target]
+        edge.id = `reactflow__edge-${edge.source}${edge.sourceHandle}-${edge.target}${edge.targetHandle}`
+      }
+      return edges.concat(newEdges)
+    })
+    return nodes.concat(newNodes)
   })
-  setNodes((nds: Node[]) => nds.concat(newNodes))
 }
 
 const deleteNodes = (

@@ -95,7 +95,7 @@ function DataFlowView() {
     'ctrl+x',
     () => {
       console.log('Ctrl+X pressed')
-      cutNodes(nodes, reactFlowInstance)
+      cutNodes(nodes, edges, reactFlowInstance)
     },
     [nodes, reactFlowInstance]
   )
@@ -103,7 +103,7 @@ function DataFlowView() {
     'ctrl+c',
     () => {
       console.log('Ctrl+C pressed')
-      copyNodes(nodes)
+      copyNodes(nodes, edges)
       setOffset({ x: 12, y: 12 })
     },
     [nodes, setOffset]
@@ -113,7 +113,7 @@ function DataFlowView() {
     () => {
       console.log('Ctrl+V pressed')
       //if (layout().stable()) {
-      pasteNodes(nodes, setNodes, incrementNodeId, offset)
+      pasteNodes(setNodes, setEdges, incrementNodeId, offset)
       setOffset((offset) => ({ x: offset.x + 12, y: offset.y + 12 }))
       //}
     },

@@ -17,18 +17,25 @@ import {
 } from '@/components/nodes/utils'
 
 function EditMenu() {
-  const { nodes, setNodes, reactFlowInstance, incrementNodeId } = useContext(DataFlowContext)
+  const {
+    nodes,
+    setNodes,
+    edges,
+    setEdges,
+    reactFlowInstance,
+    incrementNodeId,
+  } = useContext(DataFlowContext)
 
   const handleCut = () => {
-    cutNodes(nodes, reactFlowInstance)
+    cutNodes(nodes, edges, reactFlowInstance)
   }
 
   const handleCopy = () => {
-    copyNodes(nodes)
+    copyNodes(nodes, edges)
   }
 
   const handlePaste = async () => {
-    pasteNodes(nodes, setNodes, incrementNodeId)
+    pasteNodes(setNodes, setEdges, incrementNodeId)
   }
 
   const handleDelete = () => {
