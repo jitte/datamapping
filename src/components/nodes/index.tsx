@@ -10,11 +10,11 @@ import { roleInfo } from '@/lib/constants'
 import { NodeParamType, NodeConfigContext } from './types'
 import { FlowComponent } from './flow'
 import { ConfigDialog } from './config'
-import { CountryFlag } from '../countries'
 
 import { useLocalStore } from '@/lib/store'
 import { DataFlowContext } from '@/lib/contexts'
 import { vNodeType } from '@/lib/layout'
+import { CountryComponent } from './config/country'
 
 export function GenericNode({
   id,
@@ -151,8 +151,8 @@ export function GenericNode({
             ]
           )}
         >
-          <CountryFlag countryCode={data.country} />
-          <div hidden>{type}</div>
+          <CountryComponent />
+          <div hidden>{type}C</div>
           <HoverCard>
             <HoverCardTrigger>
               <div className="text-lg">{role}</div>
