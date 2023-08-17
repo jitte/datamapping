@@ -26,8 +26,15 @@ import { useLocalStore } from '@/lib/store'
 import { columns, CountryTableType } from './columns'
 import { DataTable } from './data-table'
 
-const CountryFlag = ({ countryCode }: { countryCode: string | undefined }) => {
-  return countryCode ? (
+const CountryFlag = ({
+  countryCode,
+  showName = false,
+}: {
+  countryCode: string | undefined
+  showName?: boolean
+}) => {
+  const data = countries[countryCode ?? '']
+  const flag = countryCode ? (
     <ReactCountryFlag
       svg
       countryCode={countryCode}
@@ -36,6 +43,14 @@ const CountryFlag = ({ countryCode }: { countryCode: string | undefined }) => {
     />
   ) : (
     <Globe className="w-5 h-5 mx-[6px]" />
+  )
+  return showName ? (
+    <div className="flex flex-row items-center gap-2 text-sm">
+      {flag}
+      {data ? data.name : 'n/a'}
+    </div>
+  ) : (
+    <>{flag}</>
   )
 }
 

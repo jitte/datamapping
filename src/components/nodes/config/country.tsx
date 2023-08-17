@@ -18,23 +18,7 @@ import { Label } from '@/components/ui/label'
 
 import { useLocalStore } from '@/lib/store'
 import { NodeConfigContext } from '../types'
-import { CountryFlag, countries } from '@/components/countries'
-
-const FlagAndCountry = ({
-  countryCode,
-}: {
-  countryCode: string | undefined
-}) => {
-  const data = countries[countryCode ?? '']
-  const flag = <CountryFlag countryCode={countryCode} />
-
-  return (
-    <div className="flex flex-row items-center gap-2 text-sm">
-      {flag}
-      {data ? data.name : 'n/a'}
-    </div>
-  )
-}
+import { CountryFlag } from '@/components/countries'
 
 const CountryComponent = () => {
   const { preference } = useLocalStore()
@@ -61,7 +45,7 @@ const CountryComponent = () => {
             variant="outline"
             className="flex flex-row items-center justify-between"
           >
-            <FlagAndCountry countryCode={country} />
+            <CountryFlag countryCode={country} showName />
             <ChevronsUpDown className="w-4 h-4 opacity-50 shrink-0" />
           </Button>
         </PopoverTrigger>
@@ -78,7 +62,7 @@ const CountryComponent = () => {
                       country === cc ? 'opacity-100' : 'opacity-0'
                     )}
                   />
-                  <FlagAndCountry countryCode={cc} />
+                  <CountryFlag countryCode={cc} showName />
                 </CommandItem>
               ))}
             </CommandGroup>
