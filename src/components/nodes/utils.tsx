@@ -104,14 +104,15 @@ const deleteNodes = (
 }
 
 const selectNodes = (
-  nodes: Node[],
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
   selected: boolean
 ) => {
-  nodes.map((node) => {
-    node.selected = selected
+  setNodes((nodes) => {
+    for (const node of nodes) {
+      node.selected = selected
+    }
+    return [...nodes]
   })
-  setNodes([...nodes])
 }
 
 const addNode = (

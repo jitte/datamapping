@@ -29,6 +29,7 @@ import {
   copyNodes,
   pasteNodes,
   addNode,
+  selectNodes,
 } from './components/nodes/utils'
 import { edgeType } from './components/nodes/utils'
 import { maxNodeId } from './components/projects/utils'
@@ -236,6 +237,7 @@ function DataFlowView() {
         y: event.clientY - reactFlowBounds.top,
       })
       const id = incrementNodeId()
+      selectNodes(setNodes, false)
       addNode(id, position, role, setNodes)
       console.log('at: onDrop', { event, id, role, position })
       layout().trigger()

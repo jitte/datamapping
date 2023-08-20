@@ -10,7 +10,7 @@ import {
 import { Grip } from 'lucide-react'
 
 import { roleInfo } from '@/lib/constants'
-import { addNode } from '../nodes/utils'
+import { addNode, selectNodes } from '../nodes/utils'
 import { DataFlowContext } from '@/lib/contexts'
 import { AutoLayout, alParamTemperature } from '@/lib/layout'
 
@@ -33,6 +33,7 @@ const InsertMenu = () => {
       if (reactFlowInstance) {
         position = reactFlowInstance.project(position)
       }
+      selectNodes(setNodes, false)
       addNode(incrementNodeId(), position, role, setNodes)
       AutoLayout.temperature = alParamTemperature
     }

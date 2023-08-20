@@ -43,11 +43,11 @@ function EditMenu() {
   }
 
   const handleSelect = () => {
-    selectNodes(nodes, setNodes, true)
+    selectNodes(setNodes, true)
   }
   
   const handleUnSelect = () => {
-    selectNodes(nodes, setNodes, false)
+    selectNodes(setNodes, false)
   }
 
   return (
