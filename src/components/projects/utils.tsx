@@ -45,7 +45,7 @@ const maxNodeId = (projects: ProjectType[]): number => {
     .reduce((acc, ele) => acc.concat(ele))
   // [1, 2, ...]
   const ids = nodeIds.map((nodeId: string) => {
-    const id = Number(nodeId.replace('node_', ''))
+    const id = Number(nodeId?.replace('node_', ''))
     return Number.isNaN(id) ? 0 : id
   })
   return Math.max(0, ...ids)
