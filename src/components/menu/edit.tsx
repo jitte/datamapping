@@ -14,6 +14,7 @@ import {
   pasteNodes,
   deleteNodes,
   selectNodes,
+  selectEdges,
 } from '@/components/nodes/utils'
 
 function EditMenu() {
@@ -44,10 +45,12 @@ function EditMenu() {
 
   const handleSelect = () => {
     selectNodes(setNodes, true)
+    selectEdges(setEdges, true)
   }
   
   const handleUnSelect = () => {
     selectNodes(setNodes, false)
+    selectEdges(setEdges, false)
   }
 
   return (

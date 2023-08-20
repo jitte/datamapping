@@ -52,8 +52,7 @@ const pasteNodes = async (
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>,
   incrementNodeId: () => number,
   offset: XYPosition = { x: 0, y: 0 }
-) => {
-  const value = await readClipboard()
+) => { const value = await readClipboard()
   let newNodes: Node[]
   let newEdges: Edge[]
   try {
@@ -66,32 +65,37 @@ const pasteNodes = async (
   }
   if (!Array.isArray(newNodes)) return
 
+  const nodeMap: { [key: string]: string } = {}
+  newNodes = newNodes.map<Node>((node: Node) => {
+    if (node.position) {
+      node.position.x = node.position.x + offset.x
+      node.position.y = node.position.y + offset.y
+    } else {
+      node.position = { x: 0, y: 0 }
+    }
+    const oldId = node.id
+    node.id = `node_${incrementNodeId()}`
+    nodeMap[oldId] = node.id
+    return node
+  })
   setNodes((nodes) => {
     for (const node of nodes) {
       node.selected = false
     }
-    const nodeMap: { [key: string]: string } = {}
-    newNodes = newNodes.map<Node>((node: Node) => {
-      if (node.position) {
-        node.position.x = node.position.x + offset.x
-        node.position.y = node.position.y + offset.y
-      } else {
-        node.position = { x: 0, y: 0 }
-      }
-      const oldId = node.id
-      node.id = `node_${incrementNodeId()}`
-      nodeMap[oldId] = node.id
-      return node
-    })
-    setEdges((edges: Edge[]) => {
-      for (const edge of newEdges) {
-        edge.source = nodeMap[edge.source]
-        edge.target = nodeMap[edge.target]
-        edge.id = `reactflow__edge-${edge.source}${edge.sourceHandle}-${edge.target}${edge.targetHandle}`
-      }
-      return edges.concat(newEdges)
-    })
     return nodes.concat(newNodes)
+  })
+
+  newEdges = newEdges.map((edge) => {
+    edge.source = nodeMap[edge.source]
+    edge.target = nodeMap[edge.target]
+    edge.id = `reactflow__edge-${edge.source}${edge.sourceHandle}-${edge.target}${edge.targetHandle}`
+    return edge
+  })
+  setEdges((edges: Edge[]) => {
+    for (const edge of edges) {
+      edge.selected = false
+    }
+    return edges.concat(newEdges)
   })
 }
 
@@ -112,6 +116,18 @@ const selectNodes = (
       node.selected = selected
     }
     return [...nodes]
+  })
+}
+
+const selectEdges = (
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>,
+  selected: boolean
+) => {
+  setEdges((edges) => {
+    for (const edge of edges) {
+      edge.selected = selected
+    }
+    return [...edges]
   })
 }
 
@@ -152,6 +168,7 @@ export {
   pasteNodes,
   deleteNodes,
   selectNodes,
+  selectEdges,
   addNode,
   edgeType,
 }
