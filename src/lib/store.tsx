@@ -1,4 +1,5 @@
-import { create } from 'zustand'
+import { createWithEqualityFn } from 'zustand/traditional'
+import { shallow } from 'zustand/shallow'
 import { persist } from 'zustand/middleware'
 import { ProjectType } from '@/components/projects/types'
 
@@ -49,7 +50,7 @@ const initialPreference: PreferenceType = {
   showDebugInfo: false,
 }
 
-const useLocalStore = create(
+const useLocalStore = createWithEqualityFn(
   persist<LocalStoreType>(
     (set, get) => ({
       projects: [],
@@ -72,7 +73,8 @@ const useLocalStore = create(
       },
     }),
     { name: 'data mapping' }
-  )
+  ),
+  shallow
 )
 
 export { useLocalStore }
