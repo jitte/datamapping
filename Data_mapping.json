@@ -1,0 +1,425 @@
+[
+	{
+		"id": 5,
+		"name": "Typical Project Data Flow",
+		"description": "",
+		"nodes": [
+			{
+				"id": "node_29",
+				"type": "genericNode",
+				"position": {
+					"x": 1797.3027637433265,
+					"y": 1542.2368280553906
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": false,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "Server",
+					"country": "US"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 250,
+				"dragging": false,
+				"positionAbsolute": {
+					"x": 1800,
+					"y": 1356
+				}
+			},
+			{
+				"id": "node_30",
+				"type": "genericNode",
+				"position": {
+					"x": 2251.8322111126927,
+					"y": 1506.2368280553906
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": true,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "Third Party",
+					"country": "US"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 286,
+				"positionAbsolute": {
+					"x": 2244,
+					"y": 1176
+				},
+				"dragging": false
+			},
+			{
+				"id": "node_31",
+				"type": "genericNode",
+				"position": {
+					"x": 2251.8322111126927,
+					"y": 532.3248739657906
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": true,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "PII Processor",
+					"country": "US"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 286,
+				"positionAbsolute": {
+					"x": 2352,
+					"y": 708
+				},
+				"dragging": false
+			},
+			{
+				"id": "node_32",
+				"type": "genericNode",
+				"position": {
+					"x": 2747.2374881231844,
+					"y": 981.5197361260375
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": true,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "PII Controller",
+					"country": "JP"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 286,
+				"positionAbsolute": {
+					"x": 2748,
+					"y": 1008
+				},
+				"dragging": false
+			},
+			{
+				"id": "node_33",
+				"type": "genericNode",
+				"position": {
+					"x": 348.8602984281837,
+					"y": 1009.5197361260375
+				},
+				"data": {
+					"showName": false,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": true,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "PII Principals",
+					"country": "EU"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 258,
+				"positionAbsolute": {
+					"x": 348,
+					"y": 1044
+				},
+				"dragging": false
+			},
+			{
+				"id": "node_34",
+				"type": "genericNode",
+				"position": {
+					"x": 838.0796233417298,
+					"y": 596.3248739657906
+				},
+				"data": {
+					"showName": false,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": false,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "PC",
+					"country": "EU"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 222,
+				"positionAbsolute": {
+					"x": 840,
+					"y": 636
+				},
+				"dragging": false
+			},
+			{
+				"id": "node_35",
+				"type": "genericNode",
+				"position": {
+					"x": 838.0796233417298,
+					"y": 1542.2368280553906
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": false,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "Product",
+					"country": "EU"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 250,
+				"dragging": false
+			},
+			{
+				"id": "node_36",
+				"type": "genericNode",
+				"position": {
+					"x": 1315.0102358236986,
+					"y": 1045.5197361260375
+				},
+				"data": {
+					"showName": false,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": false,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "Smartphone",
+					"country": "EU"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 222,
+				"positionAbsolute": {
+					"x": 1332,
+					"y": 948
+				},
+				"dragging": false
+			},
+			{
+				"id": "node_37",
+				"type": "genericNode",
+				"position": {
+					"x": 1797.3027637433265,
+					"y": 1017.5197361260375
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": false,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "Server",
+					"country": "EU"
+				},
+				"selected": false,
+				"width": 240,
+				"height": 250,
+				"dragging": false,
+				"positionAbsolute": {
+					"x": 1788,
+					"y": 1044
+				}
+			},
+			{
+				"id": "node_38",
+				"type": "genericNode",
+				"position": {
+					"x": 1315.0102358236986,
+					"y": 596.3248739657906
+				},
+				"data": {
+					"showName": true,
+					"showIcon": true,
+					"showDescription": false,
+					"hasContract": false,
+					"hasPiiFlow": true,
+					"hasNonPiiFlow": true,
+					"role": "Server",
+					"country": "EU",
+					"name": ""
+				},
+				"selected": false,
+				"width": 240,
+				"height": 222,
+				"dragging": false,
+				"positionAbsolute": {
+					"x": 1320,
+					"y": 480
+				}
+			}
+		],
+		"edges": [
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_33",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_36",
+				"targetHandle": "target_pii_flow",
+				"type": "domestic",
+				"id": "reactflow__edge-node_2source_pii_flow-node_7target_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_33",
+				"sourceHandle": "source_non_pii_flow",
+				"target": "node_35",
+				"targetHandle": "target_non_pii_flow",
+				"type": "domestic",
+				"id": "reactflow__edge-node_2source_non_pii_flow-node_9target_non_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_35",
+				"sourceHandle": "source_non_pii_flow",
+				"target": "node_36",
+				"targetHandle": "target_non_pii_flow",
+				"type": "domestic",
+				"id": "reactflow__edge-node_9source_non_pii_flow-node_7target_non_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_36",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_37",
+				"targetHandle": "target_pii_flow",
+				"type": "domestic",
+				"id": "reactflow__edge-node_7source_pii_flow-node_6target_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_33",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_34",
+				"targetHandle": "target_pii_flow",
+				"type": "domestic",
+				"id": "reactflow__edge-node_2source_pii_flow-node_8target_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_36",
+				"sourceHandle": "source_non_pii_flow",
+				"target": "node_29",
+				"targetHandle": "target_non_pii_flow",
+				"type": "crossborder",
+				"id": "reactflow__edge-node_7source_non_pii_flow-node_10target_non_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_29",
+				"sourceHandle": "source_non_pii_flow",
+				"target": "node_30",
+				"targetHandle": "target_non_pii_flow",
+				"type": "domestic",
+				"id": "reactflow__edge-node_10source_non_pii_flow-node_5target_non_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_37",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_31",
+				"targetHandle": "target_pii_flow",
+				"type": "crossborder",
+				"id": "reactflow__edge-node_6source_pii_flow-node_4target_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_31",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_32",
+				"targetHandle": "target_pii_flow",
+				"type": "crossborder",
+				"id": "reactflow__edge-node_4source_pii_flow-node_3target_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_30",
+				"sourceHandle": "source_non_pii_flow",
+				"target": "node_32",
+				"targetHandle": "target_non_pii_flow",
+				"type": "crossborder",
+				"id": "reactflow__edge-node_5source_non_pii_flow-node_3target_non_pii_flow",
+				"selected": false
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_34",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_38",
+				"targetHandle": "target_pii_flow",
+				"type": "domestic",
+				"selected": false,
+				"id": "reactflow__edge-node_8source_pii_flow-node_11target_pii_flow"
+			},
+			{
+				"animated": true,
+				"style": {
+					"strokeWidth": 8
+				},
+				"source": "node_38",
+				"sourceHandle": "source_pii_flow",
+				"target": "node_31",
+				"targetHandle": "target_pii_flow",
+				"type": "crossborder",
+				"id": "reactflow__edge-node_11source_pii_flow-node_4target_pii_flow",
+				"selected": false
+			}
+		],
+		"autoLayout": false
+	}
+]
