@@ -71,3 +71,8 @@ docs/
 - `README.md` must be written in **English only** — Claude reads this file during sessions to understand intent without paying the cost of translating Japanese text
 - `README_jp.md` is for human readers and is **never loaded automatically** by Claude
 - When adding a new plan, create a new subdirectory `nn_plan-name/` where `nn` is the next sequential number
+
+## Git Workflow
+
+**Always ask for user confirmation before running `git commit` or `git push`.**
+Show the diff summary and proposed commit message, then wait for approval.
