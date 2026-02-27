@@ -55,3 +55,19 @@ Projects are auto-saved to `localStorage` 1 second after any node/edge change. T
 
 - Initial project nodes: `pj_{projectId}_node_{n}`
 - Nodes added at runtime: `node_{n}` (counter tracked via `nodeIdRef`, initialized to max existing ID across all projects)
+
+## Documentation (`docs/`)
+
+Plans and explanations are stored under `docs/` with numbered subdirectories:
+
+```
+docs/
+  nn_plan-name/
+    plan.md     # English — source of truth, used by Claude to minimize token usage
+    解説.md      # Japanese — human-readable explanation for the same plan
+```
+
+**Rules:**
+- `plan.md` must be written in **English only** — Claude reads this file during sessions to understand intent without paying the cost of translating Japanese text
+- `解説.md` is for human readers and is **never loaded automatically** by Claude
+- When adding a new plan, create a new subdirectory `nn_plan-name/` where `nn` is the next sequential number
