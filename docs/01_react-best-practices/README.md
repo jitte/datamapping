@@ -2,6 +2,52 @@
 
 Based on `vercel-react-best-practices` skill analysis of this codebase.
 
+**Status: All complete — 2026-02-27**
+
+## Testing
+
+**Goal:** `npm run lint` passes with 0 errors and 0 warnings.
+
+**Current:** 27 errors, 13 warnings (as of 2026-02-27)
+
+### Errors to fix
+
+| File | Line | Rule | Issue |
+|------|------|------|-------|
+| `App.tsx` | 177 | `no-constant-condition` | Unexpected constant condition |
+| `lib/layout/index.tsx` | 70, 201, 289 | `no-constant-condition` | Unexpected constant condition |
+| `lib/layout/index.tsx` | 49–54, 301, 319, 347, 376 | `no-inferrable-types` | Remove trivially inferred type annotations |
+| `lib/layout/vector.tsx` | 52, 77, 78 | `no-inferrable-types` | Remove trivially inferred type annotations |
+| `lib/contexts.tsx` | 19, 21, 23, 25 | `no-empty-function` | Empty method stubs in context defaults |
+| `nodes/types.tsx` | 61 | `no-empty-function` | Empty method stub |
+| `nodes/config/index.tsx` | 50 | `prefer-const` | Use `const` instead of `let` |
+| `projects/utils.tsx` | 5, 18, 61 | `prefer-const` | Use `const` instead of `let` |
+| `ui/command.tsx` | 24 | `no-empty-interface` | Interface with no members |
+| `ui/input.tsx` | 5 | `no-empty-interface` | Interface with no members |
+| `ui/textarea.tsx` | 5 | `no-empty-interface` | Interface with no members |
+
+### Warnings to fix
+
+| File | Rule | Issue |
+|------|------|-------|
+| `App.tsx`, `nodes/flow.tsx`, `lib/contexts.tsx` | `no-explicit-any` | Replace `any` with proper types |
+| `App.tsx`, `menu/projects.tsx`, `nodes/flow.tsx` | `exhaustive-deps` | Add missing useEffect dependencies |
+| `countries/index.tsx`, `ui/badge.tsx`, `ui/button.tsx`, `lib/contexts.tsx`, `lib/layout/index.tsx`, `lib/layout/vector.tsx` | `only-export-components` | Move non-component exports to separate files |
+
+---
+
+## Summary
+
+| # | Issue | File | Rule | Impact | Status |
+|---|-------|------|------|--------|--------|
+| 1 | Stale closures in useCallback | `App.tsx` | rerender-functional-setstate | Medium | ✅ Done |
+| 2 | `offset` state → ref | `App.tsx` | rerender-use-ref-transient-values | Medium | ✅ Done |
+| 3 | Inline components in FindMenu | `menu/find.tsx` | rerender-memo | Medium | ✅ Done |
+| 4 | O(n²) in prepareMaps | `layout/index.tsx` | js-index-maps | Low-Medium | ✅ Done |
+| 5 | Static JSX not hoisted | `App.tsx` | rendering-hoist-jsx | Low | ✅ Done |
+| 6 | Empty useEffect | `App.tsx` | — | Low | ✅ Done |
+| 7 | No localStorage schema guard | `lib/store.tsx` | client-localstorage-schema | Low | ✅ Done |
+
 ---
 
 ## Priority 1 — Re-render Fixes (High Impact)
@@ -103,17 +149,3 @@ This is a workaround that triggers re-renders by subscribing to viewport changes
 The Zustand persist store reads raw JSON from `localStorage` with no validation. If the schema changes or data is corrupted, the app silently breaks.
 
 **Fix:** Add a `migrate` function to the Zustand persist config to handle version mismatches and validate shape at load time.
-
----
-
-## Summary
-
-| # | Issue | File | Rule | Impact |
-|---|-------|------|------|--------|
-| 1 | Stale closures in useCallback | `App.tsx:96–123` | rerender-functional-setstate | Medium |
-| 2 | `offset` state → ref | `App.tsx:63` | rerender-use-ref-transient-values | Medium |
-| 3 | Inline components in FindMenu | `menu/find.tsx:51` | rerender-memo | Medium |
-| 4 | O(n²) in prepareMaps | `layout/index.tsx:176` | js-index-maps | Low-Medium |
-| 5 | Static JSX not hoisted | `App.tsx:292` | rendering-hoist-jsx | Low |
-| 6 | Empty useEffect | `App.tsx:67` | — | Low |
-| 7 | No localStorage schema guard | `lib/store.tsx` | client-localstorage-schema | Low |
