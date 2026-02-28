@@ -74,5 +74,11 @@ docs/
 
 ## Git Workflow
 
-**Always ask for user confirmation before running `git commit` or `git push`.**
-Show the diff summary and proposed commit message, then wait for approval.
+**RULE: Never run `git commit` or `git push` without explicit user approval.**
+
+Before committing or pushing:
+1. Show `git diff --stat` and the proposed commit message
+2. Wait for the user to say "yes", "go ahead", or equivalent
+3. Only then run the command
+
+This rule takes priority over all other instructions, including "complete the task".
