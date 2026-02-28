@@ -2,7 +2,39 @@
 
 Based on `vercel-react-best-practices` skill analysis of this codebase.
 
-**Status: All complete (incl. #9 unit tests) — 2026-02-28**
+**Status: All complete — 2026-t02-27**
+
+## Testing
+
+**Goal:** `npm run lint` passes with 0 errors and 0 warnings.
+
+**Current:** 27 errors, 13 warnings (as of 2026-02-27)
+
+### Errors to fix
+
+| File | Line | Rule | Issue |
+|------|------|------|-------|
+| `App.tsx` | 177 | `no-constant-condition` | Unexpected constant condition |
+| `lib/layout/index.tsx` | 70, 201, 289 | `no-constant-condition` | Unexpected constant condition |
+| `lib/layout/index.tsx` | 49–54, 301, 319, 347, 376 | `no-inferrable-types` | Remove trivially inferred type annotations |
+| `lib/layout/vector.tsx` | 52, 77, 78 | `no-inferrable-types` | Remove trivially inferred type annotations |
+| `lib/contexts.tsx` | 19, 21, 23, 25 | `no-empty-function` | Empty method stubs in context defaults |
+| `nodes/types.tsx` | 61 | `no-empty-function` | Empty method stub |
+| `nodes/config/index.tsx` | 50 | `prefer-const` | Use `const` instead of `let` |
+| `projects/utils.tsx` | 5, 18, 61 | `prefer-const` | Use `const` instead of `let` |
+| `ui/command.tsx` | 24 | `no-empty-interface` | Interface with no members |
+| `ui/input.tsx` | 5 | `no-empty-interface` | Interface with no members |
+| `ui/textarea.tsx` | 5 | `no-empty-interface` | Interface with no members |
+
+### Warnings to fix
+
+| File | Rule | Issue |
+|------|------|-------|
+| `App.tsx`, `nodes/flow.tsx`, `lib/contexts.tsx` | `no-explicit-any` | Replace `any` with proper types |
+| `App.tsx`, `menu/projects.tsx`, `nodes/flow.tsx` | `exhaustive-deps` | Add missing useEffect dependencies |
+| `countries/index.tsx`, `ui/badge.tsx`, `ui/button.tsx`, `lib/contexts.tsx`, `lib/layout/index.tsx`, `lib/layout/vector.tsx` | `only-export-components` | Move non-component exports to separate files |
+
+---
 
 ## Summary
 
@@ -15,8 +47,6 @@ Based on `vercel-react-best-practices` skill analysis of this codebase.
 | 5 | Static JSX not hoisted | `App.tsx` | rendering-hoist-jsx | Low | ✅ Done |
 | 6 | Empty useEffect | `App.tsx` | — | Low | ✅ Done |
 | 7 | No localStorage schema guard | `lib/store.tsx` | client-localstorage-schema | Low | ✅ Done |
-| 8 | Lint: 27 errors, 13 warnings | multiple files | various | Low | ✅ Done |
-| 9 | No unit tests | `lib/layout/` | — | Low | ✅ Done |
 
 ---
 
@@ -119,67 +149,3 @@ This is a workaround that triggers re-renders by subscribing to viewport changes
 The Zustand persist store reads raw JSON from `localStorage` with no validation. If the schema changes or data is corrupted, the app silently breaks.
 
 **Fix:** Add a `migrate` function to the Zustand persist config to handle version mismatches and validate shape at load time.
-
----
-
-## 8. Testing
-
-**Goal:** `npm run lint` passes with 0 errors and 0 warnings.
-
-**Result: ✅ Pass** (as of 2026-02-27)
-
-### Errors fixed
-
-| File | Rule | Fix applied |
-|------|------|-------------|
-| `App.tsx` | `no-constant-condition` | Removed `if (false)` dead code |
-| `lib/layout/index.tsx` | `no-constant-condition` | Removed `if (false)` blocks; `while (true)` suppressed with disable comment |
-| `lib/layout/index.tsx` | `no-inferrable-types` | Removed trivially inferred type annotations |
-| `lib/layout/vector.tsx` | `no-inferrable-types` | Removed trivially inferred type annotations |
-| `lib/contexts.tsx` | `no-empty-function` | Wrapped context defaults with eslint-disable block |
-| `nodes/types.tsx` | `no-empty-function` | Wrapped context defaults with eslint-disable block |
-| `nodes/config/index.tsx` | `prefer-const` | `let` → `const` in for-of loop |
-| `projects/utils.tsx` | `prefer-const` | `let` → `const` for array/object literals |
-| `ui/command.tsx` | `no-empty-interface` | `interface` → `type` alias |
-| `ui/input.tsx` | `no-empty-interface` | `interface` → `type` alias |
-| `ui/textarea.tsx` | `no-empty-interface` | `interface` → `type` alias |
-
-### Warnings fixed
-
-| File | Rule | Fix applied |
-|------|------|-------------|
-| `App.tsx` | `no-explicit-any` | `MutableRefObject<any>` → `useRef<HTMLDivElement>(null)` |
-| `nodes/flow.tsx` | `no-explicit-any` | Same as above |
-| `lib/contexts.tsx` | `no-explicit-any` | `any` → `(instance: ReactFlowInstance \| null) => void` |
-| `App.tsx` | `exhaustive-deps` | Added `currentProjectId`, `storeProjects` to deps; `setTimerRef` suppressed |
-| `menu/projects.tsx` | `exhaustive-deps` | Added `fitView` to deps |
-| `nodes/flow.tsx` | `exhaustive-deps` | Added `id` to both useEffect deps arrays |
-| `countries/index.tsx`, `ui/badge.tsx`, `ui/button.tsx`, `lib/contexts.tsx`, `lib/layout/index.tsx`, `lib/layout/vector.tsx` | `only-export-components` | Added eslint-disable comments on mixed-export lines |
-
----
-
-## 9. Unit Tests
-
-**Goal:** Add Vitest, write unit tests for pure logic modules.
-
-**Result: ✅ Pass — 66 tests, 0 failures** (as of 2026-02-28)
-
-### Setup
-
-- **Framework:** [Vitest](https://vitest.dev/) v4 (native Vite integration)
-- **Environment:** jsdom
-- **Scripts:** `npm test` (run once), `npm run test:coverage` (with v8 coverage)
-- **Config:** added `test` block to `vite.config.ts`
-
-### Test files
-
-| File | Tests | Coverage target |
-|------|-------|-----------------|
-| `src/lib/layout/vector.test.ts` | 46 | `Vector` class — all instance and static methods |
-| `src/lib/layout/index.test.ts` | 20 | `AutoLayout` — `prepare`, `stable`, `pin`, `update` |
-
-### Key decisions
-
-- **Scope:** Pure logic only (no React rendering, no DOM). `Vector` and `AutoLayout` are the only modules without React or browser API dependencies at the tested method level.
-- **`indegree` is consumed by `prepareRank()`:** The topological sort in `prepareRank()` decrements `indegree` to 0 as it processes nodes. Tests check `targetMap` keys instead of `indegree` after `prepare()`.
-- **`-0` vs `0`:** JavaScript's `Object.is(-0, 0)` is `false`. Tests use `toBeCloseTo(0)` for values that may become `-0` through negation.
