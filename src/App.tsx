@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import ReactFlow, {
+import {
+  ReactFlow,
   useReactFlow,
   ReactFlowProvider,
   useViewport,
@@ -15,9 +16,9 @@ import ReactFlow, {
   EdgeChange,
   applyEdgeChanges,
   addEdge,
-  updateEdge,
-} from 'reactflow'
-import 'reactflow/dist/style.css'
+  reconnectEdge,
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
 import './App.css'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -62,12 +63,11 @@ function DataFlowView() {
   const [edges, setEdges] = useState(project.edges)
   const [offset, setOffset] = useState({ x: 12, y: 12 })
 
-  // receive viewport update
-  const { x: vpX, y: vpY, zoom: vpZ } = useViewport()
-  useEffect(() => {}, [vpX, vpY, vpZ]) // somehow need this to get update
+  // calling useViewport() subscribes this component to viewport changes
+  useViewport()
 
   // creating ref and accessor
-  const domRef: React.MutableRefObject<any> = useRef(null)
+  const domRef = useRef<HTMLDivElement | null>(null)
   const nodeIdRef: React.MutableRefObject<number> = useRef(maxNodeId(projects))
   const incrementNodeId = (): number => {
     nodeIdRef.current++
@@ -158,13 +158,12 @@ function DataFlowView() {
       updateProject()
     }
     //console.log('at: useEffect(nodes/edges)', nodes, edges, project, layout)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projects, nodes, edges, setNodes])
 
   // callbacks
   const onNodeDragStart = useCallback(
-    (event: React.MouseEvent, nodeParam: Node, nodesParam: Node[]) => {
-      if (false)
-        console.log('at: onNodeDragStart', event, nodeParam, nodesParam)
+    (_event: React.MouseEvent, _node: Node, nodesParam: Node[]) => {
       layout().pin(nodesParam)
     },
     []
@@ -201,9 +200,9 @@ function DataFlowView() {
     },
     [setEdges]
   )
-  const onEdgeUpdate = useCallback(
+  const onReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) =>
-      setEdges((els) => updateEdge(oldEdge, newConnection, els)),
+      setEdges((els) => reconnectEdge(oldEdge, newConnection, els)),
     []
   )
   const onConnect = useCallback(
@@ -226,6 +225,7 @@ function DataFlowView() {
     (event: React.DragEvent) => {
       event.preventDefault()
 
+      if (!domRef.current) return
       const reactFlowBounds = domRef.current.getBoundingClientRect()
       const role = event.dataTransfer.getData('application/reactflow')
 
@@ -233,7 +233,7 @@ function DataFlowView() {
       if (typeof role === 'undefined' || !role) {
         return
       }
-      const position = reactFlowInstance.project({
+      const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       })
@@ -244,7 +244,7 @@ function DataFlowView() {
       console.log('at: onDrop', { event, id, role, position })
       layout().trigger()
     },
-    [reactFlowInstance, domRef, projects]
+    [reactFlowInstance, domRef]
   )
 
   return (
@@ -273,7 +273,7 @@ function DataFlowView() {
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onEdgeUpdate={onEdgeUpdate}
+            onReconnect={onReconnect}
             onConnect={onConnect}
             onDrop={onDrop}
             onDragOver={onDragOver}

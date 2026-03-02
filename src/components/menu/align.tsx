@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Node } from 'reactflow'
+import { Node } from '@xyflow/react'
 import {
   MenubarContent,
   MenubarItem,

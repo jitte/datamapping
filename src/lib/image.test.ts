@@ -1,15 +1,10 @@
-// v11: getTransformForBounds(rect, w, h, minZoom, maxZoom) → [x, y, scale]
-// v12 migration: rename to getViewportForBounds(rect, w, h, minZoom, maxZoom) → { x, y, zoom }
-//   downloadImage() must update the destructure:
-//     v11: const [tx, ty, scale] = getTransformForBounds(...)
-//     v12: const { x: tx, y: ty, zoom: scale } = getViewportForBounds(...)
-//   Also: CSS class '.react-flow__viewport' → '.react-flow__viewport' (unchanged in v12)
-//         Rect type import moves from 'reactflow' to '@xyflow/react'
+// v12: getViewportForBounds(rect, w, h, minZoom, maxZoom) → { x, y, zoom }
+// Migration complete: getTransformForBounds([x,y,scale]) → getViewportForBounds({x,y,zoom})
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-vi.mock('reactflow', () => ({
-  getTransformForBounds: vi.fn().mockReturnValue([10, 20, 0.5]),
+vi.mock('@xyflow/react', () => ({
+  getViewportForBounds: vi.fn().mockReturnValue({ x: 10, y: 20, zoom: 0.5 }),
 }))
 
 vi.mock('html-to-image', () => ({
@@ -17,7 +12,7 @@ vi.mock('html-to-image', () => ({
   toSvg: vi.fn().mockResolvedValue('data:image/svg+xml,mock'),
 }))
 
-import { getTransformForBounds } from 'reactflow'
+import { getViewportForBounds } from '@xyflow/react'
 import { toPng, toSvg } from 'html-to-image'
 import { downloadImage } from './image'
 
@@ -37,13 +32,13 @@ describe('downloadImage', () => {
     document.body.removeChild(viewport)
   })
 
-  it('calls getTransformForBounds with nodesBounds, width, height, minZoom=0.2, maxZoom=2', () => {
+  it('calls getViewportForBounds with nodesBounds, width, height, minZoom=0.2, maxZoom=2, padding=0.1', () => {
     downloadImage(mockBounds, 'png')
-    expect(getTransformForBounds).toHaveBeenCalledWith(mockBounds, 800, 600, 0.2, 2)
+    expect(getViewportForBounds).toHaveBeenCalledWith(mockBounds, 800, 600, 0.2, 2, 0.1)
   })
 
-  it('passes transform [x,y,scale] from getTransformForBounds into the image style', async () => {
-    // mock returns [10, 20, 0.5] → transform: translate(10px, 20px) scale(0.5)
+  it('passes {x,y,zoom} from getViewportForBounds into the image style', async () => {
+    // mock returns { x: 10, y: 20, zoom: 0.5 } → transform: translate(10px, 20px) scale(0.5)
     downloadImage(mockBounds, 'png')
     await vi.waitFor(() => expect(toPng).toHaveBeenCalled())
     const options = vi.mocked(toPng).mock.calls[0][1] as { style: Record<string, string> }

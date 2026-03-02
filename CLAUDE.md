@@ -8,13 +8,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev      # Start dev server at http://localhost:5173
 npm run build    # TypeScript check + Vite build
 npm run lint     # ESLint (0 warnings allowed)
+npm run test     # Vitest unit tests
+npm run test:e2e # Playwright smoke tests (requires running dev server)
 ```
-
-No test framework is configured.
 
 ## Architecture
 
-This is a React + TypeScript + Vite app for drawing cross-border data transfer flow diagrams using [ReactFlow](https://reactflow.xyflow.com/).
+This is a React + TypeScript + Vite app for drawing cross-border data transfer flow diagrams using [@xyflow/react](https://reactflow.dev/) (v12, formerly `reactflow` v11).
 
 ### State Management
 
@@ -46,6 +46,8 @@ Edge type (`domestic` vs `crossborder`) is determined automatically in `edgeType
 - **rotation**: aligns edges toward horizontal
 
 Simulation runs every ~33ms when temperature > epsilon. Temperature decays by `decayRate` each step. Dragging a node pins it temporarily and triggers a new simulation.
+
+Node dimensions are read via `node.measured?.width ?? node.width ?? 0` (v12 stores library-measured sizes in `node.measured`).
 
 ### Data Persistence
 

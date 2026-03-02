@@ -1,5 +1,5 @@
 import React from 'react'
-import { Node, Edge, ReactFlowInstance, XYPosition } from 'reactflow'
+import { Node, Edge, ReactFlowInstance, XYPosition } from '@xyflow/react'
 
 import { writeClipboard, readClipboard } from '@/lib/clipboard'
 import { roleInfo } from '@/lib/constants'
@@ -22,7 +22,7 @@ const selectedNodesAndEdges = (nodes: Node[], edges: Edge[]) => {
   return { selectedNodes, selectedEdges }
 }
 
-const cutNodes = (
+const cutNodes = async (
   nodes: Node[],
   edges: Edge[],
   reactFlowInstance: ReactFlowInstance | null
@@ -34,7 +34,7 @@ const cutNodes = (
     '  '
   )
   writeClipboard(value)
-  reactFlowInstance?.deleteElements({ nodes: selectedNodes })
+  await reactFlowInstance?.deleteElements({ nodes: selectedNodes })
 }
 
 const copyNodes = (nodes: Node[], edges: Edge[]) => {
@@ -99,12 +99,12 @@ const pasteNodes = async (
   })
 }
 
-const deleteNodes = (
+const deleteNodes = async (
   nodes: Node[],
   reactFlowInstance: ReactFlowInstance | null
 ) => {
   const selectedNodes = nodes.filter((node) => node.selected)
-  reactFlowInstance?.deleteElements({ nodes: selectedNodes })
+  await reactFlowInstance?.deleteElements({ nodes: selectedNodes })
 }
 
 const selectNodes = (
