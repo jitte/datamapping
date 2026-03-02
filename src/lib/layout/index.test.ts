@@ -7,6 +7,9 @@ const mockRFI = {
   project: ({ x, y }: { x: number; y: number }) => ({ x, y }),
 } as unknown as ReactFlowInstance
 
+// v11: width/height are set directly on the node by the library after measurement.
+// v12 migration: the library writes measured dimensions to node.measured.width / node.measured.height.
+//   AutoLayout.getWidthHeight() must change to: node.measured?.width ?? node.width ?? 0
 const makeNode = (
   id: string,
   x: number,
@@ -189,6 +192,26 @@ describe('AutoLayout', () => {
       layout.vnodes[0].vector = new Vector({ x: 0, y: 0 })
       layout.update()
       expect(AutoLayout.temperature).toBeCloseTo(95)
+    })
+  })
+
+  // v12 migration target: AutoLayout.getWidthHeight()
+  // v11: reads node.width / node.height directly
+  // v12: must read node.measured?.width ?? node.width (library stores measured dims in node.measured)
+  describe('getWidthHeight() via prepare() — v11 behavior', () => {
+    it('derives radius from node.width and node.height (max/2)', () => {
+      layout.prepare([makeNode('a', 0, 0, 120, 80)], [])
+      expect(layout.vnodeMap['a'].radius).toBe(60) // max(120,80)/2
+    })
+
+    it('uses height when height > width', () => {
+      layout.prepare([makeNode('a', 0, 0, 60, 100)], [])
+      expect(layout.vnodeMap['a'].radius).toBe(50) // max(60,100)/2
+    })
+
+    it('falls back to 0 when width and height are both 0', () => {
+      layout.prepare([makeNode('a', 0, 0, 0, 0)], [])
+      expect(layout.vnodeMap['a'].radius).toBe(0)
     })
   })
 })

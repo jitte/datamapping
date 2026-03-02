@@ -9,6 +9,7 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "tailwindcss-animate": "^1.0.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/forms": "^0.5.3",
     "@types/node": "^20.3.3",
     "@types/react": "^18.2.5",
