@@ -1,11 +1,11 @@
-# React Flow Data Mapping
+# XYFlow Data Mapping
 
 A flow diagram editor to describe cross border data transfer.
 ![screenshot](https://github.com/jitte/datamapping/blob/973c00f4d6674cca30d177693e4790c5fe0b5524/public/screenshot.png)
 
 # Key Features
 
-- With [reactflow](https://github.com/wbkd/react-flow/), describe your project data flow as nodes and edges
+- With [@xyflow/react](https://github.com/xyflow/xyflow), describe your project data flow as nodes and edges
 - Automatically color edges that represent cross border data transfer
 - Auto layout nodes or manualy align nodes
 - Copy and Paste nodes
