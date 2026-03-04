@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { Edge, Node } from 'reactflow'
+import { Edge, Node } from '@xyflow/react'
 import { findNode, findEdge, edgeType, addNode } from './utils'
 
 const makeNode = (id: string, country = ''): Node => ({

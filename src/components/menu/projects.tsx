@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow } from '@xyflow/react'
 import { MenubarMenu } from '@/components/ui/menubar'
 import {
   Select,
@@ -21,7 +21,7 @@ export function ProjectMenu() {
     setTimeout(() => {
       fitView({ duration: 500 })
     }, 100)
-  }, [currentProjectId])
+  }, [currentProjectId, fitView])
 
   function handleChange(value: string) {
     console.log('at: ProjectMenu/handleChange', value)

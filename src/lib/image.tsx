@@ -1,15 +1,16 @@
-import { Rect, getTransformForBounds } from 'reactflow'
+import { Rect, getViewportForBounds } from '@xyflow/react'
 import { toPng, toSvg } from 'html-to-image'
 
 export function downloadImage(nodesBounds: Rect, format: 'png' | 'svg') {
   const imageWidth = nodesBounds.width
   const imageHeight = nodesBounds.height
-  const transform = getTransformForBounds(
+  const { x, y, zoom } = getViewportForBounds(
     nodesBounds,
     imageWidth,
     imageHeight,
     0.2,
-    2
+    2,
+    0.1
   )
   const converter = format === 'svg' ? toSvg : toPng
   const options = {
@@ -18,7 +19,7 @@ export function downloadImage(nodesBounds: Rect, format: 'png' | 'svg') {
     style: {
       width: String(imageWidth),
       height: String(imageHeight),
-      transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`,
+      transform: `translate(${x}px, ${y}px) scale(${zoom})`,
     },
   }
   const downloadLink = (dataUrl: string) => {

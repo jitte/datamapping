@@ -58,5 +58,5 @@ export type DataContextType = {
 
 export const NodeConfigContext = createContext<DataContextType>({
   nodeData: {},
-  setNodeData: () => {},
+  setNodeData: () => { /* noop */ },
 })

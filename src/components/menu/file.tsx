@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { useReactFlow, getRectOfNodes } from 'reactflow'
+import { useReactFlow, getNodesBounds } from '@xyflow/react'
 import {
   MenubarContent,
   MenubarItem,
@@ -34,7 +34,7 @@ const DownloadMenu = () => {
   const { getNodes } = useReactFlow()
 
   function onClick(format: 'svg' | 'png') {
-    downloadImage(getRectOfNodes(getNodes()), format)
+    downloadImage(getNodesBounds(getNodes()), format)
   }
 
   return (

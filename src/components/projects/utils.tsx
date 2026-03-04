@@ -1,8 +1,8 @@
-import { Node, Edge } from 'reactflow'
+import { Node, Edge } from '@xyflow/react'
 import { ProjectType } from './types'
 
 function allNodes(projects: ProjectType[]) {
-  let nodes: Node[] = []
+  const nodes: Node[] = []
 
   for (const project of projects) {
     for (const node of project.nodes) {
@@ -15,7 +15,7 @@ function allNodes(projects: ProjectType[]) {
 }
 
 function allEdges(projects: ProjectType[]) {
-  let edges: Edge[] = []
+  const edges: Edge[] = []
 
   for (const project of projects) {
     for (const edge of project.edges) {
@@ -58,7 +58,7 @@ const duplicateProject = (
 ): ProjectType => {
   const nodes: Node[] = oldProject.nodes.map((node) => ({...node}))
   const edges: Edge[] = oldProject.edges.map((edge) => ({...edge}))
-  let nodeMap: { [key: string]: string } = {}
+  const nodeMap: { [key: string]: string } = {}
 
   nodes.forEach((node) => {
     const newId = `node_${incrementNodeId()}`

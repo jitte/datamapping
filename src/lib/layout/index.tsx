@@ -1,4 +1,4 @@
-import { Node, Edge, ReactFlowInstance, Viewport } from 'reactflow'
+import { Node, Edge, ReactFlowInstance } from '@xyflow/react'
 import { Vector, VectorType } from './vector'
 
 export type vNodeType = {
@@ -46,12 +46,12 @@ class AutoLayout {
   vedges: vEdgeType[] = []
   vnodeMap: mapType<vNodeType> = {}
   vedgeMap: mapType<vEdgeType> = {}
-  layoutWidth: number = 0
-  layoutHeight: number = 0
-  simulated: number = 0
+  layoutWidth = 0
+  layoutHeight = 0
+  simulated = 0
   weights: string[] = []
 
-  static temperature: number = 0
+  static temperature = 0
   static pinnedNodes: mapType<boolean> = {}
   static center: VectorType = Vector.zero()
   static weightMap: mapType<number> = alParamStressWeight
@@ -63,18 +63,9 @@ class AutoLayout {
   trigger = (): AutoLayout => {
     AutoLayout.temperature = alParamTemperature
 
-    const viewport: Viewport = this.reactflowInstance.getViewport()
     const x = window.innerWidth / 2
     const y = window.innerHeight / 2
-    AutoLayout.center = this.reactflowInstance.project({ x, y })
-    if (false) {
-      console.log(
-        window.innerWidth,
-        window.innerHeight,
-        viewport,
-        AutoLayout.center
-      )
-    }
+    AutoLayout.center = this.reactflowInstance.screenToFlowPosition({ x, y })
     return this
   }
 
@@ -203,7 +194,7 @@ class AutoLayout {
     // exclude vnode without edge
     let vnodes = this.vnodes.filter((vn) => vn.indegree + vn.outdegree > 0)
     let currentRank = 1
-    while (true) {
+    for (;;) {
       const zeroDegree = vnodes.filter((vn) => vn.indegree === 0)
       if (zeroDegree.length === 0) break
       vnodes = vnodes.filter((vn) => vn.indegree > 0)
@@ -219,8 +210,8 @@ class AutoLayout {
   }
 
   private getWidthHeight = (node: Node): { width: number; height: number } => {
-    const width = node.width ?? 0
-    const height = node.height ?? 0
+    const width = node.measured?.width ?? node.width ?? 0
+    const height = node.measured?.height ?? node.height ?? 0
     return { width, height }
   }
 
@@ -291,19 +282,11 @@ class AutoLayout {
   stable = (): boolean => {
     const epsilon =
       (this.simulated * AutoLayout.temperature) / alParamTemperature
-    if (false) {
-      console.log('at: AutoLayout/stable', {
-        epsilon,
-        temperature: AutoLayout.temperature,
-        stable: epsilon < alParamEpsilon,
-        this: this,
-      })
-    }
     return epsilon < alParamEpsilon
   }
 
   private stressCenter = (vnode: vNodeType): void => {
-    const stress: string = 'center'
+    const stress = 'center'
     if (vnode.rank === 0) {
       vnode.evaluate[stress].add(
         Vector.vector(vnode.position, AutoLayout.center).normalize(
@@ -321,7 +304,7 @@ class AutoLayout {
   }
 
   private stressCollision = (vnode: vNodeType): void => {
-    const stress: string = 'collision'
+    const stress = 'collision'
     const len: number = (this.vnodes ?? []).length
     if (len < 2) return
 
@@ -349,7 +332,7 @@ class AutoLayout {
   }
 
   private stressCrossing = (vnode: vNodeType): void => {
-    const stress: string = 'crossing'
+    const stress = 'crossing'
     const np = vnode.position
     const crossing = (vedge: vEdgeType): void => {
       if (vnode === vedge.source || vnode === vedge.target) return
@@ -378,7 +361,7 @@ class AutoLayout {
   }
 
   private stressRotation = (vnode: vNodeType): void => {
-    const stress: string = 'rotation'
+    const stress = 'rotation'
 
     const rotation = (nodeMap: mapType<vEdgeType>, negate: boolean): void => {
       const keys: string[] = Object.keys(nodeMap)
@@ -409,4 +392,5 @@ class AutoLayout {
   }
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { AutoLayout, alParamTemperature }

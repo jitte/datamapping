@@ -1,10 +1,10 @@
 import { createContext, ReactNode } from 'react'
-import { Node, Edge, ReactFlowInstance } from 'reactflow'
+import { Node, Edge, ReactFlowInstance } from '@xyflow/react'
 import { AutoLayout } from '@/lib/layout'
 
 type DataFlowContextType = {
-  reactFlowInstance: ReactFlowInstance | null
-  setReactFlowInstance: any
+  reactFlowInstance: ReactFlowInstance<Node, Edge> | null
+  setReactFlowInstance: React.Dispatch<React.SetStateAction<ReactFlowInstance<Node, Edge>>>
   nodes: Node[]
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>
   edges: Edge[]
@@ -14,15 +14,16 @@ type DataFlowContextType = {
   incrementNodeId: () => number
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const DataFlowContext = createContext<DataFlowContextType>({
   reactFlowInstance: null,
-  setReactFlowInstance: () => {},
+  setReactFlowInstance: () => { /* noop */ },
   nodes: [],
-  setNodes: () => {},
+  setNodes: () => { /* noop */ },
   edges: [],
-  setEdges: () => {},
+  setEdges: () => { /* noop */ },
   layout: () => null,
-  setLayout: () => {},
+  setLayout: () => { /* noop */ },
   incrementNodeId: () => 0,
 })
 

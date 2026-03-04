@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Node, Edge, ReactFlowInstance } from 'reactflow'
+import { Node, Edge, ReactFlowInstance } from '@xyflow/react'
 import { AutoLayout, alParamTemperature } from './index'
 import { Vector } from './vector'
 
@@ -7,9 +7,8 @@ const mockRFI = {
   project: ({ x, y }: { x: number; y: number }) => ({ x, y }),
 } as unknown as ReactFlowInstance
 
-// v11: width/height are set directly on the node by the library after measurement.
-// v12 migration: the library writes measured dimensions to node.measured.width / node.measured.height.
-//   AutoLayout.getWidthHeight() must change to: node.measured?.width ?? node.width ?? 0
+// v12: library writes measured dimensions to node.measured.width / node.measured.height.
+//   AutoLayout.getWidthHeight() uses: node.measured?.width ?? node.width ?? 0 (done)
 const makeNode = (
   id: string,
   x: number,
@@ -23,6 +22,7 @@ const makeNode = (
   data: {},
   width,
   height,
+  measured: { width, height },
 })
 
 const makeEdge = (id: string, source: string, target: string): Edge => ({

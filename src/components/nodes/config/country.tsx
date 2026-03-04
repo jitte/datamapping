@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { useNodeId } from 'reactflow'
+import { useNodeId } from '@xyflow/react'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 
 import { useLocalStore } from '@/lib/store'
-import { NodeConfigContext } from '../types'
+import { NodeConfigContext, NodeDataType } from '../types'
 import { DataFlowContext } from '@/lib/contexts'
 import { CountryFlag } from '@/components/countries'
 import { findNode } from '../utils'
@@ -96,7 +96,7 @@ const CountryComponentShort = () => {
   const currentNode = findNode(nodes, nodeId)
   if (!currentNode || !currentNode.data) return null
 
-  const country = currentNode.data.country ?? ''
+  const country = (currentNode.data as NodeDataType).country ?? ''
 
   const updateNodes = (country: string) => {
     const currentNode = findNode(nodes, nodeId)

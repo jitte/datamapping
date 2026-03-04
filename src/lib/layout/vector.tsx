@@ -1,4 +1,4 @@
-import { XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
 
 export type XY = XYPosition
 export type VectorType = Vector | XY
@@ -49,7 +49,7 @@ class Vector {
     return this
   }
 
-  normalize = (unit: number = 1): Vector => {
+  normalize = (unit = 1): Vector => {
     if (this.x === 0 && this.y === 0) return this
 
     this.multiple(unit / this.r())
@@ -74,8 +74,8 @@ class Vector {
   }
 
   static sum = (positions: VectorType[]): Vector => {
-    let x: number = 0
-    let y: number = 0
+    let x = 0
+    let y = 0
     positions.forEach((pos) => {
       x = x + pos.x
       y = y + pos.y
@@ -134,4 +134,5 @@ class Vector {
 
 const distance = Vector.distance
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { Vector, distance }

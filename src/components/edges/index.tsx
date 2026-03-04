@@ -1,4 +1,4 @@
-import { BaseEdge, EdgeProps, getBezierPath } from 'reactflow'
+import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react'
 import './style.css'
 
 export function DomesticEdge(props: EdgeProps) {

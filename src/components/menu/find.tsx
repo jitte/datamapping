@@ -1,5 +1,6 @@
 import { useContext } from 'react'
-import { Node } from 'reactflow'
+import { Node } from '@xyflow/react'
+import { NodeDataType } from '@/components/nodes/types'
 import {
   MenubarMenu,
   MenubarTrigger,
@@ -48,7 +49,7 @@ const FindMenu = () => {
     }
   }
 
-  const NodeMenubarItem = ({ node }: { node: Node }) => {
+  const NodeMenubarItem = ({ node }: { node: Node<NodeDataType> }) => {
     return (
       <div className="flex flex-row items-center gap-1">
         <CountryFlag countryCode={node.data.country} />

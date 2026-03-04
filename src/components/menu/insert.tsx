@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { XYPosition } from 'reactflow'
+import { XYPosition } from '@xyflow/react'
 import {
   MenubarContent,
   MenubarItem,
@@ -31,7 +31,7 @@ const InsertMenu = () => {
         y: Math.random() * 400 + 100,
       }
       if (reactFlowInstance) {
-        position = reactFlowInstance.project(position)
+        position = reactFlowInstance.screenToFlowPosition(position)
       }
       selectNodes(setNodes, false)
       selectEdges(setEdges, false)

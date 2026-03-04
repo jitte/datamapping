@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { useNodeId, Node } from 'reactflow'
+import { useNodeId, Node } from '@xyflow/react'
 import { Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -31,9 +31,9 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
     useContext(DataFlowContext)
   const nodeId = useNodeId() ?? ''
 
-  function handleDelete() {
+  async function handleDelete() {
     const node = findNode(nodes, nodeId)
-    reactFlowInstance?.deleteElements({ nodes: [node] })
+    await reactFlowInstance?.deleteElements({ nodes: [node] })
     setOpen(false)
   }
 
@@ -47,7 +47,7 @@ export function ConfigDialog({ data }: { data: NodeDataType }) {
 
   function updateEdges() {
     console.log('at ConfigDialog/updateEdges', { edges })
-    for (let edge of edges) {
+    for (const edge of edges) {
       edge.type = edgeType(edge.source, edge.target, nodes)
       console.log(`${edge.source} and ${edge.target} is ${edge.type}`)
     }

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Handle, Position, useUpdateNodeInternals } from 'reactflow'
+import { Handle, Position, useUpdateNodeInternals } from '@xyflow/react'
 
 import { NodeDataType } from './types'
 
@@ -16,7 +16,7 @@ export function FlowComponent({
   const targetId = 'target_' + name.toLowerCase().replace(/ /g, '_')
 
   // set Handle position according to this component
-  const ref: React.MutableRefObject<any> = useRef(null)
+  const ref = useRef<HTMLDivElement | null>(null)
   const updateNodeInternals = useUpdateNodeInternals()
   const [position, setPosition] = useState(0)
 
@@ -27,13 +27,13 @@ export function FlowComponent({
       setPosition(ref.current.offsetTop + ref.current.clientHeight / 2)
       updateNodeInternals(id)
     }
-  }, [data, ref, updateNodeInternals])
+  }, [data, id, ref, updateNodeInternals])
 
   // step2: then propagate position
   useEffect(() => {
     //console.log('at: FlowComponent/useEffect2')
     updateNodeInternals(id)
-  }, [position, updateNodeInternals])
+  }, [id, position, updateNodeInternals])
 
   return (
     <div ref={ref} className="flex py-1 m-1 bg-gray-100/80">
