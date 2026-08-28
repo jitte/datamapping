@@ -2,6 +2,7 @@
 // Migration complete: getTransformForBounds([x,y,scale]) → getViewportForBounds({x,y,zoom})
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import type { MockInstance } from 'vitest'
 
 vi.mock('@xyflow/react', () => ({
   getViewportForBounds: vi.fn().mockReturnValue({ x: 10, y: 20, zoom: 0.5 }),
@@ -20,16 +21,21 @@ const mockBounds = { x: 0, y: 0, width: 800, height: 600 }
 
 describe('downloadImage', () => {
   let viewport: HTMLElement
+  let clickSpy: MockInstance<() => void>
 
   beforeEach(() => {
     viewport = document.createElement('div')
     viewport.className = 'react-flow__viewport'
     document.body.appendChild(viewport)
     vi.clearAllMocks()
+    // downloadImage triggers the download via <a>.click(); jsdom implements no
+    // navigation, so stub it to keep the "Not implemented" noise out of the output.
+    clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined)
   })
 
   afterEach(() => {
     document.body.removeChild(viewport)
+    clickSpy.mockRestore()
   })
 
   it('calls getViewportForBounds with nodesBounds, width, height, minZoom=0.2, maxZoom=2, padding=0.1', () => {
